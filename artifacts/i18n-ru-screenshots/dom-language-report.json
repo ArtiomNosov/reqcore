@@ -1,0 +1,42 @@
+{
+  "baseUrl": "http://127.0.0.1:3001",
+  "capturedAt": "2026-05-27T08:57:28.012Z",
+  "pages": [
+    {
+      "route": "/",
+      "url": "http://127.0.0.1:3001/",
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\home.png",
+      "unexpectedLatin": []
+    },
+    {
+      "route": "/auth/sign-in",
+      "url": "http://127.0.0.1:3001/auth/sign-in",
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\sign-in.png",
+      "unexpectedLatin": []
+    },
+    {
+      "route": "/auth/sign-up",
+      "url": "http://127.0.0.1:3001/auth/sign-up",
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\sign-up.png",
+      "unexpectedLatin": []
+    },
+    {
+      "route": "/auth/forgot-password",
+      "url": "http://127.0.0.1:3001/auth/forgot-password",
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\forgot-password.png",
+      "unexpectedLatin": []
+    },
+    {
+      "route": "/jobs",
+      "url": "http://127.0.0.1:3001/jobs",
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\jobs.png",
+      "unexpectedLatin": []
+    },
+    {
+      "route": "/dashboard/settings",
+      "url": "http://127.0.0.1:3001/dashboard/settings",
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings.png",
+      "unexpectedLatin": []
+    }
+  ]
+}
