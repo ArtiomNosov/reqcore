@@ -5,6 +5,38 @@
     "save": "Save",
     "cancel": "Cancel"
   },
+  "nav": {
+    "dashboard": "Dashboard",
+    "jobs": "Jobs",
+    "candidates": "Candidates",
+    "applications": "Applications",
+    "interviews": "Interviews",
+    "timeline": "Timeline",
+    "sourceTracking": "Source Tracking",
+    "aiAnalysis": "AI Analysis",
+    "settings": "Settings",
+    "assistant": "Assistant",
+    "pipeline": "Pipeline",
+    "table": "Table",
+    "applicationForm": "Application Form",
+    "newJob": "New Job",
+    "more": "More",
+    "signOut": "Sign out",
+    "feedback": "Feedback",
+    "getStarted": "Get started"
+  },
+  "auth": {
+    "tagline": "Open-source recruiting for developer teams"
+  },
+  "demo": {
+    "banner": "Live demo — Explore freely with sample data. Editing is disabled here.",
+    "deployLink": "Deploy your own free instance →"
+  },
+  "jobsBoard": {
+    "title": "Open Positions — Job Board",
+    "description": "Browse open job positions on Reqcore and apply directly. Find your next career opportunity with companies that value transparency.",
+    "ogDescription": "Browse open job positions and apply directly. Powered by the open-source recruiting platform you actually own."
+  },
   "home": {
     "nav": {
       "features": "Features",

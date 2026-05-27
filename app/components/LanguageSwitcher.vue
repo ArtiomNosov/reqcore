@@ -34,6 +34,7 @@ type LocaleParam = string | string[] | undefined
 type RouteName = string | symbol | null | undefined
 
 const localeFlags: Record<string, string> = {
+  ru: '🇷🇺',
   en: '🇺🇸',
   es: '🇪🇸',
   fr: '🇫🇷',

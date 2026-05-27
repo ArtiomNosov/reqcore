@@ -10,6 +10,7 @@ import {
 } from 'lucide-vue-next'
 
 const route = useRoute()
+const { t } = useI18n()
 const localePath = useLocalePath()
 const getRouteBaseName = useRouteBaseName()
 const { data: session } = await authClient.useSession(useFetch)
@@ -112,11 +113,11 @@ const jobTabs = computed(() => {
   if (!activeJobId.value) return []
   const base = `/dashboard/jobs/${activeJobId.value}`
   return [
-    { label: 'Pipeline', to: base, icon: Kanban, exact: true },
-    { label: 'Table', to: `${base}/candidates`, icon: Table2, exact: true },
-    { label: 'Application Form', to: `${base}/application-form`, icon: FileText, exact: true },
-    { label: 'AI Analysis', to: `${base}/ai-analysis`, icon: Sparkles, exact: true },
-    { label: 'Settings', to: `${base}/settings`, icon: Settings, exact: true },
+    { label: t('nav.pipeline'), to: base, icon: Kanban, exact: true },
+    { label: t('nav.table'), to: `${base}/candidates`, icon: Table2, exact: true },
+    { label: t('nav.applicationForm'), to: `${base}/application-form`, icon: FileText, exact: true },
+    { label: t('nav.aiAnalysis'), to: `${base}/ai-analysis`, icon: Sparkles, exact: true },
+    { label: t('nav.settings'), to: `${base}/settings`, icon: Settings, exact: true },
   ]
 })
 
@@ -124,34 +125,35 @@ const jobTabs = computed(() => {
 // Main navigation
 // ─────────────────────────────────────────────
 
-const mainNav: Array<{ label: string; to: string; icon: typeof Briefcase; exact: boolean; comingSoon?: boolean }> = [
-  { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard, exact: true },
-  { label: 'Jobs', to: '/dashboard/jobs', icon: Briefcase, exact: false },
-  { label: 'Candidates', to: '/dashboard/candidates', icon: Users, exact: false },
-  { label: 'Applications', to: '/dashboard/applications', icon: FileText, exact: false },
-  { label: 'Interviews', to: '/dashboard/interviews', icon: Calendar, exact: false },
-  { label: 'Timeline', to: '/dashboard/timeline', icon: History, exact: true },
-  { label: 'Source Tracking', to: '/dashboard/source-tracking', icon: Radio, exact: true },
-  { label: 'AI Analysis', to: '/dashboard/ai-analysis', icon: Sparkles, exact: true },
-  { label: 'Settings', to: '/dashboard/settings', icon: Settings, exact: false },
-]
+const mainNav = computed<Array<{ label: string; to: string; icon: typeof Briefcase; exact: boolean; comingSoon?: boolean; key: string }>>(() => [
+  { key: 'dashboard', label: t('nav.dashboard'), to: '/dashboard', icon: LayoutDashboard, exact: true },
+  { key: 'jobs', label: t('nav.jobs'), to: '/dashboard/jobs', icon: Briefcase, exact: false },
+  { key: 'candidates', label: t('nav.candidates'), to: '/dashboard/candidates', icon: Users, exact: false },
+  { key: 'applications', label: t('nav.applications'), to: '/dashboard/applications', icon: FileText, exact: false },
+  { key: 'interviews', label: t('nav.interviews'), to: '/dashboard/interviews', icon: Calendar, exact: false },
+  { key: 'timeline', label: t('nav.timeline'), to: '/dashboard/timeline', icon: History, exact: true },
+  { key: 'sourceTracking', label: t('nav.sourceTracking'), to: '/dashboard/source-tracking', icon: Radio, exact: true },
+  { key: 'aiAnalysis', label: t('nav.aiAnalysis'), to: '/dashboard/ai-analysis', icon: Sparkles, exact: true },
+  { key: 'settings', label: t('nav.settings'), to: '/dashboard/settings', icon: Settings, exact: false },
+])
 
 // Items shown only when their feature flag is enabled. Filtered into mainNav
 // reactively so the gating happens at render time (PostHog flags load async).
 const flaggedNav = computed(() => {
-  const items: Array<{ label: string; to: string; icon: typeof Briefcase; exact: boolean; afterLabel: string }> = []
+  const items: Array<{ label: string; to: string; icon: typeof Briefcase; exact: boolean; afterKey: string }> = []
   if (showChatbot.value) {
-    items.push({ label: 'Assistant', to: '/dashboard/chatbot', icon: MessageCircle, exact: false, afterLabel: 'AI Analysis' })
+    items.push({ label: t('nav.assistant'), to: '/dashboard/chatbot', icon: MessageCircle, exact: false, afterKey: 'aiAnalysis' })
   }
   return items
 })
 
 const navItems = computed(() => {
-  const merged = [...mainNav]
+  const merged = [...mainNav.value]
   for (const item of flaggedNav.value) {
-    const idx = merged.findIndex((n) => n.label === item.afterLabel)
+    const idx = merged.findIndex((n) => n.key === item.afterKey)
     const insertAt = idx >= 0 ? idx + 1 : merged.length
     merged.splice(insertAt, 0, {
+      key: 'assistant',
       label: item.label, to: item.to, icon: item.icon, exact: item.exact,
     })
   }
@@ -164,9 +166,9 @@ function isActiveRoute(to: string, exact: boolean) {
   return route.path === localizedTo || route.path.startsWith(`${localizedTo}/`)
 }
 
-const primaryNavLabels = ['Dashboard', 'Jobs', 'Candidates', 'Applications', 'Interviews']
-const primaryNavItems = computed(() => navItems.value.filter(i => primaryNavLabels.includes(i.label)))
-const moreNavItems = computed(() => navItems.value.filter(i => !primaryNavLabels.includes(i.label)))
+const primaryNavKeys = ['dashboard', 'jobs', 'candidates', 'applications', 'interviews']
+const primaryNavItems = computed(() => navItems.value.filter(i => primaryNavKeys.includes(i.key)))
+const moreNavItems = computed(() => navItems.value.filter(i => !primaryNavKeys.includes(i.key)))
 
 // Close menus on route change
 watch(() => route.path, () => {

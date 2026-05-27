@@ -10,6 +10,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com). Categories: **Add
 
 ### Added
 
+* **i18n:** Russian locale (`ru.json`), default locale `ru`, and `russian-ui.client.ts` overlay for dashboard/auth UI strings (thesis fork branch `thesis/ru-localization`).
+
+### Changed
+
+* **i18n:** Navigation and demo banners use `$t()` keys; removed user-facing “ATS” wording on auth and job board pages.
+
 * **blog:** add Cluster 8 career page articles — pillar (career-page-that-converts) and two supporting articles (career-page-seo, google-for-jobs-structured-data)
 * **blog:** add incoming links to career page content from how-applicant-tracking-systems-work, open-source-applicant-tracking-system, and self-hosted-vs-cloud-ats
 

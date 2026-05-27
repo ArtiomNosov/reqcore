@@ -6,6 +6,7 @@ definePageMeta({
 })
 
 const route = useRoute()
+const { t } = useI18n()
 
 /** Forward source-tracking query params (?ref=, utm_*) through navigation */
 const sourceQuery = computed(() => {
@@ -20,18 +21,15 @@ const sourceQuery = computed(() => {
 })
 
 useSeoMeta({
-  title: 'Open Positions — Job Board',
-  description:
-    'Browse open job positions on Reqcore and apply directly. Find your next career opportunity with companies that value transparency.',
-  ogTitle: 'Open Positions — Reqcore Job Board',
-  ogDescription:
-    'Browse open job positions and apply directly. Powered by the open-source ATS you actually own.',
+  title: () => t('jobsBoard.title'),
+  description: () => t('jobsBoard.description'),
+  ogTitle: () => t('jobsBoard.title'),
+  ogDescription: () => t('jobsBoard.ogDescription'),
   ogType: 'website',
   ogImage: '/reqcore-banner-github.jpeg',
   twitterCard: 'summary_large_image',
-  twitterTitle: 'Open Positions — Reqcore Job Board',
-  twitterDescription:
-    'Browse open job positions and apply directly.',
+  twitterTitle: () => t('jobsBoard.title'),
+  twitterDescription: () => t('jobsBoard.description'),
 })
 
 // ─────────────────────────────────────────────

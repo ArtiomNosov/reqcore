@@ -7,8 +7,9 @@ const railwayEnvironmentName =
 const railwayPublicDomain =
   process.env.RAILWAY_PUBLIC_DOMAIN?.toLowerCase() ?? "";
 const siteUrl = process.env.NUXT_PUBLIC_SITE_URL || "https://reqcore.com";
-const i18nDefaultLocale = "en";
+const i18nDefaultLocale = "ru";
 const i18nLocales = [
+  { code: "ru", language: "ru-RU", name: "Русский", file: "ru.json" },
   { code: "en", language: "en-US", name: "English", file: "en.json" },
   {
     code: "es",
