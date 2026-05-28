@@ -21,6 +21,7 @@ const ssoRedirecting = ref(false);
 const route = useRoute();
 const config = useRuntimeConfig();
 const localePath = useLocalePath();
+const { t } = useI18n();
 const { track } = useTrack();
 
 const { data: authProviders } = await useFetch('/api/auth/providers');
@@ -206,7 +207,7 @@ async function handleSocialSignIn(providerId: string) {
         <h2
             class="text-xl font-semibold text-center text-surface-900 dark:text-surface-100 mb-2"
         >
-            Sign in to your account
+            {{ t('auth.signInHeading') }}
         </h2>
 
         <div
@@ -299,7 +300,7 @@ async function handleSocialSignIn(providerId: string) {
         <label
             class="flex flex-col gap-1 text-sm font-medium text-surface-700 dark:text-surface-300"
         >
-            <span>Email</span>
+            <span>{{ t('auth.emailLabel') }}</span>
             <input
                 v-model="email"
                 type="email"
@@ -312,7 +313,7 @@ async function handleSocialSignIn(providerId: string) {
         <label
             class="flex flex-col gap-1 text-sm font-medium text-surface-700 dark:text-surface-300"
         >
-            <span>Password</span>
+            <span>{{ t('auth.passwordLabel') }}</span>
             <input
                 v-model="password"
                 type="password"
@@ -327,7 +328,7 @@ async function handleSocialSignIn(providerId: string) {
                 :to="$localePath('/auth/forgot-password')"
                 class="text-sm text-brand-600 dark:text-brand-400 hover:underline"
             >
-                Forgot password?
+                {{ t('auth.forgotPassword') }}
             </NuxtLink>
         </div>
 
@@ -336,7 +337,7 @@ async function handleSocialSignIn(providerId: string) {
             :disabled="isLoading"
             class="mt-2 px-4 py-2.5 bg-brand-600 text-white rounded-md text-sm font-medium cursor-pointer hover:bg-brand-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
         >
-            {{ isLoading ? "Signing in…" : "Sign in" }}
+            {{ isLoading ? t('auth.signingIn') : t('auth.submitSignIn') }}
         </button>
 
         <!-- Enterprise SSO button — always available on cloud, uses per-org providers -->
@@ -368,7 +369,7 @@ async function handleSocialSignIn(providerId: string) {
         </template>
 
         <p class="text-center text-sm text-surface-500 dark:text-surface-400">
-            Don't have an account?
+            {{ t('auth.noAccount') }}
             <NuxtLink
                 :to="
                     route.query.invitation
@@ -379,7 +380,7 @@ async function handleSocialSignIn(providerId: string) {
                         : $localePath('/auth/sign-up')
                 "
                 class="text-brand-600 dark:text-brand-400 hover:underline"
-                >Sign up</NuxtLink
+                >{{ t('auth.signUpLink') }}</NuxtLink
             >
         </p>
     </form>

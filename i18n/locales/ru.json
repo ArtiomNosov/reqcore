@@ -37,8 +37,10 @@
     "newJob": "Новая вакансия",
     "more": "Ещё",
     "signOut": "Выйти",
+    "signingOut": "Выход…",
     "feedback": "Обратная связь",
-    "getStarted": "Начать работу"
+    "getStarted": "Начать работу",
+    "selectOrg": "Выберите организацию"
   },
   "home": {
     "nav": {
@@ -88,7 +90,16 @@
     "signInDescription": "Войдите в аккаунт Reqcore",
     "signUpTitle": "Регистрация — Reqcore",
     "forgotPasswordTitle": "Восстановление пароля — Reqcore",
-    "resetPasswordTitle": "Новый пароль — Reqcore"
+    "resetPasswordTitle": "Новый пароль — Reqcore",
+    "signInHeading": "Войдите в аккаунт",
+    "emailLabel": "Email",
+    "passwordLabel": "Пароль",
+    "forgotPassword": "Забыли пароль?",
+    "submitSignIn": "Войти",
+    "signingIn": "Вход…",
+    "noAccount": "Нет аккаунта?",
+    "signUpLink": "Регистрация",
+    "signInWithSso": "Войти через {provider}"
   },
   "demo": {
     "banner": "Живое демо — изучайте интерфейс на примерах данных. Редактирование здесь отключено.",

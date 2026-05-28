@@ -22,11 +22,22 @@
     "newJob": "New Job",
     "more": "More",
     "signOut": "Sign out",
+    "signingOut": "Signing out…",
     "feedback": "Feedback",
-    "getStarted": "Get started"
+    "getStarted": "Get started",
+    "selectOrg": "Select organization"
   },
   "auth": {
-    "tagline": "Open-source recruiting for developer teams"
+    "tagline": "Open-source recruiting for developer teams",
+    "signInHeading": "Sign in to your account",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "forgotPassword": "Forgot password?",
+    "submitSignIn": "Sign in",
+    "signingIn": "Signing in…",
+    "noAccount": "Don't have an account?",
+    "signUpLink": "Sign up",
+    "signInWithSso": "Sign in with {provider}"
   },
   "demo": {
     "banner": "Live demo — Explore freely with sample data. Editing is disabled here.",

@@ -254,7 +254,7 @@ onUnmounted(() => {
                   ? 'text-brand-700 dark:text-brand-300 bg-brand-50/80 dark:bg-brand-950/40'
                   : 'text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-surface-100 hover:bg-surface-100/80 dark:hover:bg-surface-800/60'"
               >
-                More
+                {{ t('nav.more') }}
                 <ChevronDown
                   class="size-3 opacity-60 transition-transform duration-200"
                   :class="showMoreNav ? 'rotate-180' : ''"
@@ -361,7 +361,7 @@ onUnmounted(() => {
             @click="handleNewJobClick"
           >
             <Plus class="size-3.5" />
-            New Job
+            {{ t('nav.newJob') }}
           </button>
 
           <!-- Org Switcher -->
@@ -502,7 +502,7 @@ onUnmounted(() => {
                     @click="handleSignOut"
                   >
                     <LogOut class="size-4" />
-                    {{ isSigningOut ? 'Signing out…' : 'Sign out' }}
+                    {{ isSigningOut ? t('nav.signingOut') : t('nav.signOut') }}
                   </button>
                 </div>
               </div>
@@ -616,7 +616,7 @@ onUnmounted(() => {
             @click="handleNewJobClick(); showMobileMenu = false"
           >
             <Plus class="size-4" />
-            New Job
+            {{ t('nav.newJob') }}
           </button>
 
           <!-- Get Started CTA (demo mode, mobile) -->
