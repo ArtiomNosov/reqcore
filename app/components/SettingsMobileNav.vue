@@ -3,53 +3,19 @@ import {
   Building2, Users, UserCircle, ChevronLeft, Plug, Brain, ShieldCheck, Globe,
 } from 'lucide-vue-next'
 
+const { t } = useI18n()
 const route = useRoute()
 const localePath = useLocalePath()
 
-const settingsNav = [
-  {
-    label: 'General',
-    to: '/dashboard/settings',
-    icon: Building2,
-    exact: true,
-  },
-  {
-    label: 'Localization',
-    to: '/dashboard/settings/localization',
-    icon: Globe,
-    exact: true,
-  },
-  {
-    label: 'Members',
-    to: '/dashboard/settings/members',
-    icon: Users,
-    exact: true,
-  },
-  {
-    label: 'Integrations',
-    to: '/dashboard/settings/integrations',
-    icon: Plug,
-    exact: true,
-  },
-  {
-    label: 'AI',
-    to: '/dashboard/settings/ai',
-    icon: Brain,
-    exact: true,
-  },
-  {
-    label: 'SSO',
-    to: '/dashboard/settings/sso',
-    icon: ShieldCheck,
-    exact: true,
-  },
-  {
-    label: 'Account',
-    to: '/dashboard/settings/account',
-    icon: UserCircle,
-    exact: true,
-  },
-]
+const settingsNav = computed(() => [
+  { label: t('settings.general.label'), to: '/dashboard/settings', icon: Building2, exact: true },
+  { label: t('settings.localization.label'), to: '/dashboard/settings/localization', icon: Globe, exact: true },
+  { label: t('settings.members.label'), to: '/dashboard/settings/members', icon: Users, exact: true },
+  { label: t('settings.integrations.label'), to: '/dashboard/settings/integrations', icon: Plug, exact: true },
+  { label: t('settings.ai.label'), to: '/dashboard/settings/ai', icon: Brain, exact: true },
+  { label: t('settings.sso.label'), to: '/dashboard/settings/sso', icon: ShieldCheck, exact: true },
+  { label: t('settings.account.label'), to: '/dashboard/settings/account', icon: UserCircle, exact: true },
+])
 
 function isActive(to: string, exact: boolean) {
   const localizedTo = localePath(to)
@@ -60,21 +26,19 @@ function isActive(to: string, exact: boolean) {
 
 <template>
   <div class="border-b border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 shadow-sm">
-    <!-- Back link + title -->
     <div class="flex items-center gap-3 px-4 pt-3 pb-2">
       <NuxtLink
         :to="$localePath('/dashboard')"
         class="inline-flex items-center gap-1 text-xs font-medium text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300 transition-colors no-underline"
       >
         <ChevronLeft class="size-3.5" />
-        Back
+        {{ t('settings.back') }}
       </NuxtLink>
       <h2 class="text-sm font-semibold text-surface-900 dark:text-surface-100">
-        Settings
+        {{ t('settings.title') }}
       </h2>
     </div>
 
-    <!-- Scrollable tabs -->
     <nav class="flex overflow-x-auto px-3 gap-1 pb-2 scrollbar-none">
       <NuxtLink
         v-for="item in settingsNav"

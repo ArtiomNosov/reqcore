@@ -3,61 +3,62 @@ import {
   Building2, Users, UserCircle, ChevronLeft, Settings, Plug, Brain, ShieldCheck, Globe,
 } from 'lucide-vue-next'
 
+const { t } = useI18n()
 const route = useRoute()
 const localePath = useLocalePath()
 
-const settingsNav = [
+const settingsNav = computed(() => [
   {
-    label: 'General',
-    description: 'Organization profile',
+    label: t('settings.general.label'),
+    description: t('settings.general.description'),
     to: '/dashboard/settings',
     icon: Building2,
     exact: true,
   },
   {
-    label: 'Localization',
-    description: 'Names & date formats',
+    label: t('settings.localization.label'),
+    description: t('settings.localization.description'),
     to: '/dashboard/settings/localization',
     icon: Globe,
     exact: true,
   },
   {
-    label: 'Members',
-    description: 'Team & invitations',
+    label: t('settings.members.label'),
+    description: t('settings.members.description'),
     to: '/dashboard/settings/members',
     icon: Users,
     exact: true,
   },
   {
-    label: 'Integrations',
-    description: 'Calendar & services',
+    label: t('settings.integrations.label'),
+    description: t('settings.integrations.description'),
     to: '/dashboard/settings/integrations',
     icon: Plug,
     exact: true,
   },
   {
-    label: 'AI Configuration',
-    description: 'Models & API keys',
+    label: t('settings.ai.label'),
+    description: t('settings.ai.description'),
     to: '/dashboard/settings/ai',
     icon: Brain,
     exact: true,
   },
   {
-    label: 'Single Sign-On',
-    description: 'Enterprise SSO',
+    label: t('settings.sso.label'),
+    description: t('settings.sso.description'),
     to: '/dashboard/settings/sso',
     icon: ShieldCheck,
     exact: true,
-    badge: 'Beta',
+    badge: t('common.beta'),
   },
   {
-    label: 'Account',
-    description: 'Profile & security',
+    label: t('settings.account.label'),
+    description: t('settings.account.description'),
     to: '/dashboard/settings/account',
     icon: UserCircle,
     exact: true,
   },
-]
+])
 
 function isActive(to: string, exact: boolean) {
   const localizedTo = localePath(to)
@@ -70,26 +71,24 @@ function isActive(to: string, exact: boolean) {
   <aside
     class="flex h-full w-56 min-w-56 flex-col border-r border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 overflow-y-auto overscroll-contain"
   >
-    <!-- Header -->
     <div class="px-4 pt-5 pb-4">
       <NuxtLink
         :to="$localePath('/dashboard')"
         class="inline-flex items-center gap-1.5 text-xs font-medium text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300 transition-colors no-underline mb-3"
       >
         <ChevronLeft class="size-3.5" />
-        Back to jobs
+        {{ t('settings.backToJobs') }}
       </NuxtLink>
       <div class="flex items-center gap-2.5">
         <div class="flex items-center justify-center size-8 rounded-lg bg-surface-100 dark:bg-surface-800 text-surface-500 dark:text-surface-400">
           <Settings class="size-4" />
         </div>
         <h2 class="text-sm font-semibold text-surface-900 dark:text-surface-100">
-          Settings
+          {{ t('settings.title') }}
         </h2>
       </div>
     </div>
 
-    <!-- Navigation -->
     <nav class="flex-1 px-3 pb-5">
       <div class="flex flex-col gap-0.5">
         <NuxtLink

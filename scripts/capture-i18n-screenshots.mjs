@@ -7,7 +7,7 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { chromium } from 'playwright'
 
-const baseUrl = (process.argv[2] ?? 'http://127.0.0.1:3000').replace(/\/$/, '')
+const baseUrl = (process.argv[2] ?? 'http://localhost:3000').replace(/\/$/, '')
 const outDir = join(process.cwd(), 'artifacts', 'i18n-ru-screenshots')
 
 const PUBLIC_ROUTES = [
@@ -15,7 +15,9 @@ const PUBLIC_ROUTES = [
   { name: 'sign-in', path: '/auth/sign-in' },
   { name: 'sign-up', path: '/auth/sign-up' },
   { name: 'forgot-password', path: '/auth/forgot-password' },
+  { name: 'reset-password', path: '/auth/reset-password' },
   { name: 'jobs', path: '/jobs' },
+  { name: 'onboarding-create-org', path: '/onboarding/create-org' },
 ]
 
 const DASHBOARD_ROUTES = [
@@ -51,7 +53,7 @@ async function capture(page, route, report) {
   let error = null
   try {
     const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90_000 })
-    await page.waitForTimeout(5000)
+    await page.waitForTimeout(6000)
     if (response && response.status() >= 500) {
       status = `http-${response.status()}`
     }
@@ -83,7 +85,7 @@ async function capture(page, route, report) {
   })
 }
 
-async function signInDemo(context) {
+async function signInDemo(context, page) {
   const response = await context.request.post(`${baseUrl}/api/auth/sign-in/email`, {
     headers: {
       'Content-Type': 'application/json',
@@ -92,9 +94,16 @@ async function signInDemo(context) {
     },
     data: { email: 'demo@reqcore.com', password: 'demo1234' },
   })
+
   if (!response.ok()) {
-    const body = await response.text()
-    throw new Error(`Demo sign-in failed (${response.status()}): ${body}`)
+    await page.goto(`${baseUrl}/auth/sign-in`, { waitUntil: 'domcontentloaded', timeout: 90_000 })
+    await page.waitForTimeout(6000)
+    const emailInput = page.locator('input[type="email"], input[name="email"]').first()
+    const passwordInput = page.locator('input[type="password"]').first()
+    await emailInput.fill('demo@reqcore.com')
+    await passwordInput.fill('demo1234')
+    await page.locator('button[type="submit"]').click()
+    await page.waitForURL(/\/dashboard/, { timeout: 120_000 })
   }
 
   const setOrg = await context.request.post(`${baseUrl}/api/auth/organization/set-active`, {
@@ -157,7 +166,7 @@ for (const route of PUBLIC_ROUTES) {
   await capture(page, route, report)
 }
 
-await signInDemo(context)
+await signInDemo(context, page)
 
 for (const route of DASHBOARD_ROUTES) {
   await capture(page, route, report)

@@ -18,7 +18,17 @@
     "no": "Нет",
     "error": "Ошибка",
     "success": "Успешно",
-    "noResults": "Нет результатов"
+    "noResults": "Нет результатов",
+    "saveChanges": "Сохранить изменения",
+    "create": "Создать",
+    "add": "Добавить",
+    "remove": "Удалить",
+    "confirm": "Подтвердить",
+    "retry": "Повторить",
+    "viewAll": "Смотреть все",
+    "redirecting": "Перенаправление…",
+    "or": "или",
+    "beta": "Бета"
   },
   "nav": {
     "dashboard": "Панель управления",
@@ -99,7 +109,128 @@
     "signingIn": "Вход…",
     "noAccount": "Нет аккаунта?",
     "signUpLink": "Регистрация",
-    "signInWithSso": "Войти через {provider}"
+    "signInWithSso": "Войти через {provider}",
+    "signUpHeading": "Создайте аккаунт",
+    "submitSignUp": "Зарегистрироваться",
+    "signingUp": "Регистрация…",
+    "hasAccount": "Уже есть аккаунт?",
+    "signInLink": "Войти",
+    "nameLabel": "Имя",
+    "confirmPasswordLabel": "Подтвердите пароль",
+    "forgotHeading": "Восстановление пароля",
+    "forgotDescription": "Введите email — мы отправим ссылку для сброса пароля.",
+    "submitForgot": "Отправить ссылку",
+    "sending": "Отправка…",
+    "backToSignIn": "Вернуться ко входу",
+    "resetHeading": "Новый пароль",
+    "submitReset": "Сохранить пароль",
+    "resetting": "Сохранение…",
+    "signInWithProvider": "Войти через {provider}",
+    "continueWithSso": "Продолжить через SSO",
+    "errors": {
+      "emailPasswordRequired": "Укажите email и пароль.",
+      "signInFailed": "Не удалось войти. Попробуйте снова.",
+      "ssoFailed": "Ошибка SSO. Попробуйте снова.",
+      "ssoEmailRequired": "Укажите рабочий email для входа через SSO.",
+      "ssoProviderNotFound": "Для этого домена SSO не настроен. Войдите по email и паролю.",
+      "socialSignInFailed": "Не удалось войти через соцсеть. Попробуйте снова."
+    }
+  },
+  "settings": {
+    "title": "Настройки",
+    "backToJobs": "Назад к вакансиям",
+    "back": "Назад",
+    "general": {
+      "label": "Общие",
+      "description": "Профиль организации"
+    },
+    "localization": {
+      "label": "Локализация",
+      "description": "Имена и форматы дат"
+    },
+    "members": {
+      "label": "Участники",
+      "description": "Команда и приглашения"
+    },
+    "integrations": {
+      "label": "Интеграции",
+      "description": "Календарь и сервисы"
+    },
+    "ai": {
+      "label": "Настройка ИИ",
+      "description": "Модели и API-ключи"
+    },
+    "sso": {
+      "label": "Единый вход (SSO)",
+      "description": "Корпоративный SSO"
+    },
+    "account": {
+      "label": "Аккаунт",
+      "description": "Профиль и безопасность"
+    }
+  },
+  "pipeline": {
+    "status": {
+      "new": "Новые",
+      "screening": "Скрининг",
+      "interview": "Собеседование",
+      "offer": "Оффер",
+      "hired": "Нанят",
+      "rejected": "Отклонён"
+    }
+  },
+  "job": {
+    "status": {
+      "open": "Открыта",
+      "closed": "Закрыта",
+      "draft": "Черновик"
+    },
+    "type": {
+      "full_time": "Полная занятость",
+      "part_time": "Частичная занятость",
+      "contract": "Контракт",
+      "internship": "Стажировка"
+    }
+  },
+  "interview": {
+    "status": {
+      "scheduled": "Запланировано",
+      "completed": "Завершено",
+      "cancelled": "Отменено",
+      "no_show": "Не явился"
+    }
+  },
+  "dashboard": {
+    "title": "Панель управления — Reqcore",
+    "description": "Центр управления подбором",
+    "myJobs": "Мои вакансии",
+    "recentApplications": "Недавние отклики",
+    "upcomingInterviews": "Предстоящие собеседования",
+    "pipelineOverview": "Обзор воронки",
+    "quickActions": "Быстрые действия",
+    "newApplications": "{count} новых откликов",
+    "views": "Виды",
+    "review": "Проверить"
+  },
+  "onboarding": {
+    "title": "Создание организации — Reqcore",
+    "description": "Создайте организацию, чтобы начать подбор",
+    "pickOrg": "Выберите организацию",
+    "createOrg": "Создать организацию",
+    "joinOrg": "Присоединиться",
+    "orgName": "Название организации",
+    "orgSlug": "Идентификатор (slug)",
+    "continue": "Продолжить",
+    "creating": "Создание…"
+  },
+  "empty": {
+    "noJobs": "Вакансий пока нет",
+    "noCandidates": "Кандидатов пока нет",
+    "noApplications": "Откликов пока нет"
+  },
+  "errors": {
+    "generic": "Что-то пошло не так. Попробуйте снова.",
+    "loadFailed": "Не удалось загрузить данные."
   },
   "demo": {
     "banner": "Живое демо — изучайте интерфейс на примерах данных. Редактирование здесь отключено.",

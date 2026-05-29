@@ -6,9 +6,11 @@ definePageMeta({
   middleware: ['auth'],
 })
 
+const { t } = useI18n()
+
 useSeoMeta({
-  title: 'Create Organization — Reqcore',
-  description: 'Create your organization to start recruiting',
+  title: () => t('onboarding.title'),
+  description: () => t('onboarding.description'),
   robots: 'noindex, nofollow',
 })
 

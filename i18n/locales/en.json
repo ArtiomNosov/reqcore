@@ -3,7 +3,17 @@
     "language": "Language",
     "selectLanguage": "Select language",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading",
+    "search": "Search",
+    "filters": "Filters",
+    "noResults": "No results found",
+    "saveChanges": "Save changes",
+    "back": "Back",
+    "redirecting": "Redirecting…",
+    "beta": "Beta"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -37,7 +47,42 @@
     "signingIn": "Signing in…",
     "noAccount": "Don't have an account?",
     "signUpLink": "Sign up",
-    "signInWithSso": "Sign in with {provider}"
+    "signInWithSso": "Sign in with {provider}",
+    "signInTitle": "Sign In — Reqcore",
+    "signUpTitle": "Sign Up — Reqcore",
+    "forgotPasswordTitle": "Forgot Password — Reqcore",
+    "resetPasswordTitle": "Reset Password — Reqcore"
+  },
+  "settings": {
+    "title": "Settings",
+    "backToJobs": "Back to jobs",
+    "back": "Back",
+    "general": { "label": "General", "description": "Organization profile" },
+    "localization": { "label": "Localization", "description": "Names & date formats" },
+    "members": { "label": "Members", "description": "Team & invitations" },
+    "integrations": { "label": "Integrations", "description": "Calendar & services" },
+    "ai": { "label": "AI Configuration", "description": "Models & API keys" },
+    "sso": { "label": "Single Sign-On", "description": "Enterprise SSO" },
+    "account": { "label": "Account", "description": "Profile & security" }
+  },
+  "pipeline": {
+    "status": {
+      "new": "New",
+      "screening": "Screening",
+      "interview": "Interview",
+      "offer": "Offer",
+      "hired": "Hired",
+      "rejected": "Rejected"
+    }
+  },
+  "job": {
+    "status": { "open": "Open", "closed": "Closed", "draft": "Draft" },
+    "type": {
+      "full_time": "Full-time",
+      "part_time": "Part-time",
+      "contract": "Contract",
+      "internship": "Internship"
+    }
   },
   "demo": {
     "banner": "Live demo — Explore freely with sample data. Editing is disabled here.",

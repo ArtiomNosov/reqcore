@@ -11,12 +11,15 @@ definePageMeta({
   middleware: ['auth', 'require-org'],
 })
 
+const { t } = useI18n()
+
 useSeoMeta({
-  title: 'Dashboard — Reqcore',
-  description: 'Your recruiting command center',
+  title: () => t('dashboard.title'),
+  description: () => t('dashboard.description'),
 })
 
 const { activeOrg } = useCurrentOrg()
+const { applicationStatus } = useLocalizedEnums()
 const localePath = useLocalePath()
 const { track } = useTrack()
 const { formatPersonName } = useOrgSettings()
@@ -58,14 +61,22 @@ const { interviews: upcomingInterviews } = useInterviews({
 // Derived data
 // ─────────────────────────────────────────────
 
-const stageConfig = [
-  { key: 'new', label: 'New', color: 'bg-blue-500', textColor: 'text-blue-600 dark:text-blue-400', bgColor: 'bg-blue-50 dark:bg-blue-950/40' },
-  { key: 'screening', label: 'Screening', color: 'bg-violet-500', textColor: 'text-violet-600 dark:text-violet-400', bgColor: 'bg-violet-50 dark:bg-violet-950/40' },
-  { key: 'interview', label: 'Interview', color: 'bg-amber-500', textColor: 'text-amber-600 dark:text-amber-400', bgColor: 'bg-amber-50 dark:bg-amber-950/40' },
-  { key: 'offer', label: 'Offer', color: 'bg-teal-500', textColor: 'text-teal-600 dark:text-teal-400', bgColor: 'bg-teal-50 dark:bg-teal-950/40' },
-  { key: 'hired', label: 'Hired', color: 'bg-green-600', textColor: 'text-green-600 dark:text-green-400', bgColor: 'bg-green-50 dark:bg-green-950/40' },
-  { key: 'rejected', label: 'Rejected', color: 'bg-surface-400', textColor: 'text-surface-500 dark:text-surface-400', bgColor: 'bg-surface-100 dark:bg-surface-800' },
-] as const
+const stageKeys = ['new', 'screening', 'interview', 'offer', 'hired', 'rejected'] as const
+const stageStyles: Record<(typeof stageKeys)[number], { color: string, textColor: string, bgColor: string }> = {
+  new: { color: 'bg-blue-500', textColor: 'text-blue-600 dark:text-blue-400', bgColor: 'bg-blue-50 dark:bg-blue-950/40' },
+  screening: { color: 'bg-violet-500', textColor: 'text-violet-600 dark:text-violet-400', bgColor: 'bg-violet-50 dark:bg-violet-950/40' },
+  interview: { color: 'bg-amber-500', textColor: 'text-amber-600 dark:text-amber-400', bgColor: 'bg-amber-50 dark:bg-amber-950/40' },
+  offer: { color: 'bg-teal-500', textColor: 'text-teal-600 dark:text-teal-400', bgColor: 'bg-teal-50 dark:bg-teal-950/40' },
+  hired: { color: 'bg-green-600', textColor: 'text-green-600 dark:text-green-400', bgColor: 'bg-green-50 dark:bg-green-950/40' },
+  rejected: { color: 'bg-surface-400', textColor: 'text-surface-500 dark:text-surface-400', bgColor: 'bg-surface-100 dark:bg-surface-800' },
+}
+const stageConfig = computed(() =>
+  stageKeys.map(key => ({
+    key,
+    label: applicationStatus(key),
+    ...stageStyles[key],
+  })),
+)
 
 const stageCountKeys: Record<string, string> = {
   new: 'newCount',

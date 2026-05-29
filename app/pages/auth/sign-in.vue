@@ -6,9 +6,11 @@ definePageMeta({
     middleware: ["guest"],
 });
 
+const { t } = useI18n();
+
 useSeoMeta({
-    title: "Sign In — Reqcore",
-    description: "Sign in to your Reqcore account",
+    title: () => t('auth.signInTitle'),
+    description: () => t('auth.signInDescription'),
     robots: "noindex, nofollow",
 });
 
@@ -21,7 +23,6 @@ const ssoRedirecting = ref(false);
 const route = useRoute();
 const config = useRuntimeConfig();
 const localePath = useLocalePath();
-const { t } = useI18n();
 const { track } = useTrack();
 
 const { data: authProviders } = await useFetch('/api/auth/providers');
@@ -60,7 +61,7 @@ async function handleSignIn() {
     error.value = "";
 
     if (!email.value || !password.value) {
-        error.value = "Email and password are required.";
+        error.value = t('auth.errors.emailPasswordRequired');
         return;
     }
 
@@ -74,7 +75,7 @@ async function handleSignIn() {
         });
     } catch (e: unknown) {
         error.value =
-            e instanceof Error ? e.message : "Sign-in failed. Please try again.";
+            e instanceof Error ? e.message : t('auth.errors.signInFailed');
         isLoading.value = false;
         return;
     }
