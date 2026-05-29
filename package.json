@@ -21,7 +21,8 @@
     "i18n:crowdin:upload": "crowdin upload sources",
     "i18n:crowdin:download": "crowdin download --all",
     "i18n:crowdin:sync": "npm run i18n:crowdin:upload && npm run i18n:crowdin:download",
-    "i18n:screenshots": "node scripts/capture-i18n-screenshots.mjs"
+    "i18n:screenshots": "node scripts/capture-i18n-screenshots.mjs",
+    "i18n:verify-e2e": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-ru-e2e.ps1"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.74",

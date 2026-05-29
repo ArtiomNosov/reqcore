@@ -1,691 +1,250 @@
 {
-  "baseUrl": "http://127.0.0.1:3000",
-  "capturedAt": "2026-05-28T07:29:54.583Z",
+  "baseUrl": "http://localhost:3001",
+  "capturedAt": "2026-05-29T09:50:28.406Z",
   "demoLogin": "demo@reqcore.com + org reqcore-demo via Better Auth API",
-  "totalPages": 22,
-  "pagesWithUnexpectedLatin": [
-    {
-      "route": "/auth/sign-in",
-      "name": "sign-in",
-      "url": "http://127.0.0.1:3000/auth/sign-in",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\sign-in.png",
-      "unexpectedLatin": [
-        "Sign in to your account",
-        "Sign in",
-        "Sign in with SSO",
-        "Sign up"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "SSO"
-      ]
-    },
-    {
-      "route": "/auth/sign-up",
-      "name": "sign-up",
-      "url": "http://127.0.0.1:3000/auth/sign-up",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\sign-up.png",
-      "unexpectedLatin": [
-        "Sign up",
-        "Sign in"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
-    },
-    {
-      "route": "/auth/forgot-password",
-      "name": "forgot-password",
-      "url": "http://127.0.0.1:3000/auth/forgot-password",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\forgot-password.png",
-      "unexpectedLatin": [
-        "Sign in"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
-    },
-    {
-      "route": "/dashboard",
-      "name": "dashboard",
-      "url": "http://127.0.0.1:3000/dashboard",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org",
-        "new job"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
-    },
-    {
-      "route": "/dashboard/jobs",
-      "name": "dashboard-jobs",
-      "url": "http://127.0.0.1:3000/dashboard/jobs",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-jobs.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org",
-        "My Jobs"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
-    },
-    {
-      "route": "/dashboard/candidates",
-      "name": "dashboard-candidates",
-      "url": "http://127.0.0.1:3000/dashboard/candidates",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-candidates.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
-    },
-    {
-      "route": "/dashboard/applications",
-      "name": "dashboard-applications",
-      "url": "http://127.0.0.1:3000/dashboard/applications",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-applications.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
-    },
-    {
-      "route": "/dashboard/interviews",
-      "name": "dashboard-interviews",
-      "url": "http://127.0.0.1:3000/dashboard/interviews",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-interviews.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "Google"
-      ]
-    },
-    {
-      "route": "/dashboard/timeline",
-      "name": "dashboard-timeline",
-      "url": "http://127.0.0.1:3000/dashboard/timeline",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-timeline.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
-    },
-    {
-      "route": "/dashboard/source-tracking",
-      "name": "dashboard-source-tracking",
-      "url": "http://127.0.0.1:3000/dashboard/source-tracking",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-source-tracking.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org",
-        "Source Tracking"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
-    },
-    {
-      "route": "/dashboard/ai-analysis",
-      "name": "dashboard-ai-analysis",
-      "url": "http://127.0.0.1:3000/dashboard/ai-analysis",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-ai-analysis.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org",
-        "AI Analysis"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "Openai"
-      ]
-    },
-    {
-      "route": "/dashboard/settings",
-      "name": "dashboard-settings",
-      "url": "http://127.0.0.1:3000/dashboard/settings",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org",
-        "Save changes"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "API",
-        "SSO",
-        "reqcore"
-      ]
-    },
-    {
-      "route": "/dashboard/settings/account",
-      "name": "dashboard-settings-account",
-      "url": "http://127.0.0.1:3000/dashboard/settings/account",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings-account.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "API",
-        "SSO",
-        "reqcore"
-      ]
-    },
-    {
-      "route": "/dashboard/settings/members",
-      "name": "dashboard-settings-members",
-      "url": "http://127.0.0.1:3000/dashboard/settings/members",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings-members.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "API",
-        "SSO"
-      ]
-    },
-    {
-      "route": "/dashboard/settings/localization",
-      "name": "dashboard-settings-localization",
-      "url": "http://127.0.0.1:3000/dashboard/settings/localization",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings-localization.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org",
-        "Save changes"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "API",
-        "SSO"
-      ]
-    },
-    {
-      "route": "/dashboard/settings/ai",
-      "name": "dashboard-settings-ai",
-      "url": "http://127.0.0.1:3000/dashboard/settings/ai",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings-ai.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "API",
-        "SSO"
-      ]
-    },
-    {
-      "route": "/dashboard/jobs/c4629dd1-1411-4552-a966-a1436487d108",
-      "name": "dashboard-job-pipeline",
-      "url": "http://127.0.0.1:3000/dashboard/jobs/c4629dd1-1411-4552-a966-a1436487d108",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-job-pipeline.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org",
-        "AI Analysis",
-        "AI analysis"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
-    },
-    {
-      "route": "/dashboard/jobs/c4629dd1-1411-4552-a966-a1436487d108/candidates",
-      "name": "dashboard-job-candidates",
-      "url": "http://127.0.0.1:3000/dashboard/jobs/c4629dd1-1411-4552-a966-a1436487d108/candidates",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-job-candidates.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
-    },
-    {
-      "route": "/dashboard/jobs/c4629dd1-1411-4552-a966-a1436487d108/ai-analysis",
-      "name": "dashboard-job-ai-analysis",
-      "url": "http://127.0.0.1:3000/dashboard/jobs/c4629dd1-1411-4552-a966-a1436487d108/ai-analysis",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-job-ai-analysis.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
-    },
-    {
-      "route": "/dashboard/applications/527a7cdb-9896-42bb-b8f1-c0d332ac9a18",
-      "name": "dashboard-application-detail",
-      "url": "http://127.0.0.1:3000/dashboard/applications/527a7cdb-9896-42bb-b8f1-c0d332ac9a18",
-      "status": "ok",
-      "error": null,
-      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-application-detail.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
-    }
-  ],
+  "totalPages": 24,
+  "pagesWithUnexpectedLatin": [],
   "pagesWithErrors": [],
   "pages": [
     {
       "route": "/",
       "name": "home",
-      "url": "http://127.0.0.1:3000/",
+      "url": "http://localhost:3001/",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\home.png",
       "unexpectedLatin": [],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "GitHub",
-        "Postgres",
-        "MinIO"
-      ]
+      "technicalLatinSamples": []
     },
     {
       "route": "/auth/sign-in",
       "name": "sign-in",
-      "url": "http://127.0.0.1:3000/auth/sign-in",
+      "url": "http://localhost:3001/auth/sign-in",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\sign-in.png",
-      "unexpectedLatin": [
-        "Sign in to your account",
-        "Sign in",
-        "Sign in with SSO",
-        "Sign up"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "SSO"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/auth/sign-up",
       "name": "sign-up",
-      "url": "http://127.0.0.1:3000/auth/sign-up",
+      "url": "http://localhost:3001/auth/sign-up",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\sign-up.png",
-      "unexpectedLatin": [
-        "Sign up",
-        "Sign in"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/auth/forgot-password",
       "name": "forgot-password",
-      "url": "http://127.0.0.1:3000/auth/forgot-password",
+      "url": "http://localhost:3001/auth/forgot-password",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\forgot-password.png",
-      "unexpectedLatin": [
-        "Sign in"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
+    },
+    {
+      "route": "/auth/reset-password",
+      "name": "reset-password",
+      "url": "http://localhost:3001/auth/reset-password",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\reset-password.png",
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/jobs",
       "name": "jobs",
-      "url": "http://127.0.0.1:3000/jobs",
+      "url": "http://localhost:3001/jobs",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\jobs.png",
       "unexpectedLatin": [],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "Postgres",
-        "Docker",
-        "GitHub",
-        "HR",
-        "API"
-      ]
+      "technicalLatinSamples": []
+    },
+    {
+      "route": "/onboarding/create-org",
+      "name": "onboarding-create-org",
+      "url": "http://localhost:3001/onboarding/create-org",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\onboarding-create-org.png",
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/dashboard",
       "name": "dashboard",
-      "url": "http://127.0.0.1:3000/dashboard",
+      "url": "http://localhost:3001/dashboard",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org",
-        "new job"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/dashboard/jobs",
       "name": "dashboard-jobs",
-      "url": "http://127.0.0.1:3000/dashboard/jobs",
+      "url": "http://localhost:3001/dashboard/jobs",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-jobs.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org",
-        "My Jobs"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/dashboard/candidates",
       "name": "dashboard-candidates",
-      "url": "http://127.0.0.1:3000/dashboard/candidates",
+      "url": "http://localhost:3001/dashboard/candidates",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-candidates.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/dashboard/applications",
       "name": "dashboard-applications",
-      "url": "http://127.0.0.1:3000/dashboard/applications",
+      "url": "http://localhost:3001/dashboard/applications",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-applications.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/dashboard/interviews",
       "name": "dashboard-interviews",
-      "url": "http://127.0.0.1:3000/dashboard/interviews",
+      "url": "http://localhost:3001/dashboard/interviews",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-interviews.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "Google"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/dashboard/timeline",
       "name": "dashboard-timeline",
-      "url": "http://127.0.0.1:3000/dashboard/timeline",
+      "url": "http://localhost:3001/dashboard/timeline",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-timeline.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/dashboard/source-tracking",
       "name": "dashboard-source-tracking",
-      "url": "http://127.0.0.1:3000/dashboard/source-tracking",
+      "url": "http://localhost:3001/dashboard/source-tracking",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-source-tracking.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org",
-        "Source Tracking"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/dashboard/ai-analysis",
       "name": "dashboard-ai-analysis",
-      "url": "http://127.0.0.1:3000/dashboard/ai-analysis",
+      "url": "http://localhost:3001/dashboard/ai-analysis",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-ai-analysis.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org",
-        "AI Analysis"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "Openai"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/dashboard/settings",
       "name": "dashboard-settings",
-      "url": "http://127.0.0.1:3000/dashboard/settings",
+      "url": "http://localhost:3001/dashboard/settings",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org",
-        "Save changes"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "API",
-        "SSO",
-        "reqcore"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/dashboard/settings/account",
       "name": "dashboard-settings-account",
-      "url": "http://127.0.0.1:3000/dashboard/settings/account",
+      "url": "http://localhost:3001/dashboard/settings/account",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings-account.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "API",
-        "SSO",
-        "reqcore"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/dashboard/settings/members",
       "name": "dashboard-settings-members",
-      "url": "http://127.0.0.1:3000/dashboard/settings/members",
+      "url": "http://localhost:3001/dashboard/settings/members",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings-members.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "API",
-        "SSO"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/dashboard/settings/localization",
       "name": "dashboard-settings-localization",
-      "url": "http://127.0.0.1:3000/dashboard/settings/localization",
+      "url": "http://localhost:3001/dashboard/settings/localization",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings-localization.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org",
-        "Save changes"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "API",
-        "SSO"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
       "route": "/dashboard/settings/ai",
       "name": "dashboard-settings-ai",
-      "url": "http://127.0.0.1:3000/dashboard/settings/ai",
+      "url": "http://localhost:3001/dashboard/settings/ai",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings-ai.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore",
-        "API",
-        "SSO"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
-      "route": "/dashboard/jobs/c4629dd1-1411-4552-a966-a1436487d108",
+      "route": "/dashboard/jobs/d54c4c14-056e-4b2d-83b5-54c8b350d5b7",
       "name": "dashboard-job-pipeline",
-      "url": "http://127.0.0.1:3000/dashboard/jobs/c4629dd1-1411-4552-a966-a1436487d108",
+      "url": "http://localhost:3001/dashboard/jobs/d54c4c14-056e-4b2d-83b5-54c8b350d5b7",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-job-pipeline.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org",
-        "AI Analysis",
-        "AI analysis"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
-      "route": "/dashboard/jobs/c4629dd1-1411-4552-a966-a1436487d108/candidates",
+      "route": "/dashboard/jobs/d54c4c14-056e-4b2d-83b5-54c8b350d5b7/candidates",
       "name": "dashboard-job-candidates",
-      "url": "http://127.0.0.1:3000/dashboard/jobs/c4629dd1-1411-4552-a966-a1436487d108/candidates",
+      "url": "http://localhost:3001/dashboard/jobs/d54c4c14-056e-4b2d-83b5-54c8b350d5b7/candidates",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-job-candidates.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
-      "route": "/dashboard/jobs/c4629dd1-1411-4552-a966-a1436487d108/ai-analysis",
+      "route": "/dashboard/jobs/d54c4c14-056e-4b2d-83b5-54c8b350d5b7/ai-analysis",
       "name": "dashboard-job-ai-analysis",
-      "url": "http://127.0.0.1:3000/dashboard/jobs/c4629dd1-1411-4552-a966-a1436487d108/ai-analysis",
+      "url": "http://localhost:3001/dashboard/jobs/d54c4c14-056e-4b2d-83b5-54c8b350d5b7/ai-analysis",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-job-ai-analysis.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     },
     {
-      "route": "/dashboard/applications/527a7cdb-9896-42bb-b8f1-c0d332ac9a18",
+      "route": "/dashboard/applications/25d2e4e2-2ad6-45d9-9223-6fb63ec63ebb",
       "name": "dashboard-application-detail",
-      "url": "http://127.0.0.1:3000/dashboard/applications/527a7cdb-9896-42bb-b8f1-c0d332ac9a18",
+      "url": "http://localhost:3001/dashboard/applications/25d2e4e2-2ad6-45d9-9223-6fb63ec63ebb",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-application-detail.png",
-      "unexpectedLatin": [
-        "New Job",
-        "Select org"
-      ],
-      "technicalLatinSamples": [
-        "Reqcore"
-      ]
+      "unexpectedLatin": [],
+      "technicalLatinSamples": []
     }
   ]
 }

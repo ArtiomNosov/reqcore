@@ -52,18 +52,10 @@ async function capture(page, route, report) {
   let status = 'ok'
   let error = null
   try {
-    const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90_000 })
+    const response = await page.goto(url, { waitUntil: 'load', timeout: 90_000 })
     await page.waitForTimeout(6000)
     if (response && response.status() >= 500) {
       status = `http-${response.status()}`
-    }
-    const bodySnippet = await page.evaluate(() => document.body.innerText.slice(0, 200))
-    if (
-      bodySnippet.trimStart().startsWith('500')
-      && bodySnippet.includes('Internal Server Error')
-      && bodySnippet.length < 80
-    ) {
-      status = 'internal-server-error'
     }
   } catch (e) {
     status = 'navigation-error'
@@ -196,5 +188,11 @@ console.log(
 )
 
 if (summary.pagesWithUnexpectedLatin.length > 0) {
+  process.exitCode = 1
+}
+const hardErrors = summary.pagesWithErrors.filter(
+  (p) => p.status === 'navigation-error' || String(p.status).startsWith('http-5'),
+)
+if (hardErrors.length > 0) {
   process.exitCode = 1
 }
