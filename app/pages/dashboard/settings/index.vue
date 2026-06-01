@@ -3,9 +3,12 @@ import { Building2, Save, AlertTriangle, Trash2, Loader2 } from 'lucide-vue-next
 
 definePageMeta({})
 
+const { t } = useI18n()
+const generalSeoTitle = computed(() => `${t('settingsPages.general.title')} ${t('brand.titleSuffix')}`)
+const generalSeoDescription = computed(() => t('settingsPages.general.description'))
 useSeoMeta({
-  title: 'Organization Settings — Reqcore',
-  description: 'Manage your organization settings',
+  title: generalSeoTitle,
+  description: generalSeoDescription,
 })
 
 const { activeOrg } = useCurrentOrg()
@@ -120,10 +123,10 @@ async function handleDeleteOrg() {
     <!-- Page title -->
     <div class="mb-6">
       <h1 class="text-lg font-semibold text-surface-900 dark:text-surface-50">
-        General
+        {{ t('settingsPages.general.title') }}
       </h1>
       <p class="text-sm text-surface-500 dark:text-surface-400 mt-0.5">
-        Manage your organization's profile and configuration.
+        {{ t('settingsPages.general.description') }}
       </p>
     </div>
 
@@ -135,8 +138,8 @@ async function handleDeleteOrg() {
             <Building2 class="size-5" />
           </div>
           <div>
-            <h2 class="text-base font-semibold text-surface-900 dark:text-surface-100">Organization profile</h2>
-            <p class="text-sm text-surface-500 dark:text-surface-400">Basic information about your organization.</p>
+            <h2 class="text-base font-semibold text-surface-900 dark:text-surface-100">{{ t('settingsPages.general.profileTitle') }}</h2>
+            <p class="text-sm text-surface-500 dark:text-surface-400">{{ t('settingsPages.general.profileHint') }}</p>
           </div>
         </div>
       </div>
@@ -144,7 +147,7 @@ async function handleDeleteOrg() {
       <div class="px-4 sm:px-6 py-5 space-y-5">
         <div>
           <label for="org-name" class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
-            Organization name
+            {{ t('settingsPages.general.orgName') }}
           </label>
           <input
             id="org-name"
@@ -152,13 +155,13 @@ async function handleDeleteOrg() {
             type="text"
             :disabled="!canUpdateOrg"
             class="w-full rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-3 py-2 text-sm text-surface-900 dark:text-surface-100 placeholder:text-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-            placeholder="My Company"
+            :placeholder="t('settingsPages.general.orgNamePlaceholder')"
           />
         </div>
 
         <div>
           <label for="org-slug" class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
-            URL slug
+            {{ t('settingsPages.general.urlSlug') }}
           </label>
           <div class="flex items-center rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 overflow-hidden focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-brand-500 transition-colors">
             <span class="px-3 text-sm text-surface-400 dark:text-surface-500 select-none bg-surface-50 dark:bg-surface-800/50 border-r border-surface-200 dark:border-surface-700 py-2">
@@ -174,7 +177,7 @@ async function handleDeleteOrg() {
             />
           </div>
           <p class="mt-1.5 text-xs text-surface-400 dark:text-surface-500">
-            Used in your public job board URL. Only lowercase letters, numbers, and hyphens.
+            {{ t('settingsPages.general.urlHint') }}
           </p>
           <p v-if="slugError" class="mt-1 text-xs text-danger-500">
             {{ slugError }}
@@ -190,7 +193,7 @@ async function handleDeleteOrg() {
           >
             <Loader2 v-if="isSaving" class="size-4 animate-spin" />
             <Save v-else class="size-4" />
-            {{ isSaving ? 'Saving…' : 'Save changes' }}
+            {{ isSaving ? t('ui.loading') : t('common.saveChanges') }}
           </button>
 
           <Transition
@@ -219,8 +222,8 @@ async function handleDeleteOrg() {
             <AlertTriangle class="size-5" />
           </div>
           <div>
-            <h2 class="text-base font-semibold text-danger-700 dark:text-danger-300">Danger zone</h2>
-            <p class="text-sm text-danger-600/80 dark:text-danger-400/80">Irreversible and destructive actions.</p>
+            <h2 class="text-base font-semibold text-danger-700 dark:text-danger-300">{{ t('settingsPages.danger.title') }}</h2>
+            <p class="text-sm text-danger-600/80 dark:text-danger-400/80">{{ t('settingsPages.danger.description') }}</p>
           </div>
         </div>
       </div>
@@ -228,9 +231,9 @@ async function handleDeleteOrg() {
       <div class="px-4 sm:px-6 py-5">
         <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div>
-            <h3 class="text-sm font-semibold text-surface-900 dark:text-surface-100">Delete organization</h3>
+            <h3 class="text-sm font-semibold text-surface-900 dark:text-surface-100">{{ t('settingsPages.danger.deleteOrgTitle') }}</h3>
             <p class="text-sm text-surface-500 dark:text-surface-400 mt-0.5">
-              Permanently delete this organization and all its data. This action cannot be undone.
+              {{ t('settingsPages.danger.deleteOrgHint') }}
             </p>
           </div>
           <button
@@ -238,7 +241,7 @@ async function handleDeleteOrg() {
             @click="showDeleteConfirm = true"
           >
             <Trash2 class="size-4" />
-            Delete
+            {{ t('common.delete') }}
           </button>
         </div>
 
@@ -251,7 +254,7 @@ async function handleDeleteOrg() {
         >
           <div v-if="showDeleteConfirm" class="mt-5 rounded-lg border border-danger-200 dark:border-danger-800 bg-danger-50/50 dark:bg-danger-950/30 px-4 py-4 space-y-3">
             <p class="text-sm text-surface-700 dark:text-surface-300">
-              Type <strong class="text-surface-900 dark:text-surface-100 font-semibold">{{ activeOrg?.name }}</strong> to confirm deletion:
+              {{ t('settingsPages.danger.deleteConfirmType') }} <strong class="text-surface-900 dark:text-surface-100 font-semibold">{{ activeOrg?.name }}</strong> {{ t('settingsPages.danger.deleteConfirmHint') }}
             </p>
             <input
               v-model="deleteConfirmText"
@@ -267,13 +270,13 @@ async function handleDeleteOrg() {
               >
                 <Loader2 v-if="isDeleting" class="size-4 animate-spin" />
                 <Trash2 v-else class="size-4" />
-                {{ isDeleting ? 'Deleting…' : 'Permanently delete' }}
+                {{ isDeleting ? t('settingsPages.danger.deleting') : t('settingsPages.danger.permanentlyDelete') }}
               </button>
               <button
                 class="rounded-lg px-4 py-2 text-sm font-medium text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-surface-100 transition-colors"
                 @click="showDeleteConfirm = false; deleteConfirmText = ''"
               >
-                Cancel
+                {{ t('common.cancel') }}
               </button>
             </div>
             <div v-if="deleteError" class="text-sm text-danger-600 dark:text-danger-400">
@@ -286,7 +289,7 @@ async function handleDeleteOrg() {
 
     <!-- Read-only notice for non-admin users -->
     <div v-if="!canUpdateOrg" class="mt-6 rounded-lg bg-surface-50 dark:bg-surface-800/50 border border-surface-200 dark:border-surface-800 px-4 py-3 text-sm text-surface-500 dark:text-surface-400">
-      You don't have permission to modify organization settings. Contact an admin or owner for changes.
+      {{ t('settingsPages.general.noPermission') }}
     </div>
   </div>
 </template>

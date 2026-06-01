@@ -6,9 +6,12 @@ definePageMeta({
   middleware: ['auth', 'require-org'],
 })
 
+const { t } = useI18n()
+const candidatesSeoTitle = computed(() => t('candidatesPage.title'))
+const candidatesSeoDescription = computed(() => t('candidatesPage.description'))
 useSeoMeta({
-  title: 'Candidates — Reqcore',
-  description: 'Manage your candidate pool',
+  title: candidatesSeoTitle,
+  description: candidatesSeoDescription,
 })
 
 // ── Column visibility ─────────────────────────────────────────────────────────
@@ -28,12 +31,12 @@ const visibleColumns = ref<Record<string, boolean>>({ ...defaultColumnVisibility
 const { definitions: propertyDefs } = useProperties({ entityType: () => 'candidate' })
 
 const candidateColumns = computed(() => [
-  { key: 'name', label: 'Name', required: true },
-  { key: 'email', label: 'Email' },
-  { key: 'phone', label: 'Phone' },
-  { key: 'applications', label: 'Applications' },
-  { key: 'added', label: 'Added' },
-  { key: 'quickNotes', label: 'Quick notes' },
+  { key: 'name', label: t('candidatesPage.columns.name'), required: true },
+  { key: 'email', label: t('candidatesPage.columns.email') },
+  { key: 'phone', label: t('candidatesPage.columns.phone') },
+  { key: 'applications', label: t('candidatesPage.columns.applications') },
+  { key: 'added', label: t('candidatesPage.columns.added') },
+  { key: 'quickNotes', label: t('candidatesPage.columns.quickNotes') },
   ...propertyDefs.value.map((d) => ({ key: `prop_${d.id}`, label: d.name })),
 ])
 
@@ -273,9 +276,9 @@ const selectedCandidateId = ref<string | null>(null)
     <!-- Header -->
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-50">Candidates</h1>
+        <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-50">{{ t('candidatesPage.heading') }}</h1>
         <p class="text-sm text-surface-500 dark:text-surface-400 mt-1">
-          Manage your candidate pool and track applicants.
+          {{ t('candidatesPage.description') }}
         </p>
       </div>
       <NuxtLink
@@ -283,7 +286,7 @@ const selectedCandidateId = ref<string | null>(null)
         class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 transition-colors"
       >
         <Plus class="size-4" />
-        Add Candidate
+        {{ t('candidatesPage.add') }}
       </NuxtLink>
     </div>
 
@@ -294,7 +297,7 @@ const selectedCandidateId = ref<string | null>(null)
         <input
           v-model="searchInput"
           type="text"
-          placeholder="Search by name or email…"
+          :placeholder="t('candidatesPage.searchPlaceholder')"
           class="w-full rounded-lg border border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 pl-10 pr-3 py-2 text-sm text-surface-900 dark:text-surface-100 placeholder:text-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
         />
       </div>
@@ -321,7 +324,7 @@ const selectedCandidateId = ref<string | null>(null)
         @click="drawerOpen = true"
       >
         <SlidersHorizontal class="size-4" />
-        Filters
+        {{ t('ui.filters') }}
         <span
           v-if="activeFilterCount > 0"
           class="inline-flex items-center justify-center size-4 rounded-full bg-surface-700 dark:bg-surface-300 text-white dark:text-surface-900 text-xs font-semibold"
@@ -333,7 +336,7 @@ const selectedCandidateId = ref<string | null>(null)
         @click="clearFilters"
       >
         <X class="size-3" />
-        Clear
+        {{ t('ui.resetAll') }}
       </button>
       <button
         type="button"
@@ -349,7 +352,7 @@ const selectedCandidateId = ref<string | null>(null)
     <!-- Filter drawer -->
     <FilterDrawer
       v-model="drawerOpen"
-      title="Filter candidates"
+      :title="t('candidatesPage.filterTitle')"
       description="Customize your view, then save it for quick access."
       :active-count="activeFilterCount"
       saveable
@@ -398,37 +401,37 @@ const selectedCandidateId = ref<string | null>(null)
 
         <!-- Sort -->
         <div>
-          <label class="block text-xs font-semibold uppercase tracking-wide text-surface-500 dark:text-surface-400 mb-2">Sort by</label>
+          <label class="block text-xs font-semibold uppercase tracking-wide text-surface-500 dark:text-surface-400 mb-2">{{ t('candidatesPage.sortBy') }}</label>
           <div class="flex gap-2">
             <select
               v-model="sortKey"
               class="flex-1 rounded-lg border border-surface-300 dark:border-surface-700 px-3 py-2 text-sm bg-white dark:bg-surface-900 text-surface-900 dark:text-surface-100 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
             >
-              <option value="created">Date added</option>
-              <option value="name">Name</option>
-              <option value="email">Email</option>
-              <option value="phone">Phone</option>
-              <option value="applications">Applications</option>
+              <option value="created">{{ t('candidatesPage.sortDateAdded') }}</option>
+              <option value="name">{{ t('candidatesPage.columns.name') }}</option>
+              <option value="email">{{ t('candidatesPage.columns.email') }}</option>
+              <option value="phone">{{ t('candidatesPage.columns.phone') }}</option>
+              <option value="applications">{{ t('candidatesPage.columns.applications') }}</option>
             </select>
             <select
               v-model="sortDir"
               class="w-32 rounded-lg border border-surface-300 dark:border-surface-700 px-3 py-2 text-sm bg-white dark:bg-surface-900 text-surface-900 dark:text-surface-100 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
             >
-              <option value="asc">Ascending</option>
-              <option value="desc">Descending</option>
+              <option value="asc">{{ t('candidatesPage.sortAscending') }}</option>
+              <option value="desc">{{ t('candidatesPage.sortDescending') }}</option>
             </select>
           </div>
         </div>
 
         <!-- Property filters -->
         <div v-if="propertyDefs.length > 0">
-          <label class="block text-xs font-semibold uppercase tracking-wide text-surface-500 dark:text-surface-400 mb-2">Properties</label>
+          <label class="block text-xs font-semibold uppercase tracking-wide text-surface-500 dark:text-surface-400 mb-2">{{ t('candidatesPage.properties') }}</label>
           <PropertyFilterBar v-model="propertyFilters" entity-type="candidate" />
         </div>
 
         <!-- Columns -->
         <div>
-          <label class="block text-xs font-semibold uppercase tracking-wide text-surface-500 dark:text-surface-400 mb-2">Columns</label>
+          <label class="block text-xs font-semibold uppercase tracking-wide text-surface-500 dark:text-surface-400 mb-2">{{ t('ui.columns') }}</label>
           <div class="space-y-1.5">
             <label
               v-for="col in candidateColumns.filter(c => !c.required)"
@@ -451,7 +454,7 @@ const selectedCandidateId = ref<string | null>(null)
 
     <!-- Loading state -->
     <div v-if="fetchStatus === 'pending'" class="text-center py-12 text-surface-400">
-      Loading candidates…
+      {{ t('ui.loading') }}
     </div>
 
     <!-- Error state -->
@@ -459,8 +462,8 @@ const selectedCandidateId = ref<string | null>(null)
       v-else-if="error"
       class="rounded-lg border border-danger-200 bg-danger-50 p-4 text-sm text-danger-700"
     >
-      Failed to load candidates. Please try again.
-      <button class="underline ml-1" @click="refresh()">Retry</button>
+      {{ t('candidatesPage.loadFailed') }}
+      <button class="underline ml-1" @click="refresh()">{{ t('ui.retry') }}</button>
     </div>
 
     <!-- Empty state -->
@@ -470,13 +473,10 @@ const selectedCandidateId = ref<string | null>(null)
     >
       <Users class="size-10 text-surface-300 dark:text-surface-600 mx-auto mb-3" />
       <h3 class="text-base font-semibold text-surface-700 dark:text-surface-200 mb-1">
-        {{ debouncedSearch ? 'No candidates found' : 'No candidates yet' }}
+        {{ debouncedSearch ? t('common.noResults') : t('empty.noCandidates') }}
       </h3>
       <p class="text-sm text-surface-500 dark:text-surface-400 mb-4">
-        {{ debouncedSearch
-          ? 'Try adjusting your search terms.'
-          : 'Add your first candidate to start building your talent pool.'
-        }}
+        {{ debouncedSearch ? t('candidatesPage.searchAdjust') : t('candidatesPage.emptyPool') }}
       </p>
       <NuxtLink
         v-if="!debouncedSearch"
@@ -484,7 +484,7 @@ const selectedCandidateId = ref<string | null>(null)
         class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 transition-colors"
       >
         <Plus class="size-4" />
-        Add Candidate
+        {{ t('candidatesPage.add') }}
       </NuxtLink>
     </div>
 
@@ -495,7 +495,7 @@ const selectedCandidateId = ref<string | null>(null)
           <!-- Fullscreen header -->
           <div v-if="isFullscreen" class="flex items-center justify-between px-4 py-3 border-b border-surface-200 dark:border-surface-800 shrink-0 bg-white dark:bg-surface-950">
             <span class="text-sm font-semibold text-surface-900 dark:text-surface-100">
-              Candidates — {{ sortedCandidates.length }} result{{ sortedCandidates.length === 1 ? '' : 's' }}
+              {{ sortedCandidates.length === 1 ? t('candidatesPage.resultsCount', { count: sortedCandidates.length }) : t('candidatesPage.resultsCountPlural', { count: sortedCandidates.length }) }}
             </span>
             <button
               type="button"
@@ -503,7 +503,7 @@ const selectedCandidateId = ref<string | null>(null)
               @click="isFullscreen = false"
             >
               <Minimize2 class="size-4" />
-              Exit fullscreen
+              {{ t('candidatesPage.fullscreenExit') }}
             </button>
           </div>
           <div :class="isFullscreen ? 'flex-1 overflow-auto p-4' : ''">
@@ -513,7 +513,7 @@ const selectedCandidateId = ref<string | null>(null)
             <tr class="bg-surface-50 dark:bg-surface-800/50 border-b border-surface-200 dark:border-surface-800">
               <th class="text-left px-4 py-3 font-medium text-surface-500 dark:text-surface-400">
                 <button class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors" @click="toggleSort('name')">
-                  Name
+                  {{ t('candidatesPage.columns.name') }}
                   <ArrowUp v-if="sortKey === 'name' && sortDir === 'asc'" class="size-3.5" />
                   <ArrowDown v-else-if="sortKey === 'name' && sortDir === 'desc'" class="size-3.5" />
                   <ArrowUpDown v-else class="size-3.5 opacity-40" />
@@ -521,7 +521,7 @@ const selectedCandidateId = ref<string | null>(null)
               </th>
               <th v-if="visibleColumns.email" class="text-left px-4 py-3 font-medium text-surface-500 dark:text-surface-400">
                 <button class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors" @click="toggleSort('email')">
-                  Email
+                  {{ t('candidatesPage.columns.email') }}
                   <ArrowUp v-if="sortKey === 'email' && sortDir === 'asc'" class="size-3.5" />
                   <ArrowDown v-else-if="sortKey === 'email' && sortDir === 'desc'" class="size-3.5" />
                   <ArrowUpDown v-else class="size-3.5 opacity-40" />
@@ -529,7 +529,7 @@ const selectedCandidateId = ref<string | null>(null)
               </th>
               <th v-if="visibleColumns.phone" class="text-left px-4 py-3 font-medium text-surface-500 dark:text-surface-400 hidden md:table-cell">
                 <button class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors" @click="toggleSort('phone')">
-                  Phone
+                  {{ t('candidatesPage.columns.phone') }}
                   <ArrowUp v-if="sortKey === 'phone' && sortDir === 'asc'" class="size-3.5" />
                   <ArrowDown v-else-if="sortKey === 'phone' && sortDir === 'desc'" class="size-3.5" />
                   <ArrowUpDown v-else class="size-3.5 opacity-40" />
@@ -537,7 +537,7 @@ const selectedCandidateId = ref<string | null>(null)
               </th>
               <th v-if="visibleColumns.applications" class="text-center px-4 py-3 font-medium text-surface-500 dark:text-surface-400 hidden sm:table-cell">
                 <button class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors" @click="toggleSort('applications')">
-                  Applications
+                  {{ t('candidatesPage.columns.applications') }}
                   <ArrowUp v-if="sortKey === 'applications' && sortDir === 'asc'" class="size-3.5" />
                   <ArrowDown v-else-if="sortKey === 'applications' && sortDir === 'desc'" class="size-3.5" />
                   <ArrowUpDown v-else class="size-3.5 opacity-40" />
@@ -545,14 +545,14 @@ const selectedCandidateId = ref<string | null>(null)
               </th>
               <th v-if="visibleColumns.added" class="text-left px-4 py-3 font-medium text-surface-500 dark:text-surface-400">
                 <button class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors" @click="toggleSort('created')">
-                  Added
+                  {{ t('candidatesPage.columns.added') }}
                   <ArrowUp v-if="sortKey === 'created' && sortDir === 'asc'" class="size-3.5" />
                   <ArrowDown v-else-if="sortKey === 'created' && sortDir === 'desc'" class="size-3.5" />
                   <ArrowUpDown v-else class="size-3.5 opacity-40" />
                 </button>
               </th>
               <th v-if="visibleColumns.quickNotes" class="text-left px-4 py-3 font-medium text-surface-500 dark:text-surface-400 hidden lg:table-cell w-52">
-                Quick notes
+                {{ t('candidatesPage.columns.quickNotes') }}
               </th>
               <template v-for="d in propertyDefs" :key="d.id">
                 <th v-if="visibleColumns[`prop_${d.id}`]" class="text-left px-4 py-3 font-medium text-surface-500 dark:text-surface-400 whitespace-nowrap">
@@ -624,12 +624,12 @@ const selectedCandidateId = ref<string | null>(null)
                       :disabled="isSavingNotes"
                       class="rounded bg-brand-600 px-2 py-0.5 text-xs text-white hover:bg-brand-700 disabled:opacity-50 transition-colors"
                       @click="saveNotes(c.id)"
-                    >Save</button>
+                    >{{ t('ui.save') }}</button>
                     <button
                       type="button"
                       class="rounded border border-surface-300 dark:border-surface-700 px-2 py-0.5 text-xs text-surface-500 hover:text-surface-700 transition-colors"
                       @click="cancelEditNotes"
-                    >Cancel</button>
+                    >{{ t('ui.cancel') }}</button>
                   </div>
                 </div>
                 <button
@@ -643,7 +643,7 @@ const selectedCandidateId = ref<string | null>(null)
                     v-if="c.quickNotes"
                     class="text-xs text-surface-600 dark:text-surface-400 line-clamp-2 group-hover/notes:text-surface-900 dark:group-hover/notes:text-surface-100 transition-colors"
                   >{{ c.quickNotes }}</span>
-                  <span v-else class="text-xs text-surface-300 dark:text-surface-600 group-hover/notes:text-surface-400 transition-colors italic">Add note…</span>
+                  <span v-else class="text-xs text-surface-300 dark:text-surface-600 group-hover/notes:text-surface-400 transition-colors italic">{{ t('candidatesPage.addNote') }}…</span>
                 </button>
               </td>
               <!-- Property columns (must come AFTER quick notes to match header order) -->

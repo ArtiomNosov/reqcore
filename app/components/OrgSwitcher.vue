@@ -48,7 +48,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
       class="absolute top-[calc(100%+4px)] left-0 min-w-full w-max bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-700 rounded-md shadow-lg z-50 overflow-hidden"
     >
       <div v-if="isSwitching" class="px-3 py-3 text-center text-[13px] text-surface-500 dark:text-surface-400">
-        Switching…
+        {{ t('orgSwitcher.switching') }}
       </div>
       <template v-else>
         <button
@@ -68,7 +68,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
           class="block w-full px-3 py-2 border-t border-surface-200 dark:border-surface-700 text-xs text-surface-500 dark:text-surface-400 text-left cursor-pointer no-underline hover:text-surface-900 dark:hover:text-surface-200 hover:bg-surface-50 dark:hover:bg-surface-800 transition-colors"
           @click="isOpen = false"
         >
-          + Create organization
+          {{ t('nav.createOrgPrefix') }} {{ t('orgSwitcher.createOrg') }}
         </NuxtLink>
       </template>
     </div>

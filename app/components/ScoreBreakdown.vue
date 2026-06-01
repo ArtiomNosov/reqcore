@@ -18,6 +18,7 @@ const emit = defineEmits<{
   (e: 'scored'): void
 }>()
 
+const { t } = useI18n()
 const { track } = useTrack()
 const isAnalyzing = ref(false)
 const analyzeError = ref<string | null>(null)
@@ -144,7 +145,7 @@ async function retryParse() {
             <Brain class="size-3.5 text-brand-600 dark:text-brand-400" />
           </div>
           <div>
-            <p class="text-sm font-medium text-surface-600 dark:text-surface-300">No AI analysis yet</p>
+            <p class="text-sm font-medium text-surface-600 dark:text-surface-300">{{ t('ai.noAnalysisYet') }}</p>
           </div>
         </div>
         <div class="flex items-center gap-1.5">

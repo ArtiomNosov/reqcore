@@ -142,7 +142,7 @@ export function useTrackingLinks(options?: {
     error,
     refresh,
   } = useFetch<{ data: TrackingLink[]; total: number }>(linksUrl, {
-    key: fetchKey.value,
+    key: fetchKey,
     headers: useRequestHeaders(['cookie']),
   })
 

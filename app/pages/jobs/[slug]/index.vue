@@ -8,6 +8,7 @@ definePageMeta({
 const route = useRoute()
 const jobSlug = route.params.slug as string
 const { track } = useTrack()
+const { locale } = useI18n()
 
 /** Forward source-tracking query params (?ref=, utm_*) to the apply page */
 const applyQuery = computed(() => {
@@ -179,8 +180,6 @@ const typeLabels: Record<string, string> = {
   contract: 'Contract',
   internship: 'Internship',
 }
-
-const { locale } = useI18n()
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString(locale.value, {

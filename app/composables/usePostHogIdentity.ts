@@ -23,14 +23,14 @@ export async function usePostHogIdentity() {
 
   if (!$posthogIdentifyUser) return
 
-  const { data: session } = await authClient.useSession(useFetch)
-  const activeOrgState = authClient.useActiveOrganization()
-
+  // All Vue composables must run before the first await (called from app.vue setup).
   const { hasConsented } = useAnalyticsConsent()
-
   const config = useRuntimeConfig()
   const liveDemoEmail = (config.public.liveDemoEmail as string | undefined) || ''
   const demoOrgSlug = (config.public.demoOrgSlug as string | undefined) || ''
+  const activeOrgState = authClient.useActiveOrganization()
+
+  const { data: session } = await authClient.useSession(useFetch)
 
   watch(
     [() => session.value, hasConsented] as const,

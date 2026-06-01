@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { needsConsent, acceptAnalytics, declineAnalytics } = useAnalyticsConsent()
+const { t } = useI18n()
 </script>
 
 <template>
@@ -15,9 +16,9 @@ const { needsConsent, acceptAnalytics, declineAnalytics } = useAnalyticsConsent(
       v-if="needsConsent"
       class="fixed bottom-4 right-4 z-50 max-w-sm rounded-lg border border-white/10 bg-zinc-900/95 px-4 py-3 shadow-2xl backdrop-blur-md sm:right-6 sm:bottom-6"
     >
-      <p class="mb-1 text-[11px] font-semibold uppercase tracking-wider text-white/40">A small ask</p>
+      <p class="mb-1 text-[11px] font-semibold uppercase tracking-wider text-white/40">{{ t('consent.title') }}</p>
       <p class="text-[13px] leading-relaxed text-white/70">
-        Help us improve reqcore. No ads, no data selling, just product insights.
+        {{ t('consent.body') }}
       </p>
       <p class="mt-1.5 text-[12px] text-white/40">
         <a
@@ -26,7 +27,7 @@ const { needsConsent, acceptAnalytics, declineAnalytics } = useAnalyticsConsent(
           rel="noopener noreferrer"
           class="underline underline-offset-2 transition hover:text-white/70"
         >
-          Privacy policy
+          {{ t('consent.privacy') }}
         </a>
       </p>
       <div class="mt-3 flex gap-2">
@@ -35,14 +36,14 @@ const { needsConsent, acceptAnalytics, declineAnalytics } = useAnalyticsConsent(
           class="rounded-md px-3 py-1.5 text-xs font-medium text-white/40 transition hover:text-white/70"
           @click="declineAnalytics"
         >
-          No thanks
+          {{ t('consent.decline') }}
         </button>
         <button
           type="button"
           class="rounded-md bg-indigo-500 px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-indigo-400"
           @click="acceptAnalytics"
         >
-          Sure, help improve it
+          {{ t('consent.accept') }}
         </button>
       </div>
     </div>

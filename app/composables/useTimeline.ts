@@ -58,6 +58,7 @@ interface TimelineResponse {
 }
 
 export function useTimeline() {
+  const { t, locale } = useI18n()
   const items = ref<TimelineItem[]>([])
   const upcoming = ref<TimelineItem[]>([])
   const isLoading = ref(false)
@@ -206,7 +207,7 @@ export function useTimeline() {
           jobId: jId,
           jobUrl: `/dashboard/jobs/${jId}`,
           directItems,
-          candidateGroups: buildCandidateGroups(candidateRelated),
+          candidateGroups: buildCandidateGroups(candidateRelated, t),
           items: cluster.items,
         })
       }
@@ -214,16 +215,16 @@ export function useTimeline() {
       if (candidateItems.length) {
         sections.push({
           type: 'candidates',
-          label: 'Candidates',
+          label: t('timelinePage.sectionCandidates'),
           directItems: [],
-          candidateGroups: buildCandidateGroups(candidateItems),
+          candidateGroups: buildCandidateGroups(candidateItems, t),
           items: candidateItems,
         })
       }
       if (teamItems.length) {
         sections.push({
           type: 'team',
-          label: 'Team',
+          label: t('timelinePage.sectionTeam'),
           directItems: teamItems,
           candidateGroups: [],
           items: teamItems,
@@ -232,7 +233,7 @@ export function useTimeline() {
       if (otherItems.length) {
         sections.push({
           type: 'other',
-          label: 'Other activity',
+          label: t('timelinePage.sectionOther'),
           directItems: otherItems,
           candidateGroups: [],
           items: otherItems,
@@ -241,7 +242,7 @@ export function useTimeline() {
 
       return {
         date,
-        label: formatDayLabel(date, todayStr),
+        label: formatDayLabel(date, todayStr, t, locale.value),
         isToday: date === todayStr,
         isFuture: date > todayStr,
         items: dayItems,
@@ -270,7 +271,10 @@ export function useTimeline() {
   }
 }
 
-function buildCandidateGroups(items: TimelineItem[]): TimelineCandidateGroup[] {
+function buildCandidateGroups(
+  items: TimelineItem[],
+  t: (key: string) => string,
+): TimelineCandidateGroup[] {
   const candidateMap = new Map<string, { name: string, items: TimelineItem[] }>()
 
   for (const item of items) {
@@ -278,7 +282,7 @@ function buildCandidateGroups(items: TimelineItem[]): TimelineCandidateGroup[] {
     if (!cId) {
       const fallback = '__uncategorized__'
       if (!candidateMap.has(fallback)) {
-        candidateMap.set(fallback, { name: 'Other', items: [] })
+        candidateMap.set(fallback, { name: t('timelinePage.sectionOther'), items: [] })
       }
       candidateMap.get(fallback)!.items.push(item)
       continue
@@ -287,7 +291,7 @@ function buildCandidateGroups(items: TimelineItem[]): TimelineCandidateGroup[] {
     if (!candidateMap.has(cId)) {
       const cName = item.candidateName
         ?? (item.resourceType === 'candidate' ? item.resourceName : null)
-        ?? 'Unknown candidate'
+        ?? t('timelinePage.unknownCandidate')
       candidateMap.set(cId, { name: cName, items: [] })
     }
     candidateMap.get(cId)!.items.push(item)
@@ -314,18 +318,24 @@ function formatDateKey(date: Date): string {
   return `${y}-${m}-${d}`
 }
 
-function formatDayLabel(dateStr: string, todayStr: string): string {
+function formatDayLabel(
+  dateStr: string,
+  todayStr: string,
+  t: (key: string, params?: Record<string, unknown>) => string,
+  localeCode: string,
+): string {
   const date = new Date(dateStr + 'T00:00:00')
   const today = new Date(todayStr + 'T00:00:00')
   const diffDays = Math.round((date.getTime() - today.getTime()) / 86400000)
+  const dateLocale = localeCode === 'ru' ? 'ru-RU' : localeCode
 
-  if (diffDays === 0) return 'Today'
-  if (diffDays === 1) return 'Tomorrow'
-  if (diffDays === -1) return 'Yesterday'
-  if (diffDays > 1 && diffDays <= 7) return `In ${diffDays} days`
-  if (diffDays < -1 && diffDays >= -7) return `${Math.abs(diffDays)} days ago`
+  if (diffDays === 0) return t('time.today')
+  if (diffDays === 1) return t('time.tomorrow')
+  if (diffDays === -1) return t('time.yesterday')
+  if (diffDays > 1 && diffDays <= 7) return t('time.inDays', { count: diffDays })
+  if (diffDays < -1 && diffDays >= -7) return t('time.daysAgo', { count: Math.abs(diffDays) })
 
-  return date.toLocaleDateString(undefined, {
+  return date.toLocaleDateString(dateLocale, {
     weekday: 'long',
     month: 'long',
     day: 'numeric',

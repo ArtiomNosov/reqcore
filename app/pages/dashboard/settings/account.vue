@@ -3,15 +3,24 @@ import {
   User, Lock, Save, Loader2, Eye, EyeOff, Check,
   KeyRound, Mail, Calendar,
 } from 'lucide-vue-next'
+import { toRuEmailDisplay } from '~~/shared/ru-display'
 
 definePageMeta({})
 
+const { t, locale } = useI18n()
+const accountSeoTitle = computed(() => `${t('settingsPages.account.title')} ${t('brand.titleSuffix')}`)
+const accountSeoDescription = computed(() => t('settingsPages.account.description'))
 useSeoMeta({
-  title: 'Account Settings — Reqcore',
-  description: 'Manage your personal account settings',
+  title: accountSeoTitle,
+  description: accountSeoDescription,
 })
 
 const { data: session } = await authClient.useSession(useFetch)
+const visibleEmail = computed(() => {
+  const email = session.value?.user?.email
+  if (!email) return ''
+  return locale.value?.toString().startsWith('ru') ? toRuEmailDisplay(email) : email
+})
 
 // ─────────────────────────────────────────────
 // Profile editing
@@ -127,10 +136,10 @@ function getInitials(name: string | undefined): string {
     <!-- Page title -->
     <div class="mb-6">
       <h1 class="text-lg font-semibold text-surface-900 dark:text-surface-50">
-        Account
+        {{ t('settingsPages.account.title') }}
       </h1>
       <p class="text-sm text-surface-500 dark:text-surface-400 mt-0.5">
-        Manage your personal profile and security settings.
+        {{ t('settingsPages.account.description') }}
       </p>
     </div>
 
@@ -142,8 +151,8 @@ function getInitials(name: string | undefined): string {
             <User class="size-5" />
           </div>
           <div>
-            <h2 class="text-base font-semibold text-surface-900 dark:text-surface-100">Profile</h2>
-            <p class="text-sm text-surface-500 dark:text-surface-400">Your personal information.</p>
+            <h2 class="text-base font-semibold text-surface-900 dark:text-surface-100">{{ t('settingsPages.account.profile') }}</h2>
+            <p class="text-sm text-surface-500 dark:text-surface-400">{{ t('settingsPages.account.profileHint') }}</p>
           </div>
         </div>
       </div>
@@ -168,7 +177,7 @@ function getInitials(name: string | undefined): string {
               class="text-sm text-surface-500 dark:text-surface-400 flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 hover:underline cursor-pointer transition-colors"
             >
               <Mail class="size-3.5" />
-              {{ session?.user?.email }}
+              {{ visibleEmail }}
             </a>
           </div>
         </div>
@@ -176,7 +185,7 @@ function getInitials(name: string | undefined): string {
         <!-- Name field -->
         <div>
           <label for="profile-name" class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
-            Display name
+            {{ t('settingsPages.account.displayName') }}
           </label>
           <input
             id="profile-name"
@@ -190,13 +199,13 @@ function getInitials(name: string | undefined): string {
         <!-- Email (read-only) -->
         <div>
           <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
-            Email address
+            {{ t('settingsPages.account.emailAddress') }}
           </label>
           <div class="w-full rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800/50 px-3 py-2 text-sm text-surface-500 dark:text-surface-400">
             {{ session?.user?.email }}
           </div>
           <p class="mt-1.5 text-xs text-surface-400 dark:text-surface-500">
-            Email cannot be changed at this time.
+            {{ t('settingsPages.account.emailLocked') }}
           </p>
         </div>
 
@@ -209,7 +218,7 @@ function getInitials(name: string | undefined): string {
           >
             <Loader2 v-if="isSavingProfile" class="size-4 animate-spin" />
             <Save v-else class="size-4" />
-            {{ isSavingProfile ? 'Saving…' : 'Save profile' }}
+            {{ isSavingProfile ? t('ui.loading') : t('settingsPages.account.saveProfile') }}
           </button>
 
           <Transition
@@ -239,8 +248,8 @@ function getInitials(name: string | undefined): string {
             <KeyRound class="size-5" />
           </div>
           <div>
-            <h2 class="text-base font-semibold text-surface-900 dark:text-surface-100">Password</h2>
-            <p class="text-sm text-surface-500 dark:text-surface-400">Change your account password.</p>
+            <h2 class="text-base font-semibold text-surface-900 dark:text-surface-100">{{ t('settingsPages.account.password') }}</h2>
+            <p class="text-sm text-surface-500 dark:text-surface-400">{{ t('settingsPages.account.passwordHint') }}</p>
           </div>
         </div>
       </div>
@@ -249,7 +258,7 @@ function getInitials(name: string | undefined): string {
         <!-- Current password -->
         <div>
           <label for="current-password" class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
-            Current password
+            {{ t('settingsPages.account.currentPassword') }}
           </label>
           <div class="relative">
             <input
@@ -258,7 +267,7 @@ function getInitials(name: string | undefined): string {
               :type="showCurrentPassword ? 'text' : 'password'"
               autocomplete="current-password"
               class="w-full rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-3 py-2 pr-10 text-sm text-surface-900 dark:text-surface-100 placeholder:text-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
-              placeholder="Enter current password"
+              :placeholder="t('settingsPages.account.enterCurrentPassword')"
             />
             <button
               type="button"
@@ -274,7 +283,7 @@ function getInitials(name: string | undefined): string {
         <!-- New password -->
         <div>
           <label for="new-password" class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
-            New password
+            {{ t('settingsPages.account.newPassword') }}
           </label>
           <div class="relative">
             <input
@@ -283,7 +292,7 @@ function getInitials(name: string | undefined): string {
               :type="showNewPassword ? 'text' : 'password'"
               autocomplete="new-password"
               class="w-full rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-3 py-2 pr-10 text-sm text-surface-900 dark:text-surface-100 placeholder:text-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
-              placeholder="Enter new password"
+              :placeholder="t('settingsPages.account.enterNewPassword')"
             />
             <button
               type="button"
@@ -316,7 +325,7 @@ function getInitials(name: string | undefined): string {
         <!-- Confirm password -->
         <div>
           <label for="confirm-password" class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
-            Confirm new password
+            {{ t('settingsPages.account.confirmPassword') }}
           </label>
           <input
             id="confirm-password"
@@ -324,7 +333,7 @@ function getInitials(name: string | undefined): string {
             type="password"
             autocomplete="new-password"
             class="w-full rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-3 py-2 text-sm text-surface-900 dark:text-surface-100 placeholder:text-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
-            placeholder="Confirm new password"
+            :placeholder="t('settingsPages.account.confirmPassword')"
           />
           <p
             v-if="confirmPassword && !passwordsMatch"
@@ -350,7 +359,7 @@ function getInitials(name: string | undefined): string {
           >
             <Loader2 v-if="isChangingPassword" class="size-4 animate-spin" />
             <Lock v-else class="size-4" />
-            {{ isChangingPassword ? 'Changing…' : 'Change password' }}
+            {{ isChangingPassword ? t('ui.loading') : t('settingsPages.account.changePassword') }}
           </button>
 
           <Transition
@@ -380,8 +389,8 @@ function getInitials(name: string | undefined): string {
             <Calendar class="size-5" />
           </div>
           <div>
-            <h2 class="text-base font-semibold text-surface-900 dark:text-surface-100">Session</h2>
-            <p class="text-sm text-surface-500 dark:text-surface-400">Your current login session details.</p>
+            <h2 class="text-base font-semibold text-surface-900 dark:text-surface-100">{{ t('settingsPages.account.session') }}</h2>
+            <p class="text-sm text-surface-500 dark:text-surface-400">{{ t('settingsPages.account.sessionHint') }}</p>
           </div>
         </div>
       </div>
@@ -389,19 +398,19 @@ function getInitials(name: string | undefined): string {
       <div class="px-4 sm:px-6 py-5">
         <dl class="space-y-3">
           <div class="flex items-center justify-between">
-            <dt class="text-sm text-surface-500 dark:text-surface-400">Session ID</dt>
+            <dt class="text-sm text-surface-500 dark:text-surface-400">{{ t('settingsPages.account.sessionId') }}</dt>
             <dd class="text-sm font-mono text-surface-700 dark:text-surface-300">
               {{ session?.session?.id ? `${session.session.id.slice(0, 8)}…` : '—' }}
             </dd>
           </div>
           <div class="flex items-center justify-between">
-            <dt class="text-sm text-surface-500 dark:text-surface-400">Created</dt>
+            <dt class="text-sm text-surface-500 dark:text-surface-400">{{ t('settingsPages.account.created') }}</dt>
             <dd class="text-sm text-surface-700 dark:text-surface-300">
               {{ session?.session?.createdAt ? new Date(session.session.createdAt).toLocaleDateString(undefined, { dateStyle: 'medium' }) : '—' }}
             </dd>
           </div>
           <div class="flex items-center justify-between">
-            <dt class="text-sm text-surface-500 dark:text-surface-400">Expires</dt>
+            <dt class="text-sm text-surface-500 dark:text-surface-400">{{ t('settingsPages.account.expires') }}</dt>
             <dd class="text-sm text-surface-700 dark:text-surface-300">
               {{ session?.session?.expiresAt ? new Date(session.session.expiresAt).toLocaleDateString(undefined, { dateStyle: 'medium' }) : '—' }}
             </dd>

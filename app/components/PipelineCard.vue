@@ -16,13 +16,13 @@ const emit = defineEmits<{
   (e: 'transition', status: string): void
 }>()
 
-const transitionLabels: Record<string, string> = {
-  new: 'Re-open',
-  screening: 'Screening',
-  interview: 'Interview',
-  offer: 'Offer',
-  hired: 'Hired',
-  rejected: 'Reject',
+const { t } = useI18n()
+const { applicationStatusBadge } = useLocalizedEnums()
+
+function transitionLabel(status: string) {
+  if (status === 'rejected') return t('pipeline.reject')
+  if (status === 'new') return t('pipeline.reopen')
+  return applicationStatusBadge(status)
 }
 
 const transitionClasses: Record<string, string> = {
@@ -71,7 +71,7 @@ const { formatPersonName, formatDateTime } = useOrgSettings()
             ? 'bg-warning-50 text-warning-700 ring-warning-200 dark:bg-warning-950 dark:text-warning-300 dark:ring-warning-800'
             : 'bg-danger-50 text-danger-700 ring-danger-200 dark:bg-danger-950 dark:text-danger-300 dark:ring-danger-800'"
       >
-        {{ score }}pts
+        {{ score }}{{ t('units.points') }}
       </span>
     </div>
 
@@ -85,7 +85,7 @@ const { formatPersonName, formatDateTime } = useOrgSettings()
         :class="transitionClasses[nextStatus] ?? 'text-surface-500 hover:bg-surface-100'"
         @click.prevent="emit('transition', nextStatus)"
       >
-        {{ transitionLabels[nextStatus] ?? nextStatus }}
+        {{ transitionLabel(nextStatus) }}
       </button>
     </div>
   </div>

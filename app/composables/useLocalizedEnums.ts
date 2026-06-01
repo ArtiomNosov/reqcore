@@ -7,6 +7,9 @@ export function useLocalizedEnums() {
   const applicationStatus = (status: string) =>
     t(`pipeline.status.${status}`, status)
 
+  const applicationStatusBadge = (status: string) =>
+    t(`pipeline.statusBadge.${status}`, applicationStatus(status))
+
   const jobStatus = (status: string) =>
     t(`job.status.${status}`, status)
 
@@ -18,6 +21,7 @@ export function useLocalizedEnums() {
 
   return {
     applicationStatus,
+    applicationStatusBadge,
     jobStatus,
     jobType,
     interviewStatus,

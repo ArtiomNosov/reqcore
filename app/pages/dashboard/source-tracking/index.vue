@@ -13,9 +13,13 @@ definePageMeta({
   middleware: ['auth', 'require-org'],
 })
 
+const { t } = useI18n()
+
+const seoTitle = computed(() => `${t('nav.sourceTracking')} ${t('brand.titleSuffix')}`)
+const seoDescription = computed(() => t('sourceTracking.description'))
 useSeoMeta({
-  title: 'Source Tracking — Reqcore',
-  description: 'Track where your applications come from',
+  title: seoTitle,
+  description: seoDescription,
 })
 
 const localePath = useLocalePath()
@@ -172,37 +176,10 @@ async function copyTrackingUrl(code: string) {
 // Display helpers
 // ─────────────────────────────────────────────
 
-const channelLabels: Record<string, string> = {
-  linkedin: 'LinkedIn',
-  indeed: 'Indeed',
-  glassdoor: 'Glassdoor',
-  ziprecruiter: 'ZipRecruiter',
-  monster: 'Monster',
-  handshake: 'Handshake',
-  angellist: 'AngelList',
-  wellfound: 'Wellfound',
-  dice: 'Dice',
-  stackoverflow: 'Stack Overflow',
-  weworkremotely: 'We Work Remotely',
-  remoteok: 'Remote OK',
-  builtin: 'Built In',
-  hired: 'Hired',
-  lever: 'Lever',
-  greenhouse_board: 'Greenhouse',
-  google_jobs: 'Google Jobs',
-  facebook: 'Facebook',
-  twitter: 'X / Twitter',
-  instagram: 'Instagram',
-  tiktok: 'TikTok',
-  reddit: 'Reddit',
-  referral: 'Referral',
-  career_site: 'Career Site',
-  email: 'Email',
-  event: 'Event',
-  agency: 'Agency',
-  direct: 'Direct',
-  other: 'Other',
-  custom: 'Custom',
+function getChannelLabel(channel: string): string {
+  const key = `sourceTracking.channels.${channel}`
+  const label = t(key)
+  return label === key ? t('sourceTracking.channels.custom') : label
 }
 
 const channelColors: Record<string, string> = {
@@ -245,10 +222,6 @@ function getChannelColor(channel: string) {
   return channelColors[channel] ?? 'bg-surface-400 dark:bg-surface-500'
 }
 
-function getChannelLabel(channel: string) {
-  return channelLabels[channel] ?? channel
-}
-
 const statusBadgeClasses: Record<string, string> = {
   new: 'bg-blue-50 text-blue-700 ring-blue-200/60 dark:bg-blue-950 dark:text-blue-400 dark:ring-blue-800/40',
   screening: 'bg-violet-50 text-violet-700 ring-violet-200/60 dark:bg-violet-950 dark:text-violet-400 dark:ring-violet-800/40',
@@ -275,6 +248,18 @@ function conversionRate(channel: string): number {
   return Math.round((hired / total) * 100)
 }
 
+type DateRangeKey = '7d' | '30d' | '90d' | 'all'
+
+function dateRangeLabel(range: DateRangeKey): string {
+  const keyByRange: Record<DateRangeKey, string> = {
+    '7d': 'sourceTracking.range7d',
+    '30d': 'sourceTracking.range30d',
+    '90d': 'sourceTracking.range90d',
+    all: 'sourceTracking.rangeAll',
+  }
+  return t(keyByRange[range])
+}
+
 function formatDate(dateStr: string) {
   const d = new Date(dateStr)
   const now = new Date()
@@ -283,11 +268,11 @@ function formatDate(dateStr: string) {
   const diffHours = Math.floor(diffMs / 3600000)
   const diffDays = Math.floor(diffMs / 86400000)
 
-  if (diffMins < 1) return 'Just now'
-  if (diffMins < 60) return `${diffMins}m ago`
-  if (diffHours < 24) return `${diffHours}h ago`
-  if (diffDays < 7) return `${diffDays}d ago`
-  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+  if (diffMins < 1) return t('sourceTracking.justNow')
+  if (diffMins < 60) return t('sourceTracking.minutesAgoShort', { n: diffMins })
+  if (diffHours < 24) return t('sourceTracking.hoursAgoShort', { n: diffHours })
+  if (diffDays < 7) return t('sourceTracking.daysAgoShort', { n: diffDays })
+  return d.toLocaleDateString('ru-RU', { month: 'short', day: 'numeric' })
 }
 
 const filteredAttributed = computed(() => {
@@ -386,8 +371,8 @@ const showTab = ref<'overview' | 'links' | 'table'>(initialTab)
       class="rounded-2xl border border-danger-200 dark:border-danger-900 bg-danger-50 dark:bg-danger-950/60 p-5 text-sm text-danger-700 dark:text-danger-400 flex items-center gap-3"
     >
       <AlertCircle class="size-5 shrink-0" />
-      <span>Failed to load source tracking data.</span>
-      <button class="underline ml-auto font-medium cursor-pointer" @click="refreshStats()">Retry</button>
+      <span>{{ t('sourceTracking.loadFailed') }}</span>
+      <button class="underline ml-auto font-medium cursor-pointer" @click="refreshStats()">{{ t('ui.retry') }}</button>
     </div>
 
     <!-- ─── Main content ─── -->
@@ -395,9 +380,9 @@ const showTab = ref<'overview' | 'links' | 'table'>(initialTab)
       <!-- ─── Header ─── -->
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-10">
         <div>
-          <h1 class="text-xl sm:text-2xl font-bold text-surface-900 dark:text-surface-50 tracking-tight">Source Tracking</h1>
+          <h1 class="text-xl sm:text-2xl font-bold text-surface-900 dark:text-surface-50 tracking-tight">{{ t('nav.sourceTracking') }}</h1>
           <p class="text-sm text-surface-400 dark:text-surface-500 mt-1">
-            Track where your applications come from
+            {{ t('sourceTracking.description') }}
           </p>
         </div>
         <div class="flex items-center gap-2">
@@ -412,7 +397,7 @@ const showTab = ref<'overview' | 'links' | 'table'>(initialTab)
                 : 'text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-200'"
               @click="dateRange = range"
             >
-              {{ range === 'all' ? 'All time' : range.toUpperCase() }}
+              {{ dateRangeLabel(range) }}
             </button>
           </div>
 
@@ -435,7 +420,7 @@ const showTab = ref<'overview' | 'links' | 'table'>(initialTab)
             @click="showCreateModal = true"
           >
             <Plus class="size-4" />
-            <span class="hidden sm:inline">New Link</span>
+            <span class="hidden sm:inline">{{ t('sourceTracking.createLink') }}</span>
           </button>
         </div>
       </div>

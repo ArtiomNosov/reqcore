@@ -3,9 +3,12 @@ import { Globe, Save, Check, Loader2 } from 'lucide-vue-next'
 
 definePageMeta({})
 
+const { t } = useI18n()
+const localizationSeoTitle = computed(() => `${t('settingsPages.localization.title')} ${t('brand.titleSuffix')}`)
+const localizationSeoDescription = computed(() => t('settingsPages.localization.description'))
 useSeoMeta({
-  title: 'Localization Settings — Reqcore',
-  description: 'Configure name display format and date format for your organization',
+  title: localizationSeoTitle,
+  description: localizationSeoDescription,
 })
 
 const { allowed: canUpdateOrg } = usePermission({ organization: ['update'] })
@@ -41,7 +44,7 @@ async function handleSave() {
     setTimeout(() => { saveSuccess.value = false }, 3000)
   }
   catch (err: unknown) {
-    saveError.value = err instanceof Error ? err.message : 'Failed to save settings'
+    saveError.value = err instanceof Error ? err.message : t('errors.generic')
   }
   finally {
     isSaving.value = false
@@ -49,7 +52,7 @@ async function handleSave() {
 }
 
 // Preview helpers
-const previewCandidate = { firstName: 'Jane', lastName: 'Doe', displayName: null }
+const previewCandidate = { firstName: 'Иван', lastName: 'Иванов', displayName: null }
 const previewNameFormatted = computed(() => {
   if (localNameFormat.value === 'last_first') return `${previewCandidate.lastName} ${previewCandidate.firstName}`
   return `${previewCandidate.firstName} ${previewCandidate.lastName}`
@@ -72,10 +75,10 @@ const previewDateFormatted = computed(() => {
     <!-- Page title -->
     <div class="mb-6">
       <h1 class="text-lg font-semibold text-surface-900 dark:text-surface-50">
-        Localization
+        {{ t('settingsPages.localization.title') }}
       </h1>
       <p class="text-sm text-surface-500 dark:text-surface-400 mt-0.5">
-        Configure how candidate names and dates are displayed across your organization.
+        {{ t('settingsPages.localization.description') }}
       </p>
     </div>
 
@@ -87,8 +90,8 @@ const previewDateFormatted = computed(() => {
             <Globe class="size-5" />
           </div>
           <div>
-            <h2 class="text-base font-semibold text-surface-900 dark:text-surface-100">Display preferences</h2>
-            <p class="text-sm text-surface-500 dark:text-surface-400">Controls name and date formatting for all members of this organization.</p>
+            <h2 class="text-base font-semibold text-surface-900 dark:text-surface-100">{{ t('settingsPages.localization.displayTitle') }}</h2>
+            <p class="text-sm text-surface-500 dark:text-surface-400">{{ t('settingsPages.localization.displayHint') }}</p>
           </div>
         </div>
       </div>
@@ -97,10 +100,10 @@ const previewDateFormatted = computed(() => {
         <!-- Name display format -->
         <div>
           <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-2">
-            Name display format
+            {{ t('settingsPages.localization.nameFormat') }}
           </label>
           <p class="text-xs text-surface-400 dark:text-surface-500 mb-3">
-            Choose how candidate names are displayed throughout the application. You can always override this on individual candidates using the Display Name field.
+            {{ t('settingsPages.localization.nameFormatHint') }}
           </p>
           <div class="flex flex-col sm:flex-row gap-3">
             <label
@@ -117,8 +120,8 @@ const previewDateFormatted = computed(() => {
                 :disabled="!canUpdateOrg"
               />
               <div>
-                <span class="block text-sm font-medium text-surface-800 dark:text-surface-200">First Last</span>
-                <span class="block text-xs text-surface-400 mt-0.5">e.g. Jane Doe</span>
+                <span class="block text-sm font-medium text-surface-800 dark:text-surface-200">{{ t('settingsPages.localization.firstLast') }}</span>
+                <span class="block text-xs text-surface-400 mt-0.5">{{ t('settingsPages.localization.exampleName') }}</span>
               </div>
             </label>
             <label
@@ -135,8 +138,8 @@ const previewDateFormatted = computed(() => {
                 :disabled="!canUpdateOrg"
               />
               <div>
-                <span class="block text-sm font-medium text-surface-800 dark:text-surface-200">Last First</span>
-                <span class="block text-xs text-surface-400 mt-0.5">e.g. Doe Jane</span>
+                <span class="block text-sm font-medium text-surface-800 dark:text-surface-200">{{ t('settingsPages.localization.lastFirst') }}</span>
+                <span class="block text-xs text-surface-400 mt-0.5">{{ t('settingsPages.localization.exampleName') }}</span>
               </div>
             </label>
           </div>
@@ -145,10 +148,10 @@ const previewDateFormatted = computed(() => {
         <!-- Date format -->
         <div>
           <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-2">
-            Date format
+            {{ t('settingsPages.localization.dateFormat') }}
           </label>
           <p class="text-xs text-surface-400 dark:text-surface-500 mb-3">
-            Controls how dates (e.g. date of birth) are displayed.
+            {{ t('settingsPages.localization.dateFormatHint') }}
           </p>
           <div class="flex flex-col sm:flex-row gap-3">
             <label
@@ -165,8 +168,8 @@ const previewDateFormatted = computed(() => {
                 :disabled="!canUpdateOrg"
               />
               <div>
-                <span class="block text-sm font-medium text-surface-800 dark:text-surface-200">MM/DD/YYYY</span>
-                <span class="block text-xs text-surface-400 mt-0.5">United States</span>
+                <span class="block text-sm font-medium text-surface-800 dark:text-surface-200">{{ t('settingsPages.localization.dateExampleMdy') }}</span>
+                <span class="block text-xs text-surface-400 mt-0.5">{{ t('settingsPages.localization.regionUs') }}</span>
               </div>
             </label>
             <label
@@ -183,8 +186,8 @@ const previewDateFormatted = computed(() => {
                 :disabled="!canUpdateOrg"
               />
               <div>
-                <span class="block text-sm font-medium text-surface-800 dark:text-surface-200">DD/MM/YYYY</span>
-                <span class="block text-xs text-surface-400 mt-0.5">Europe, Vietnam & most regions</span>
+                <span class="block text-sm font-medium text-surface-800 dark:text-surface-200">{{ t('settingsPages.localization.dateExampleDmy') }}</span>
+                <span class="block text-xs text-surface-400 mt-0.5">{{ t('settingsPages.localization.regionEu') }}</span>
               </div>
             </label>
             <label
@@ -201,8 +204,8 @@ const previewDateFormatted = computed(() => {
                 :disabled="!canUpdateOrg"
               />
               <div>
-                <span class="block text-sm font-medium text-surface-800 dark:text-surface-200">YYYY-MM-DD</span>
-                <span class="block text-xs text-surface-400 mt-0.5">ISO 8601 / East Asia</span>
+                <span class="block text-sm font-medium text-surface-800 dark:text-surface-200">{{ t('settingsPages.localization.dateExampleYmd') }}</span>
+                <span class="block text-xs text-surface-400 mt-0.5">{{ t('settingsPages.localization.regionIso') }}</span>
               </div>
             </label>
           </div>
@@ -210,16 +213,10 @@ const previewDateFormatted = computed(() => {
 
         <!-- Live preview -->
         <div class="rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800/50 p-4">
-          <p class="text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wide mb-2">Preview</p>
+          <p class="text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wide mb-2">{{ t('settingsPages.localization.preview') }}</p>
           <div class="flex flex-col sm:flex-row sm:items-center gap-3 text-sm">
             <div class="flex items-center gap-2">
-              <span class="text-surface-400">Name:</span>
-              <span class="font-medium text-surface-900 dark:text-surface-100">{{ previewNameFormatted }}</span>
-            </div>
-            <div class="hidden sm:block text-surface-300 dark:text-surface-600">·</div>
-            <div class="flex items-center gap-2">
-              <span class="text-surface-400">Date of Birth:</span>
-              <span class="font-medium text-surface-900 dark:text-surface-100">{{ previewDateFormatted }}</span>
+              <span class="font-medium text-surface-900 dark:text-surface-100">{{ t('settingsPages.localization.previewLine', { name: previewNameFormatted, dob: previewDateFormatted }) }}</span>
             </div>
           </div>
         </div>
@@ -242,9 +239,9 @@ const previewDateFormatted = computed(() => {
             <Check v-if="saveSuccess" class="size-4" />
             <Loader2 v-else-if="isSaving" class="size-4 animate-spin" />
             <Save v-else class="size-4" />
-            {{ saveSuccess ? 'Saved!' : isSaving ? 'Saving…' : 'Save changes' }}
+            {{ saveSuccess ? t('common.success') : isSaving ? t('ui.loading') : t('common.saveChanges') }}
           </button>
-          <p v-if="!canUpdateOrg" class="text-xs text-surface-400">Only admins and owners can change organization settings.</p>
+          <p v-if="!canUpdateOrg" class="text-xs text-surface-400">{{ t('settingsPages.localization.noPermission') }}</p>
         </div>
       </div>
     </section>

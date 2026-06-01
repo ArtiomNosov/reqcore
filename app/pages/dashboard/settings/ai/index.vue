@@ -12,9 +12,12 @@ import {
 
 definePageMeta({})
 
+const { t } = useI18n()
+const aiSeoTitle = computed(() => `${t('settingsPages.ai.title')} ${t('brand.titleSuffix')}`)
+const aiSeoDescription = computed(() => t('settingsPages.ai.description'))
 useSeoMeta({
-  title: 'AI Configuration — Reqcore',
-  description: 'Configure AI providers and models for the chatbot and candidate analysis.',
+  title: aiSeoTitle,
+  description: aiSeoDescription,
 })
 
 interface AiConfigRow {
@@ -138,9 +141,9 @@ function formatPrice(p: number | null): string {
     <!-- Page header -->
     <div class="mb-6 flex items-start justify-between gap-4 flex-wrap">
       <div>
-        <h1 class="text-lg font-semibold text-surface-900 dark:text-surface-50">AI Configuration</h1>
+        <h1 class="text-lg font-semibold text-surface-900 dark:text-surface-50">{{ t('settingsPages.ai.title') }}</h1>
         <p class="text-sm text-surface-500 dark:text-surface-400 mt-0.5">
-          Add as many providers and models as you like. Pick which one powers the chatbot and which one scores candidates.
+          {{ t('settingsPages.ai.description') }}
         </p>
       </div>
       <NuxtLink
@@ -149,7 +152,7 @@ function formatPrice(p: number | null): string {
         class="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-700 transition-colors"
       >
         <Plus class="size-4" />
-        Add a model
+        {{ t('settingsPages.ai.addModel') }}
       </NuxtLink>
     </div>
 
@@ -164,15 +167,14 @@ function formatPrice(p: number | null): string {
     >
       <AlertTriangle class="size-5 shrink-0 mt-0.5" />
       <div>
-        <p class="font-semibold mb-1">Insufficient permissions</p>
-        <p>You don't have permission to manage AI settings. Contact your organization owner or admin.</p>
+        <p class="font-semibold mb-1">{{ t('settingsPages.ai.noPermission') }}</p>
       </div>
     </div>
 
     <!-- Loading -->
     <div v-else-if="isLoading" class="rounded-xl border border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 p-8 text-center text-sm text-surface-500">
       <Loader2 class="size-5 animate-spin mx-auto mb-2 text-surface-400" />
-      Loading configurations…
+      {{ t('ui.loading') }}
     </div>
 
     <!-- Empty state -->
@@ -183,17 +185,7 @@ function formatPrice(p: number | null): string {
       <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 mb-3">
         <Brain class="size-6" />
       </div>
-      <h2 class="text-base font-semibold text-surface-900 dark:text-surface-100">No AI models configured yet</h2>
-      <p class="mt-1 mb-4 text-sm text-surface-500 dark:text-surface-400">
-        Add your first model to enable the chatbot and candidate analysis. Pick from popular providers or bring your own OpenAI-compatible endpoint.
-      </p>
-      <NuxtLink
-        to="/dashboard/settings/ai/new"
-        class="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 transition-colors"
-      >
-        <Plus class="size-4" />
-        Add your first model
-      </NuxtLink>
+      <h2 class="text-base font-semibold text-surface-900 dark:text-surface-100">{{ t('settingsPages.ai.empty') }}</h2>
     </div>
 
     <!-- Config cards -->
@@ -216,20 +208,20 @@ function formatPrice(p: number | null): string {
                 class="inline-flex items-center gap-1 rounded-full border border-brand-200 dark:border-brand-800 bg-brand-50 dark:bg-brand-950/50 px-2 py-0.5 text-[11px] font-medium text-brand-700 dark:text-brand-300"
                 title="Default for the chatbot"
               >
-                <Sparkles class="size-3" /> Chatbot default
+                <Sparkles class="size-3" /> {{ t('settingsPages.ai.chatbotDefault') }}
               </span>
               <span
                 v-if="c.isDefaultAnalysis"
                 class="inline-flex items-center gap-1 rounded-full border border-warning-200 dark:border-warning-800 bg-warning-50 dark:bg-warning-950/50 px-2 py-0.5 text-[11px] font-medium text-warning-700 dark:text-warning-300"
                 title="Default for candidate analysis"
               >
-                <Star class="size-3" /> Analysis default
+                <Star class="size-3" /> {{ t('settingsPages.ai.analysisDefault') }}
               </span>
               <span
                 v-if="!c.hasApiKey"
                 class="inline-flex items-center gap-1 rounded-full border border-danger-200 dark:border-danger-800 bg-danger-50 dark:bg-danger-950/50 px-2 py-0.5 text-[11px] font-medium text-danger-700 dark:text-danger-300"
               >
-                <AlertTriangle class="size-3" /> Missing API key
+                <AlertTriangle class="size-3" /> {{ t('settingsPages.ai.missingApiKey') }}
               </span>
             </div>
             <div class="mt-1 flex items-center gap-2 flex-wrap text-xs text-surface-500">
@@ -240,7 +232,7 @@ function formatPrice(p: number | null): string {
               </span>
               <span class="inline-flex items-center gap-1" title="Pricing per 1M tokens">
                 <BarChart3 class="size-3" />
-                {{ formatPrice(c.inputPricePer1m) }} in / {{ formatPrice(c.outputPricePer1m) }} out
+                {{ t('settingsPages.ai.pricingInOut', { input: formatPrice(c.inputPricePer1m), output: formatPrice(c.outputPricePer1m) }) }}
               </span>
             </div>
 
@@ -249,7 +241,7 @@ function formatPrice(p: number | null): string {
                 v-if="testResults[c.id]?.success"
                 class="inline-flex items-center gap-1 text-[11px] text-success-600 dark:text-success-400"
               >
-                <Check class="size-3" /> Connection verified.
+                <Check class="size-3" /> {{ t('settingsPages.ai.connectionVerified') }}
               </span>
               <span
                 v-else
@@ -271,7 +263,7 @@ function formatPrice(p: number | null): string {
             >
               <Loader2 v-if="togglingDefaultId === c.id && togglingPurpose === 'chatbot'" class="size-3.5 animate-spin" />
               <Sparkles v-else class="size-3.5" />
-              Use for chatbot
+              {{ t('settingsPages.ai.useForChatbot') }}
             </button>
 
             <button
@@ -283,7 +275,7 @@ function formatPrice(p: number | null): string {
             >
               <Loader2 v-if="togglingDefaultId === c.id && togglingPurpose === 'analysis'" class="size-3.5 animate-spin" />
               <Star v-else class="size-3.5" />
-              Use for analysis
+              {{ t('settingsPages.ai.useForAnalysis') }}
             </button>
 
             <button
@@ -293,7 +285,7 @@ function formatPrice(p: number | null): string {
             >
               <Loader2 v-if="testingId === c.id" class="size-3.5 animate-spin" />
               <Zap v-else class="size-3.5" />
-              Test
+              {{ t('settingsPages.ai.test') }}
             </button>
 
             <NuxtLink
@@ -301,7 +293,7 @@ function formatPrice(p: number | null): string {
               class="inline-flex items-center gap-1 rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2.5 py-1.5 text-xs font-medium text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 transition-colors"
             >
               <Pencil class="size-3.5" />
-              Edit
+              {{ t('ui.edit') }}
             </NuxtLink>
 
             <button
@@ -320,7 +312,7 @@ function formatPrice(p: number | null): string {
     <!-- Footer hint -->
     <p v-if="canManageAi && configs.length > 0" class="mt-4 text-xs text-surface-500 dark:text-surface-400 flex items-start gap-1.5">
       <KeyRound class="size-3.5 mt-0.5 shrink-0" />
-      <span>API keys are encrypted at rest with AES-256-GCM and never returned to the browser. Need a free key? OpenAI, Anthropic, and Google all offer trial credits.</span>
+      <span>{{ t('settingsPages.ai.apiKeysHint') }}</span>
     </p>
   </div>
 </template>

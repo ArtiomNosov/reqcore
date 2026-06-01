@@ -50,6 +50,8 @@
     "signInWithSso": "Sign in with {provider}",
     "signInTitle": "Sign In — Reqcore",
     "signUpTitle": "Sign Up — Reqcore",
+    "signUpDescription": "Create your Reqcore account",
+    "signUpHeading": "Create your account",
     "forgotPasswordTitle": "Forgot Password — Reqcore",
     "resetPasswordTitle": "Reset Password — Reqcore"
   },
@@ -83,6 +85,14 @@
       "contract": "Contract",
       "internship": "Internship"
     }
+  },
+  "sourceTracking": {
+    "description": "Track where your applications come from",
+    "loadFailed": "Failed to load source tracking data."
+  },
+  "ai": {
+    "noAnalysisYet": "No AI analysis yet",
+    "scoredSuccess": "AI analysis complete."
   },
   "demo": {
     "banner": "Live demo — Explore freely with sample data. Editing is disabled here.",

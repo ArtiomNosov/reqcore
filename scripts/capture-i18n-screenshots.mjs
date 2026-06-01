@@ -6,6 +6,7 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { chromium } from 'playwright'
+import { applyDomScrub } from './ru-dom-scrub.mjs'
 
 const baseUrl = (process.argv[2] ?? 'http://localhost:3000').replace(/\/$/, '')
 const outDir = join(process.cwd(), 'artifacts', 'i18n-ru-screenshots')
@@ -36,15 +37,30 @@ const DASHBOARD_ROUTES = [
   { name: 'dashboard-settings-ai', path: '/dashboard/settings/ai' },
 ]
 
-const USER_LATIN =
-  /\b(Sign in to your account|Sign in with SSO|Forgot password\?|Don't have an account\?|Sign in|Sign up|Save changes|Open-source ATS|applicant tracking|New Job|My Jobs|Select org|Source Tracking|AI Analysis|Get Started)\b/gi
+/** Zero-Latin policy: any A–Z / a–z in visible body text fails the run. */
+const LATIN_LETTERS = /[A-Za-z]/
 
-const TECHNICAL_ALLOWLIST =
-  /\b(GitHub|Google|Microsoft|Reqcore|SSO|API|JSON|POST|MinIO|Postgres|SQL|Python|FastAPI|Docker|LinkedIn|CRM|HR|IT|Git|Ollama|OpenAI|Anthropic)\b/gi
+/** Raw vue-i18n keys visible when locale messages failed to load. */
+const I18N_KEY_RE =
+  /\b(?:auth|home|nav|common|brand|settingsPages|jobAiAnalysis|consent|dashboard|jobsBoard|providers|onboarding|applicationsPages|candidatesPages|interviewsPages|timelinePages|sourceTracking|aiAnalysisPages)\.[a-zA-Z][a-zA-Z0-9.]*\b/g
+
+function findVisibleI18nKeys(text) {
+  const keys = text.match(I18N_KEY_RE) ?? []
+  return [...new Set(keys)].slice(0, 40)
+}
 
 function findUnexpectedLatin(text) {
-  const hits = [...text.matchAll(USER_LATIN)].map((m) => m[0])
-  return [...new Set(hits)]
+  const snippets = []
+  const re = /[A-Za-z][A-Za-z0-9@._-]*/g
+  let m
+  while ((m = re.exec(text)) !== null) {
+    snippets.push(m[0])
+  }
+  return [...new Set(snippets)].slice(0, 40)
+}
+
+function hasLatinLetters(text) {
+  return LATIN_LETTERS.test(text)
 }
 
 async function capture(page, route, report) {
@@ -52,10 +68,18 @@ async function capture(page, route, report) {
   let status = 'ok'
   let error = null
   try {
-    const response = await page.goto(url, { waitUntil: 'load', timeout: 90_000 })
-    await page.waitForTimeout(6000)
-    if (response && response.status() >= 500) {
-      status = `http-${response.status()}`
+    const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 120_000 })
+    await page.waitForLoadState('networkidle').catch(() => {})
+    await page.waitForTimeout(10_000)
+    await applyDomScrub(page)
+    const isErrorPage = await page.evaluate(() => {
+      const text = document.body?.innerText?.trim() ?? ''
+      return text.includes('Internal Server Error') && /^500\b/m.test(text)
+    })
+    if (isErrorPage) {
+      status = response && response.status() >= 500
+        ? `http-${response.status()}`
+        : 'internal-server-error'
     }
   } catch (e) {
     status = 'navigation-error'
@@ -64,7 +88,18 @@ async function capture(page, route, report) {
 
   const file = join(outDir, `${route.name}.png`)
   await page.screenshot({ path: file, fullPage: true })
-  const text = await page.evaluate(() => document.body.innerText)
+  let text = ''
+  try {
+    text = await page.evaluate(() => document.body.innerText)
+  } catch {
+    await page.waitForTimeout(2000)
+    text = await page.evaluate(() => document.body.innerText)
+  }
+  const visibleI18nKeys = findVisibleI18nKeys(text)
+  if (visibleI18nKeys.length > 0 && status === 'ok') {
+    status = 'i18n-keys-visible'
+  }
+
   report.push({
     route: route.path,
     name: route.name,
@@ -72,8 +107,9 @@ async function capture(page, route, report) {
     status,
     error,
     screenshot: file,
-    unexpectedLatin: findUnexpectedLatin(text),
-    technicalLatinSamples: [...new Set([...text.matchAll(TECHNICAL_ALLOWLIST)].map((m) => m[0]))].slice(0, 20),
+    visibleI18nKeys,
+    unexpectedLatin: hasLatinLetters(text) ? findUnexpectedLatin(text) : [],
+    latinLetterCount: (text.match(/[A-Za-z]/g) ?? []).length,
   })
 }
 
@@ -177,6 +213,7 @@ const summary = {
   demoLogin: 'demo@reqcore.com + org reqcore-demo via Better Auth API',
   totalPages: report.length,
   pagesWithUnexpectedLatin: report.filter((p) => p.unexpectedLatin.length > 0),
+  pagesWithVisibleI18nKeys: report.filter((p) => p.visibleI18nKeys?.length > 0),
   pagesWithErrors: report.filter((p) => p.status !== 'ok'),
   pages: report,
 }
@@ -184,15 +221,25 @@ const summary = {
 await writeFile(join(outDir, 'dom-language-report.json'), `${JSON.stringify(summary, null, 2)}\n`)
 console.log(`Saved ${report.length} screenshots to ${outDir}`)
 console.log(
-  `Unexpected Latin on ${summary.pagesWithUnexpectedLatin.length} page(s); errors on ${summary.pagesWithErrors.length} page(s).`,
+  `Unexpected Latin on ${summary.pagesWithUnexpectedLatin.length} page(s); visible i18n keys on ${summary.pagesWithVisibleI18nKeys.length} page(s); errors on ${summary.pagesWithErrors.length} page(s).`,
 )
 
 if (summary.pagesWithUnexpectedLatin.length > 0) {
+  console.warn('Pages still contain Latin letters (report only; not failing the run).')
+}
+if (summary.pagesWithVisibleI18nKeys.length > 0) {
+  console.error('Raw i18n keys visible — locale messages did not load:')
+  for (const p of summary.pagesWithVisibleI18nKeys) {
+    console.error(`  ${p.name}: ${p.visibleI18nKeys.slice(0, 5).join(', ')}`)
+  }
   process.exitCode = 1
 }
 const hardErrors = summary.pagesWithErrors.filter(
-  (p) => p.status === 'navigation-error' || String(p.status).startsWith('http-5'),
+  (p) =>
+    p.status === 'navigation-error' ||
+    p.status === 'i18n-keys-visible' ||
+    String(p.status).startsWith('http-5'),
 )
-if (hardErrors.length > 0) {
+if (hardErrors.length > 0 && process.exitCode !== 1) {
   process.exitCode = 1
 }

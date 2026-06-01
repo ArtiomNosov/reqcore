@@ -11,6 +11,7 @@ import {
 
 const route = useRoute()
 const { t } = useI18n()
+const { jobStatus } = useLocalizedEnums()
 const localePath = useLocalePath()
 const getRouteBaseName = useRouteBaseName()
 const { data: session } = await authClient.useSession(useFetch)
@@ -222,8 +223,8 @@ onUnmounted(() => {
             :href="useRuntimeConfig().public.marketingUrl"
             class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg no-underline hover:bg-surface-100/60 dark:hover:bg-surface-800/60 transition-colors mr-1 lg:mr-4"
           >
-            <img src="/eagle-mascot-logo.png" alt="Reqcore mascot" class="size-7 shrink-0 object-contain" />
-            <span class="text-[15px] font-bold text-surface-900 dark:text-surface-100 hidden sm:block tracking-tight">Reqcore</span>
+            <img src="/eagle-mascot-logo.png" :alt="t('brand.mascotAlt')" class="size-7 shrink-0 object-contain" />
+            <span class="text-[15px] font-bold text-surface-900 dark:text-surface-100 hidden sm:block tracking-tight">{{ t('brand.name') }}</span>
           </a>
 
           <!-- Desktop nav links -->
@@ -301,7 +302,7 @@ onUnmounted(() => {
               @click="showGetStartedMenu = !showGetStartedMenu"
             >
               <Sparkles class="size-3.5 transition-transform duration-300 group-hover:rotate-12" />
-              Get Started
+              {{ t('nav.getStarted') }}
               <ChevronDown
                 class="size-3 opacity-70 transition-transform duration-200"
                 :class="showGetStartedMenu ? 'rotate-180' : ''"
@@ -321,7 +322,7 @@ onUnmounted(() => {
                 class="absolute right-0 top-[calc(100%+6px)] w-72 rounded-xl border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-900 shadow-xl shadow-surface-900/8 dark:shadow-surface-950/30 overflow-hidden"
               >
                 <div class="px-4 py-3 border-b border-surface-100 dark:border-surface-800">
-                  <p class="text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wider">Choose your setup</p>
+                  <p class="text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wider">{{ t('nav.chooseSetup') }}</p>
                 </div>
                 <div class="p-2 space-y-1">
                   <NuxtLink
@@ -346,8 +347,8 @@ onUnmounted(() => {
                       <Server class="size-4" />
                     </div>
                     <div>
-                      <div class="text-sm font-semibold text-surface-900 dark:text-surface-100 group-hover/item:text-surface-700 dark:group-hover/item:text-surface-200 transition-colors">Self-Host</div>
-                      <div class="text-xs text-surface-500 dark:text-surface-400 mt-0.5">Deploy on your own infrastructure — full control, 100% free</div>
+                      <div class="text-sm font-semibold text-surface-900 dark:text-surface-100 group-hover/item:text-surface-700 dark:group-hover/item:text-surface-200 transition-colors">{{ t('demoUpsell.selfHost') }}</div>
+                      <div class="text-xs text-surface-500 dark:text-surface-400 mt-0.5">{{ t('nav.selfHostDesc') }}</div>
                     </div>
                   </a>
                 </div>
@@ -377,7 +378,7 @@ onUnmounted(() => {
           <!-- Color mode toggle -->
           <button
             class="inline-flex items-center justify-center size-8 rounded-lg text-surface-500 dark:text-surface-400 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-100 dark:hover:bg-surface-800 transition-all duration-200 cursor-pointer border-0 bg-transparent"
-            :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            :title="isDark ? t('nav.colorModeLight') : t('nav.colorModeDark')"
             @click="toggleColorMode"
           >
             <Sun v-if="isDark" class="size-4" />
@@ -417,7 +418,7 @@ onUnmounted(() => {
                       : 'text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-800'"
                   >
                     <ArrowUpCircle class="size-4" />
-                    Updates & changelog
+                    {{ t('nav.updatesChangelog') }}
                   </NuxtLink>
                   <button
                     v-if="isFeedbackEnabled"
@@ -425,7 +426,7 @@ onUnmounted(() => {
                     @click="showFeedbackModal = true; showMoreActions = false"
                   >
                     <MessageSquarePlus class="size-4" />
-                    Report issue
+                    {{ t('nav.reportIssue') }}
                   </button>
                 </div>
               </div>
@@ -484,7 +485,7 @@ onUnmounted(() => {
                       v-if="item.comingSoon"
                       class="ml-auto inline-flex items-center rounded-full bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 text-[9px] font-semibold leading-none text-amber-700 dark:text-amber-400 ring-1 ring-inset ring-amber-200/60 dark:ring-amber-800/40"
                     >
-                      Soon
+                      {{ t('nav.soon') }}
                     </span>
                   </NuxtLink>
                 </div>
@@ -537,7 +538,7 @@ onUnmounted(() => {
             class="hidden sm:flex items-center gap-1 text-xs font-medium text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300 transition-colors no-underline shrink-0"
           >
             <ChevronLeft class="size-3.5" />
-            All Jobs
+            {{ t('nav.allJobs') }}
           </NuxtLink>
 
           <div class="hidden sm:block w-px h-4 bg-surface-200 dark:bg-surface-700 shrink-0" />
@@ -549,10 +550,10 @@ onUnmounted(() => {
             </span>
             <span
               v-if="activeJobStatus"
-              class="inline-flex shrink-0 items-center rounded-md px-1.5 py-0.5 text-[10px] font-semibold capitalize ring-1 ring-inset"
+              class="inline-flex shrink-0 items-center rounded-md px-1.5 py-0.5 text-[10px] font-semibold ring-1 ring-inset"
               :class="jobStatusBadgeClasses[activeJobStatus] ?? 'bg-surface-50 text-surface-600 ring-surface-200'"
             >
-              {{ activeJobStatus }}
+              {{ jobStatus(activeJobStatus) }}
             </span>
           </div>
 
@@ -622,13 +623,13 @@ onUnmounted(() => {
           <!-- Get Started CTA (demo mode, mobile) -->
           <template v-if="isDemo">
             <div class="mt-2 pt-2 border-t border-surface-200 dark:border-surface-700">
-              <p class="px-3 mb-1.5 text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wider">Get Started</p>
+              <p class="px-3 mb-1.5 text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wider">{{ t('nav.getStarted') }}</p>
               <NuxtLink
                 :to="$localePath('/auth/fresh-signup')"
                 class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-brand-700 dark:text-brand-300 bg-brand-50 dark:bg-brand-950/40 hover:bg-brand-100 dark:hover:bg-brand-950/60 transition-colors no-underline"
               >
                 <Cloud class="size-4" />
-                Cloud Hosted — Start Free
+                {{ t('demoUpsell.cloud') }}
               </NuxtLink>
               <a
                 href="https://github.com/reqcore-inc/reqcore#quick-start"
@@ -637,7 +638,7 @@ onUnmounted(() => {
                 class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors no-underline mt-1"
               >
                 <Server class="size-4" />
-                Self-Host — Deploy Free
+                {{ t('demoUpsell.selfHost') }}
               </a>
             </div>
           </template>

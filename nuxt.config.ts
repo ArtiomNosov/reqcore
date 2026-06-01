@@ -8,38 +8,9 @@ const railwayPublicDomain =
   process.env.RAILWAY_PUBLIC_DOMAIN?.toLowerCase() ?? "";
 const siteUrl = process.env.NUXT_PUBLIC_SITE_URL || "https://reqcore.com";
 const i18nDefaultLocale = "ru";
+// Thesis RU branch: single locale avoids partial EN/ES strings in screenshots.
 const i18nLocales = [
   { code: "ru", language: "ru-RU", name: "Русский", file: "ru.json" },
-  { code: "en", language: "en-US", name: "English", file: "en.json" },
-  {
-    code: "es",
-    language: "es-ES",
-    name: "Español",
-    file: "es.json",
-    partial: true,
-  },
-  {
-    code: "fr",
-    language: "fr-FR",
-    name: "Français",
-    file: "fr.json",
-    partial: true,
-  },
-  {
-    code: "de",
-    language: "de-DE",
-    name: "Deutsch",
-    file: "de.json",
-    partial: true,
-  },
-  { code: "nb", language: "nb-NO", name: "Norsk Bokmål", file: "nb.json" },
-  {
-    code: "vi",
-    language: "vi-VN",
-    name: "Tiếng Việt",
-    file: "vi.json",
-    partial: true,
-  },
 ];
 
 const localizedPublicRouteRules = Object.fromEntries(

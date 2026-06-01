@@ -1,9 +1,300 @@
 {
   "baseUrl": "http://localhost:3001",
-  "capturedAt": "2026-05-29T09:50:28.406Z",
+  "capturedAt": "2026-06-01T12:23:33.880Z",
   "demoLogin": "demo@reqcore.com + org reqcore-demo via Better Auth API",
   "totalPages": 24,
-  "pagesWithUnexpectedLatin": [],
+  "pagesWithUnexpectedLatin": [
+    {
+      "route": "/",
+      "name": "home",
+      "url": "http://localhost:3001/",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\home.png",
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "PostgreSQL"
+      ],
+      "latinLetterCount": 10
+    },
+    {
+      "route": "/jobs",
+      "name": "jobs",
+      "url": "http://localhost:3001/jobs",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\jobs.png",
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "HR-",
+        "B2B-",
+        "UI",
+        "B2B",
+        "SaaS",
+        "TZ",
+        "Linux",
+        "CI",
+        "API",
+        "developer",
+        "docs"
+      ],
+      "latinLetterCount": 39
+    },
+    {
+      "route": "/dashboard/jobs",
+      "name": "dashboard-jobs",
+      "url": "http://localhost:3001/dashboard/jobs",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-jobs.png",
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "TZ"
+      ],
+      "latinLetterCount": 2
+    },
+    {
+      "route": "/dashboard/candidates",
+      "name": "dashboard-candidates",
+      "url": "http://localhost:3001/dashboard/candidates",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-candidates.png",
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "tatiana.belova@example.com",
+        "andrey.vinogradov@example.com",
+        "maria.volkova@example.com",
+        "elena.smirnova@example.com",
+        "viktoria.zaitseva@example.com",
+        "mikhail.stepanov@example.com",
+        "vera.golubeva@example.com",
+        "gleb.egorov@example.com",
+        "roman.nikitin@example.com",
+        "pavel.medvedev@example.com",
+        "dmitry.novikov@example.com",
+        "igor.semenov@example.com",
+        "ekaterina.romanova@example.com",
+        "oleg.makarov@example.com",
+        "yulia.fedorova@example.com",
+        "alina.pavlova@example.com",
+        "kirill.komarov@example.com",
+        "ivan.petrov@example.com",
+        "alexey.kozlov@example.com",
+        "maxim.orlov@example.com",
+        "candidates",
+        "total"
+      ],
+      "latinLetterCount": 469
+    },
+    {
+      "route": "/dashboard/applications",
+      "name": "dashboard-applications",
+      "url": "http://localhost:3001/dashboard/applications",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-applications.png",
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "viktoria.zaitseva@example.com",
+        "olga.kuznetsova@example.com",
+        "oleg.makarov@example.com",
+        "vera.golubeva@example.com",
+        "nikita.sokolov@example.com",
+        "alina.pavlova@example.com",
+        "roman.nikitin@example.com",
+        "gleb.egorov@example.com",
+        "anna.morozova@example.com",
+        "pavel.medvedev@example.com",
+        "sofia.lebedeva@example.com",
+        "maria.volkova@example.com",
+        "natalia.solovieva@example.com",
+        "maxim.orlov@example.com",
+        "dmitry.novikov@example.com",
+        "darya.kovaleva@example.com"
+      ],
+      "latinLetterCount": 451
+    },
+    {
+      "route": "/dashboard/interviews",
+      "name": "dashboard-interviews",
+      "url": "http://localhost:3001/dashboard/interviews",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-interviews.png",
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "fit",
+        "CI",
+        "CD"
+      ],
+      "latinLetterCount": 7
+    },
+    {
+      "route": "/dashboard/source-tracking",
+      "name": "dashboard-source-tracking",
+      "url": "http://localhost:3001/dashboard/source-tracking",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-source-tracking.png",
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "Server",
+        "Error",
+        "Cannot",
+        "read",
+        "properties",
+        "of",
+        "undefined",
+        "reading",
+        "deps"
+      ],
+      "latinLetterCount": 53
+    },
+    {
+      "route": "/dashboard/ai-analysis",
+      "name": "dashboard-ai-analysis",
+      "url": "http://localhost:3001/dashboard/ai-analysis",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-ai-analysis.png",
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "OpenAI"
+      ],
+      "latinLetterCount": 6
+    },
+    {
+      "route": "/dashboard/settings",
+      "name": "dashboard-settings",
+      "url": "http://localhost:3001/dashboard/settings",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings.png",
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "reqcore.com"
+      ],
+      "latinLetterCount": 10
+    },
+    {
+      "route": "/dashboard/settings/account",
+      "name": "dashboard-settings-account",
+      "url": "http://localhost:3001/dashboard/settings/account",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings-account.png",
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "lQG8HNcJ"
+      ],
+      "latinLetterCount": 7
+    },
+    {
+      "route": "/dashboard/settings/localization",
+      "name": "dashboard-settings-localization",
+      "url": "http://localhost:3001/dashboard/settings/localization",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings-localization.png",
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "ISO"
+      ],
+      "latinLetterCount": 3
+    },
+    {
+      "route": "/dashboard/settings/ai",
+      "name": "dashboard-settings-ai",
+      "url": "http://localhost:3001/dashboard/settings/ai",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings-ai.png",
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "OpenAI",
+        "gpt-4o-mini",
+        "API",
+        "AES-256-GCM",
+        "Anthropic",
+        "Google."
+      ],
+      "latinLetterCount": 44
+    },
+    {
+      "route": "/dashboard/jobs/6e00d255-8905-4969-b5b6-313e820acdae",
+      "name": "dashboard-job-pipeline",
+      "url": "http://localhost:3001/dashboard/jobs/6e00d255-8905-4969-b5b6-313e820acdae",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-job-pipeline.png",
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "Pipeline",
+        "olga.kuznetsova@example.com",
+        "artem.vasiliev@example.com",
+        "katerina.ivanova@example.com",
+        "pavel.medvedev@example.com",
+        "open-source",
+        "FRONTEND-",
+        "Svelte",
+        "Add",
+        "org-wide",
+        "property",
+        "Manage",
+        "job-specific",
+        "properties"
+      ],
+      "latinLetterCount": 196
+    },
+    {
+      "route": "/dashboard/jobs/6e00d255-8905-4969-b5b6-313e820acdae/candidates",
+      "name": "dashboard-job-candidates",
+      "url": "http://localhost:3001/dashboard/jobs/6e00d255-8905-4969-b5b6-313e820acdae/candidates",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-job-candidates.png",
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "elena.smirnova@example.com",
+        "alexey.kozlov@example.com",
+        "maria.volkova@example.com",
+        "dmitry.novikov@example.com",
+        "anna.morozova@example.com",
+        "ivan.petrov@example.com",
+        "sofia.lebedeva@example.com",
+        "nikita.sokolov@example.com",
+        "olga.kuznetsova@example.com",
+        "artem.vasiliev@example.com",
+        "katerina.ivanova@example.com",
+        "pavel.medvedev@example.com",
+        "yulia.fedorova@example.com",
+        "maxim.orlov@example.com"
+      ],
+      "latinLetterCount": 316
+    },
+    {
+      "route": "/dashboard/jobs/6e00d255-8905-4969-b5b6-313e820acdae/ai-analysis",
+      "name": "dashboard-job-ai-analysis",
+      "url": "http://localhost:3001/dashboard/jobs/6e00d255-8905-4969-b5b6-313e820acdae/ai-analysis",
+      "status": "ok",
+      "error": null,
+      "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-job-ai-analysis.png",
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "core_tech_stack",
+        "system_design",
+        "engineering_practices",
+        "B2B",
+        "SaaS",
+        "workflow-",
+        "relevant_experience",
+        "leadership_collab"
+      ],
+      "latinLetterCount": 93
+    }
+  ],
+  "pagesWithVisibleI18nKeys": [],
   "pagesWithErrors": [],
   "pages": [
     {
@@ -13,8 +304,11 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\home.png",
-      "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "PostgreSQL"
+      ],
+      "latinLetterCount": 10
     },
     {
       "route": "/auth/sign-in",
@@ -23,8 +317,9 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\sign-in.png",
+      "visibleI18nKeys": [],
       "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "latinLetterCount": 0
     },
     {
       "route": "/auth/sign-up",
@@ -33,8 +328,9 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\sign-up.png",
+      "visibleI18nKeys": [],
       "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "latinLetterCount": 0
     },
     {
       "route": "/auth/forgot-password",
@@ -43,8 +339,9 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\forgot-password.png",
+      "visibleI18nKeys": [],
       "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "latinLetterCount": 0
     },
     {
       "route": "/auth/reset-password",
@@ -53,8 +350,9 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\reset-password.png",
+      "visibleI18nKeys": [],
       "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "latinLetterCount": 0
     },
     {
       "route": "/jobs",
@@ -63,8 +361,21 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\jobs.png",
-      "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "HR-",
+        "B2B-",
+        "UI",
+        "B2B",
+        "SaaS",
+        "TZ",
+        "Linux",
+        "CI",
+        "API",
+        "developer",
+        "docs"
+      ],
+      "latinLetterCount": 39
     },
     {
       "route": "/onboarding/create-org",
@@ -73,8 +384,9 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\onboarding-create-org.png",
+      "visibleI18nKeys": [],
       "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "latinLetterCount": 0
     },
     {
       "route": "/dashboard",
@@ -83,8 +395,9 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard.png",
+      "visibleI18nKeys": [],
       "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "latinLetterCount": 0
     },
     {
       "route": "/dashboard/jobs",
@@ -93,8 +406,11 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-jobs.png",
-      "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "TZ"
+      ],
+      "latinLetterCount": 2
     },
     {
       "route": "/dashboard/candidates",
@@ -103,8 +419,32 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-candidates.png",
-      "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "tatiana.belova@example.com",
+        "andrey.vinogradov@example.com",
+        "maria.volkova@example.com",
+        "elena.smirnova@example.com",
+        "viktoria.zaitseva@example.com",
+        "mikhail.stepanov@example.com",
+        "vera.golubeva@example.com",
+        "gleb.egorov@example.com",
+        "roman.nikitin@example.com",
+        "pavel.medvedev@example.com",
+        "dmitry.novikov@example.com",
+        "igor.semenov@example.com",
+        "ekaterina.romanova@example.com",
+        "oleg.makarov@example.com",
+        "yulia.fedorova@example.com",
+        "alina.pavlova@example.com",
+        "kirill.komarov@example.com",
+        "ivan.petrov@example.com",
+        "alexey.kozlov@example.com",
+        "maxim.orlov@example.com",
+        "candidates",
+        "total"
+      ],
+      "latinLetterCount": 469
     },
     {
       "route": "/dashboard/applications",
@@ -113,8 +453,26 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-applications.png",
-      "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "viktoria.zaitseva@example.com",
+        "olga.kuznetsova@example.com",
+        "oleg.makarov@example.com",
+        "vera.golubeva@example.com",
+        "nikita.sokolov@example.com",
+        "alina.pavlova@example.com",
+        "roman.nikitin@example.com",
+        "gleb.egorov@example.com",
+        "anna.morozova@example.com",
+        "pavel.medvedev@example.com",
+        "sofia.lebedeva@example.com",
+        "maria.volkova@example.com",
+        "natalia.solovieva@example.com",
+        "maxim.orlov@example.com",
+        "dmitry.novikov@example.com",
+        "darya.kovaleva@example.com"
+      ],
+      "latinLetterCount": 451
     },
     {
       "route": "/dashboard/interviews",
@@ -123,8 +481,13 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-interviews.png",
-      "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "fit",
+        "CI",
+        "CD"
+      ],
+      "latinLetterCount": 7
     },
     {
       "route": "/dashboard/timeline",
@@ -133,8 +496,9 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-timeline.png",
+      "visibleI18nKeys": [],
       "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "latinLetterCount": 0
     },
     {
       "route": "/dashboard/source-tracking",
@@ -143,8 +507,19 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-source-tracking.png",
-      "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "Server",
+        "Error",
+        "Cannot",
+        "read",
+        "properties",
+        "of",
+        "undefined",
+        "reading",
+        "deps"
+      ],
+      "latinLetterCount": 53
     },
     {
       "route": "/dashboard/ai-analysis",
@@ -153,8 +528,11 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-ai-analysis.png",
-      "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "OpenAI"
+      ],
+      "latinLetterCount": 6
     },
     {
       "route": "/dashboard/settings",
@@ -163,8 +541,11 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings.png",
-      "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "reqcore.com"
+      ],
+      "latinLetterCount": 10
     },
     {
       "route": "/dashboard/settings/account",
@@ -173,8 +554,11 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings-account.png",
-      "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "lQG8HNcJ"
+      ],
+      "latinLetterCount": 7
     },
     {
       "route": "/dashboard/settings/members",
@@ -183,8 +567,9 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings-members.png",
+      "visibleI18nKeys": [],
       "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "latinLetterCount": 0
     },
     {
       "route": "/dashboard/settings/localization",
@@ -193,8 +578,11 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings-localization.png",
-      "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "ISO"
+      ],
+      "latinLetterCount": 3
     },
     {
       "route": "/dashboard/settings/ai",
@@ -203,48 +591,99 @@
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-settings-ai.png",
-      "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "OpenAI",
+        "gpt-4o-mini",
+        "API",
+        "AES-256-GCM",
+        "Anthropic",
+        "Google."
+      ],
+      "latinLetterCount": 44
     },
     {
-      "route": "/dashboard/jobs/d54c4c14-056e-4b2d-83b5-54c8b350d5b7",
+      "route": "/dashboard/jobs/6e00d255-8905-4969-b5b6-313e820acdae",
       "name": "dashboard-job-pipeline",
-      "url": "http://localhost:3001/dashboard/jobs/d54c4c14-056e-4b2d-83b5-54c8b350d5b7",
+      "url": "http://localhost:3001/dashboard/jobs/6e00d255-8905-4969-b5b6-313e820acdae",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-job-pipeline.png",
-      "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "Pipeline",
+        "olga.kuznetsova@example.com",
+        "artem.vasiliev@example.com",
+        "katerina.ivanova@example.com",
+        "pavel.medvedev@example.com",
+        "open-source",
+        "FRONTEND-",
+        "Svelte",
+        "Add",
+        "org-wide",
+        "property",
+        "Manage",
+        "job-specific",
+        "properties"
+      ],
+      "latinLetterCount": 196
     },
     {
-      "route": "/dashboard/jobs/d54c4c14-056e-4b2d-83b5-54c8b350d5b7/candidates",
+      "route": "/dashboard/jobs/6e00d255-8905-4969-b5b6-313e820acdae/candidates",
       "name": "dashboard-job-candidates",
-      "url": "http://localhost:3001/dashboard/jobs/d54c4c14-056e-4b2d-83b5-54c8b350d5b7/candidates",
+      "url": "http://localhost:3001/dashboard/jobs/6e00d255-8905-4969-b5b6-313e820acdae/candidates",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-job-candidates.png",
-      "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "elena.smirnova@example.com",
+        "alexey.kozlov@example.com",
+        "maria.volkova@example.com",
+        "dmitry.novikov@example.com",
+        "anna.morozova@example.com",
+        "ivan.petrov@example.com",
+        "sofia.lebedeva@example.com",
+        "nikita.sokolov@example.com",
+        "olga.kuznetsova@example.com",
+        "artem.vasiliev@example.com",
+        "katerina.ivanova@example.com",
+        "pavel.medvedev@example.com",
+        "yulia.fedorova@example.com",
+        "maxim.orlov@example.com"
+      ],
+      "latinLetterCount": 316
     },
     {
-      "route": "/dashboard/jobs/d54c4c14-056e-4b2d-83b5-54c8b350d5b7/ai-analysis",
+      "route": "/dashboard/jobs/6e00d255-8905-4969-b5b6-313e820acdae/ai-analysis",
       "name": "dashboard-job-ai-analysis",
-      "url": "http://localhost:3001/dashboard/jobs/d54c4c14-056e-4b2d-83b5-54c8b350d5b7/ai-analysis",
+      "url": "http://localhost:3001/dashboard/jobs/6e00d255-8905-4969-b5b6-313e820acdae/ai-analysis",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-job-ai-analysis.png",
-      "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "visibleI18nKeys": [],
+      "unexpectedLatin": [
+        "core_tech_stack",
+        "system_design",
+        "engineering_practices",
+        "B2B",
+        "SaaS",
+        "workflow-",
+        "relevant_experience",
+        "leadership_collab"
+      ],
+      "latinLetterCount": 93
     },
     {
-      "route": "/dashboard/applications/25d2e4e2-2ad6-45d9-9223-6fb63ec63ebb",
+      "route": "/dashboard/applications/c3f3073c-5f7e-4bc1-b261-983a25a10612",
       "name": "dashboard-application-detail",
-      "url": "http://localhost:3001/dashboard/applications/25d2e4e2-2ad6-45d9-9223-6fb63ec63ebb",
+      "url": "http://localhost:3001/dashboard/applications/c3f3073c-5f7e-4bc1-b261-983a25a10612",
       "status": "ok",
       "error": null,
       "screenshot": "C:\\Users\\MSI-Vector\\.cursor\\worktrees\\master-thesis-repository\\o6qf\\reqcore\\artifacts\\i18n-ru-screenshots\\dashboard-application-detail.png",
+      "visibleI18nKeys": [],
       "unexpectedLatin": [],
-      "technicalLatinSamples": []
+      "latinLetterCount": 0
     }
   ]
 }

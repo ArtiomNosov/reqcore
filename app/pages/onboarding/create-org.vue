@@ -8,9 +8,11 @@ definePageMeta({
 
 const { t } = useI18n()
 
+const onboardingSeoTitle = computed(() => t('onboarding.title'))
+const onboardingSeoDescription = computed(() => t('onboarding.description'))
 useSeoMeta({
-  title: () => t('onboarding.title'),
-  description: () => t('onboarding.description'),
+  title: onboardingSeoTitle,
+  description: onboardingSeoDescription,
   robots: 'noindex, nofollow',
 })
 

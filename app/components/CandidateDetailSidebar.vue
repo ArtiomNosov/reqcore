@@ -16,6 +16,7 @@ const emit = defineEmits<{
   (e: 'updated'): void
 }>()
 
+const { t } = useI18n()
 const { handlePreviewReadOnlyError } = usePreviewReadOnly()
 const toast = useToast()
 const { track } = useTrack()
@@ -549,7 +550,7 @@ function formatInterviewDate(dateStr: string) {
             @click="activeTab = 'ai_analysis'"
           >
             <Brain class="size-3.5" />
-            AI Analysis
+            {{ t('nav.aiAnalysis') }}
           </button>
           <button
             class="cursor-pointer px-3 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px inline-flex items-center gap-1.5"

@@ -21,14 +21,14 @@ const { isDark, toggle: toggleColorMode } = useColorMode()
       >
         <img
           src="/eagle-mascot-logo-128.png"
-          alt="Reqcore mascot"
+          :alt="t('brand.mascotAlt')"
           width="28"
           height="28"
           loading="eager"
           decoding="sync"
           class="h-7 w-7 object-contain"
         />
-        Reqcore
+        {{ t('brand.name') }}
       </a>
 
       <!-- Center nav links (desktop) -->

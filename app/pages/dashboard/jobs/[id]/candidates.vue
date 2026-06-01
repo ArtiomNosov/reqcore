@@ -6,6 +6,9 @@ definePageMeta({
   middleware: ['auth', 'require-org'],
 })
 
+const { t } = useI18n()
+const { applicationStatusBadge } = useLocalizedEnums()
+const { formatRelativeAgo } = useRelativeTime()
 const route = useRoute()
 const jobId = route.params.id as string
 
@@ -23,10 +26,13 @@ const { data: jobData, status: jobFetchStatus, error: jobError } = useFetch(
   },
 )
 
+const candidatesSeoTitle = computed(() =>
+  jobData.value
+    ? t('jobsCandidatesTable.pageTitle', { job: jobData.value.title })
+    : t('jobsCandidatesTable.pageTitleFallback'),
+)
 useSeoMeta({
-  title: computed(() =>
-    jobData.value ? `Table — ${jobData.value.title} — Reqcore` : 'Table — Reqcore',
-  ),
+  title: candidatesSeoTitle,
 })
 
 // ─────────────────────────────────────────────
@@ -84,14 +90,16 @@ function getCandidateInitials(firstName?: string, lastName?: string) {
   return `${first}${last}`.toUpperCase() || 'C'
 }
 
-const statusLabels: Record<Status, string> = {
-  new: 'New',
-  screening: 'Screening',
-  interview: 'Interview',
-  offer: 'Offer',
-  hired: 'Hired',
-  rejected: 'Rejected',
+function statusLabel(s: Status) {
+  return applicationStatusBadge(s)
 }
+
+const columnOptions = computed(() => [
+  { key: 'email' as const, label: t('jobsCandidatesTable.colEmail') },
+  { key: 'score' as const, label: t('jobsCandidatesTable.colScore') },
+  { key: 'status' as const, label: t('jobsCandidatesTable.colStatus') },
+  { key: 'createdAt' as const, label: t('jobsCandidatesTable.colApplied') },
+])
 
 function toggleStatus(s: Status) {
   if (selectedStatuses.value.includes(s)) {
@@ -190,14 +198,7 @@ const sorted = computed(() => {
 // ─────────────────────────────────────────────
 
 function timeAgo(date: string | Date) {
-  const diff = Date.now() - new Date(date).getTime()
-  const mins = Math.floor(diff / 60_000)
-  if (mins < 60) return `${mins}m ago`
-  const hrs = Math.floor(mins / 60)
-  if (hrs < 24) return `${hrs}h ago`
-  const days = Math.floor(hrs / 24)
-  if (days < 30) return `${days}d ago`
-  return new Date(date).toLocaleDateString()
+  return formatRelativeAgo(date)
 }
 
 function scoreClass(score: number) {
@@ -239,7 +240,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
     <!-- Loading -->
     <div v-if="isLoading" class="flex flex-col items-center justify-center py-12 gap-3">
       <div class="size-8 rounded-full border-2 border-brand-200 border-t-brand-600 dark:border-brand-800 dark:border-t-brand-400 animate-spin" />
-      <p class="text-sm font-medium text-surface-400 dark:text-surface-500">Loading candidates…</p>
+      <p class="text-sm font-medium text-surface-400 dark:text-surface-500">{{ t('jobsCandidatesTable.loading') }}</p>
     </div>
 
     <!-- Error -->
@@ -247,8 +248,8 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
       v-else-if="jobError || appError"
       class="rounded-xl border border-danger-200/80 bg-danger-50 p-5 text-sm text-danger-700 dark:border-danger-800/60 dark:bg-danger-950/40 dark:text-danger-300"
     >
-      {{ jobError ? 'Job not found or failed to load.' : 'Failed to load candidates.' }}
-      <NuxtLink :to="$localePath('/dashboard')" class="ml-1 font-medium underline hover:no-underline">Back to Jobs</NuxtLink>
+      {{ jobError ? t('jobsCandidatesTable.jobLoadFailed') : t('jobsCandidatesTable.candidatesLoadFailed') }}
+      <NuxtLink :to="$localePath('/dashboard/jobs')" class="ml-1 font-medium underline hover:no-underline">{{ t('jobsCandidatesTable.backToJobs') }}</NuxtLink>
     </div>
 
     <template v-else-if="jobData">
@@ -261,7 +262,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
             @click="panelOpen = !panelOpen"
           >
             <SlidersHorizontal class="size-4" />
-            View
+            {{ t('jobsCandidatesTable.view') }}
             <span
               v-if="activeFilterCount > 0"
               class="inline-flex items-center justify-center size-4 rounded-full bg-brand-500 text-white text-[10px] font-semibold"
@@ -277,15 +278,10 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
           >
             <!-- Columns -->
             <div>
-              <p class="text-xs font-semibold text-surface-500 dark:text-surface-400 uppercase tracking-wide mb-2">Columns</p>
+              <p class="text-xs font-semibold text-surface-500 dark:text-surface-400 uppercase tracking-wide mb-2">{{ t('jobsCandidatesTable.columns') }}</p>
               <div class="space-y-1.5">
                 <label
-                  v-for="col in ([
-                    { key: 'email', label: 'Email' },
-                    { key: 'score', label: 'Score' },
-                    { key: 'status', label: 'Status' },
-                    { key: 'createdAt', label: 'Applied' },
-                  ] as const)"
+                  v-for="col in columnOptions"
                   :key="col.key"
                   class="flex items-center gap-2.5 cursor-pointer select-none group"
                 >
@@ -309,7 +305,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
 
             <!-- Filter by status -->
             <div>
-              <p class="text-xs font-semibold text-surface-500 dark:text-surface-400 uppercase tracking-wide mb-2">Filter by Status</p>
+              <p class="text-xs font-semibold text-surface-500 dark:text-surface-400 uppercase tracking-wide mb-2">{{ t('jobsCandidatesTable.filterByStatus') }}</p>
               <div class="space-y-1.5">
                 <label
                   v-for="s in STATUS_OPTIONS"
@@ -329,7 +325,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
                   class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold capitalize ring-1 ring-inset"
                     :class="statusBadgeClasses[s]"
                   >
-                    {{ statusLabels[s] }}
+                    {{ statusLabel(s) }}
                   </span>
                 </label>
               </div>
@@ -339,23 +335,23 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
 
             <!-- Score range -->
             <div>
-              <p class="text-xs font-semibold text-surface-500 dark:text-surface-400 uppercase tracking-wide mb-2">Score Range</p>
+              <p class="text-xs font-semibold text-surface-500 dark:text-surface-400 uppercase tracking-wide mb-2">{{ t('jobsCandidatesTable.scoreRange') }}</p>
               <div class="flex items-center gap-2">
                 <input
                   v-model.number="scoreMin"
                   type="number"
                   min="0"
                   max="100"
-                  placeholder="Min"
+                  :placeholder="t('jobsCandidatesTable.min')"
                   class="w-full rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-3 py-1.5 text-sm text-surface-900 dark:text-surface-100 placeholder:text-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 />
-                <span class="text-surface-400 text-xs shrink-0">to</span>
+                <span class="text-surface-400 text-xs shrink-0">{{ t('jobsCandidatesTable.to') }}</span>
                 <input
                   v-model.number="scoreMax"
                   type="number"
                   min="0"
                   max="100"
-                  placeholder="Max"
+                  :placeholder="t('jobsCandidatesTable.max')"
                   class="w-full rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-3 py-1.5 text-sm text-surface-900 dark:text-surface-100 placeholder:text-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 />
               </div>
@@ -368,7 +364,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
               @click="clearFilters"
             >
               <X class="size-3" />
-              Clear filters
+              {{ t('jobsCandidatesTable.clearFilters') }}
             </button>
           </div>
         </div>
@@ -382,7 +378,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
             :class="statusBadgeClasses[s]"
             @click="toggleStatus(s as Status)"
           >
-            {{ statusLabels[s] }}
+            {{ statusLabel(s) }}
             <X class="size-2.5" />
           </span>
         </template>
@@ -391,7 +387,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
           class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium bg-surface-100 dark:bg-surface-800 text-surface-600 dark:text-surface-300 cursor-pointer"
           @click="scoreMin = undefined; scoreMax = undefined"
         >
-          Score {{ scoreMin ?? '0' }}–{{ scoreMax ?? '100' }}
+          {{ t('jobsCandidatesTable.scoreRangePill', { min: scoreMin ?? '0', max: scoreMax ?? '100' }) }}
           <X class="size-2.5" />
         </span>
       </div>
@@ -405,10 +401,10 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
           <Users class="size-6 text-surface-400 dark:text-surface-500" />
         </div>
         <h3 class="text-base font-semibold text-surface-700 dark:text-surface-200 mb-1">
-          No candidates yet
+          {{ t('jobsCandidatesTable.noCandidates') }}
         </h3>
         <p class="text-sm text-surface-500 dark:text-surface-400 max-w-xs mx-auto">
-          Candidates will appear here when they apply to this job or when you link candidates from the Overview tab.
+          {{ t('jobsCandidatesTable.noCandidatesHint') }}
         </p>
       </div>
 
@@ -427,7 +423,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
                     class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors"
                     @click="toggleSort('name')"
                   >
-                    Name
+                    {{ t('jobsCandidatesTable.colName') }}
                     <ChevronUp v-if="sortKey === 'name' && sortDir === 'asc'" class="size-3" />
                     <ChevronDown v-else-if="sortKey === 'name' && sortDir === 'desc'" class="size-3" />
                     <ChevronsUpDown v-else class="size-3 opacity-40" />
@@ -435,7 +431,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
                 </th>
                 <th v-if="visibleCols.email" class="hidden sm:table-cell px-4 py-3 text-left text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wide select-none">
                   <button class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors" @click="toggleSort('email')">
-                    Email
+                    {{ t('jobsCandidatesTable.colEmail') }}
                     <ChevronUp v-if="sortKey === 'email' && sortDir === 'asc'" class="size-3" />
                     <ChevronDown v-else-if="sortKey === 'email' && sortDir === 'desc'" class="size-3" />
                     <ChevronsUpDown v-else class="size-3 opacity-40" />
@@ -443,7 +439,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
                 </th>
                 <th v-if="visibleCols.score" class="px-4 py-3 text-left text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wide select-none">
                   <button class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors" @click="toggleSort('score')">
-                    Score
+                    {{ t('jobsCandidatesTable.colScore') }}
                     <ChevronUp v-if="sortKey === 'score' && sortDir === 'asc'" class="size-3" />
                     <ChevronDown v-else-if="sortKey === 'score' && sortDir === 'desc'" class="size-3" />
                     <ChevronsUpDown v-else class="size-3 opacity-40" />
@@ -451,7 +447,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
                 </th>
                 <th v-if="visibleCols.status" class="px-4 py-3 text-left text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wide select-none">
                   <button class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors" @click="toggleSort('status')">
-                    Status
+                    {{ t('jobsCandidatesTable.colStatus') }}
                     <ChevronUp v-if="sortKey === 'status' && sortDir === 'asc'" class="size-3" />
                     <ChevronDown v-else-if="sortKey === 'status' && sortDir === 'desc'" class="size-3" />
                     <ChevronsUpDown v-else class="size-3 opacity-40" />
@@ -459,7 +455,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
                 </th>
                 <th v-if="visibleCols.createdAt" class="hidden md:table-cell px-4 py-3 text-left text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wide select-none">
                   <button class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors" @click="toggleSort('createdAt')">
-                    Applied
+                    {{ t('jobsCandidatesTable.colApplied') }}
                     <ChevronUp v-if="sortKey === 'createdAt' && sortDir === 'asc'" class="size-3" />
                     <ChevronDown v-else-if="sortKey === 'createdAt' && sortDir === 'desc'" class="size-3" />
                     <ChevronsUpDown v-else class="size-3 opacity-40" />
@@ -474,7 +470,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
                   :colspan="1 + Object.values(visibleCols).filter(Boolean).length"
                   class="px-4 py-10 text-center text-sm text-surface-400"
                 >
-                  No candidates match the current filters.
+                  {{ t('candidatesPage.searchAdjust') }}
                 </td>
               </tr>
               <tr
@@ -514,7 +510,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
                     class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold tabular-nums ring-1 ring-inset"
                     :class="scoreClass(app.score)"
                   >
-                    {{ app.score }} pts
+                    {{ app.score }} {{ t('units.points') }}
                   </span>
                   <span v-else class="text-surface-400 dark:text-surface-500 text-xs">—</span>
                 </td>
@@ -523,7 +519,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
                     class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold capitalize ring-1 ring-inset"
                     :class="statusBadgeClasses[app.status] ?? 'bg-surface-100 text-surface-600 ring-surface-200'"
                   >
-                    {{ app.status }}
+                    {{ statusLabel(app.status as Status) }}
                   </span>
                 </td>
                 <td v-if="visibleCols.createdAt" class="hidden md:table-cell px-4 py-3 text-surface-500 dark:text-surface-400 whitespace-nowrap text-xs font-medium">
@@ -537,7 +533,7 @@ const isLoading = computed(() => jobFetchStatus.value === 'pending' || appFetchS
         <!-- Footer / count -->
         <div class="px-4 py-3 border-t border-surface-200/80 dark:border-surface-800/60 bg-surface-50/80 dark:bg-surface-900">
           <p class="text-xs font-medium text-surface-500 dark:text-surface-400">
-            {{ sorted.length }} of {{ total }} candidate{{ total === 1 ? '' : 's' }}
+            {{ t('jobsCandidatesTable.candidatesCount', { count: sorted.length }) }} / {{ total }}
           </p>
         </div>
       </div>

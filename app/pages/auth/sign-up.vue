@@ -4,9 +4,13 @@ definePageMeta({
     middleware: ["guest"],
 });
 
+const { t } = useI18n();
+
+const signUpSeoTitle = computed(() => t('auth.signUpTitle'))
+const signUpSeoDescription = computed(() => t('auth.signUpDescription'))
 useSeoMeta({
-    title: "Sign Up — Reqcore",
-    description: "Create your Reqcore account",
+    title: signUpSeoTitle,
+    description: signUpSeoDescription,
     robots: "noindex, nofollow",
 });
 
@@ -22,15 +26,15 @@ const { track } = useTrack();
 const { data: authProviders } = await useFetch('/api/auth/providers');
 const oidcEnabled = computed(() => authProviders.value?.oidc ?? false);
 const oidcProviderName = computed(
-    () => authProviders.value?.oidcProviderName || "SSO",
+    () => authProviders.value?.oidcProviderName || t('providers.sso'),
 );
 const socialLoading = ref<string | null>(null);
 
 const socialProviders = computed(() => {
     const providers: { id: string; name: string }[] = [];
-    if (authProviders.value?.google) providers.push({ id: "google", name: "Google" });
-    if (authProviders.value?.github) providers.push({ id: "github", name: "GitHub" });
-    if (authProviders.value?.microsoft) providers.push({ id: "microsoft", name: "Microsoft" });
+    if (authProviders.value?.google) providers.push({ id: "google", name: t('providers.google') });
+    if (authProviders.value?.github) providers.push({ id: "github", name: t('providers.github') });
+    if (authProviders.value?.microsoft) providers.push({ id: "microsoft", name: t('providers.microsoft') });
     return providers;
 });
 
@@ -149,7 +153,7 @@ async function handleSocialSignUp(providerId: string) {
         <h2
             class="text-xl font-semibold text-center text-surface-900 dark:text-surface-100 mb-2"
         >
-            Create your account
+            {{ t('auth.signUpHeading') }}
         </h2>
 
         <div
@@ -193,7 +197,7 @@ async function handleSocialSignUp(providerId: string) {
                             <rect x="1" y="12" width="10" height="10" fill="#00A4EF"/>
                             <rect x="12" y="12" width="10" height="10" fill="#FFB900"/>
                         </svg>
-                        Continue with {{ provider.name }}
+                        {{ t('auth.continueWithProvider', { provider: provider.name }) }}
                     </template>
                 </button>
             </div>
@@ -203,7 +207,7 @@ async function handleSocialSignUp(providerId: string) {
                     <div class="w-full border-t border-surface-200 dark:border-surface-700" />
                 </div>
                 <div class="relative flex justify-center text-xs">
-                    <span class="bg-white dark:bg-surface-900 px-2 text-surface-400">or continue with email</span>
+                    <span class="bg-white dark:bg-surface-900 px-2 text-surface-400">{{ t('auth.orContinueWithEmail') }}</span>
                 </div>
             </div>
         </template>
@@ -232,7 +236,7 @@ async function handleSocialSignUp(providerId: string) {
                 <div class="relative flex justify-center text-xs">
                     <span
                         class="bg-white dark:bg-surface-900 px-2 text-surface-400"
-                        >or continue with email</span
+                        >{{ t('auth.orContinueWithEmail') }}</span
                     >
                 </div>
             </div>
@@ -241,7 +245,7 @@ async function handleSocialSignUp(providerId: string) {
         <label
             class="flex flex-col gap-1 text-sm font-medium text-surface-700 dark:text-surface-300"
         >
-            <span>Name</span>
+            <span>{{ t('auth.nameLabel') }}</span>
             <input
                 v-model="name"
                 type="text"
@@ -254,7 +258,7 @@ async function handleSocialSignUp(providerId: string) {
         <label
             class="flex flex-col gap-1 text-sm font-medium text-surface-700 dark:text-surface-300"
         >
-            <span>Email</span>
+            <span>{{ t('auth.emailLabel') }}</span>
             <input
                 v-model="email"
                 type="email"
@@ -267,7 +271,7 @@ async function handleSocialSignUp(providerId: string) {
         <label
             class="flex flex-col gap-1 text-sm font-medium text-surface-700 dark:text-surface-300"
         >
-            <span>Password</span>
+            <span>{{ t('auth.passwordLabel') }}</span>
             <input
                 v-model="password"
                 type="password"
@@ -281,7 +285,7 @@ async function handleSocialSignUp(providerId: string) {
         <label
             class="flex flex-col gap-1 text-sm font-medium text-surface-700 dark:text-surface-300"
         >
-            <span>Confirm password</span>
+            <span>{{ t('auth.confirmPasswordLabel') }}</span>
             <input
                 v-model="confirmPassword"
                 type="password"
@@ -296,11 +300,11 @@ async function handleSocialSignUp(providerId: string) {
             :disabled="isLoading"
             class="mt-2 px-4 py-2.5 bg-brand-600 text-white rounded-md text-sm font-medium cursor-pointer hover:bg-brand-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
         >
-            {{ isLoading ? "Creating account…" : "Sign up" }}
+            {{ isLoading ? t('auth.signingUp') : t('auth.submitSignUp') }}
         </button>
 
         <p class="text-center text-sm text-surface-500 dark:text-surface-400">
-            Already have an account?
+            {{ t('auth.hasAccount') }}
             <NuxtLink
                 :to="
                     pendingInvitation
@@ -311,7 +315,7 @@ async function handleSocialSignUp(providerId: string) {
                         : $localePath('/auth/sign-in')
                 "
                 class="text-brand-600 dark:text-brand-400 hover:underline"
-                >Sign in</NuxtLink
+                >{{ t('auth.signInLink') }}</NuxtLink
             >
         </p>
     </form>

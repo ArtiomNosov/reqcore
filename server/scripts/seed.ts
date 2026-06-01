@@ -33,6 +33,9 @@ import {
   DEVOPS_QUESTIONS_RU,
   FULLSTACK_QUESTIONS_RU,
   JOBS_DATA_RU,
+  JOB_CRITERIA_RU,
+  TRACKING_LINK_NAMES_RU,
+  localizeInterview,
   ruAppNote,
 } from './seed-data-ru'
 
@@ -423,7 +426,7 @@ const JOB_2_CRITERIA: ScoringCriterionSeed[] = [
   },
 ]
 
-const JOB_CRITERIA = [JOB_0_CRITERIA, JOB_1_CRITERIA, JOB_2_CRITERIA]
+const JOB_CRITERIA = [...JOB_CRITERIA_RU] as ScoringCriterionSeed[][]
 
 // ─────────────────────────────────────────────
 // AI Scoring — Per-application criterion scores
@@ -2190,6 +2193,10 @@ async function seed() {
 
   if (existingDemoUser) {
     userId = existingDemoUser.id
+    await db
+      .update(schema.user)
+      .set({ name: 'Демо Рекрутер', updatedAt: new Date() })
+      .where(eq(schema.user.id, userId))
     // Ensure password is up to date in case it changed
     await db
       .update(schema.account)
@@ -2201,7 +2208,7 @@ async function seed() {
     userId = id()
     await db.insert(schema.user).values({
       id: userId,
-      name: 'Demo Recruiter',
+      name: 'Демо Рекрутер',
       email: DEMO_EMAIL,
       emailVerified: true,
       createdAt: daysAgo(30),
@@ -2424,7 +2431,8 @@ async function seed() {
   // 6b. Create tracking links and application source attribution
   const trackingLinkIds: string[] = []
 
-  for (const link of TRACKING_LINKS_DATA) {
+  for (let linkIdx = 0; linkIdx < TRACKING_LINKS_DATA.length; linkIdx++) {
+    const link = TRACKING_LINKS_DATA[linkIdx]!
     const trackingLinkId = id()
     trackingLinkIds.push(trackingLinkId)
 
@@ -2433,7 +2441,7 @@ async function seed() {
       organizationId: orgId,
       jobId: link.jobIndex !== null ? (jobIds[link.jobIndex] ?? null) : null,
       channel: link.channel,
-      name: link.name,
+      name: TRACKING_LINK_NAMES_RU[linkIdx] ?? link.name,
       code: link.code,
       utmSource: link.utmSource ?? null,
       utmMedium: link.utmMedium ?? null,
@@ -2647,7 +2655,7 @@ async function seed() {
   let totalInterviews = 0
   const interviewIds: string[] = [] // track IDs for activity log
 
-  for (const iv of INTERVIEWS_DATA) {
+  for (const iv of INTERVIEWS_DATA.map(localizeInterview)) {
     const applicationId = applicationMap.get(`${iv.jobIndex}-${iv.candidateIndex}`)
     if (!applicationId) {
       console.warn(`⚠️  Skipping interview "${iv.title}" — no application found for job ${iv.jobIndex}, candidate ${iv.candidateIndex}`)

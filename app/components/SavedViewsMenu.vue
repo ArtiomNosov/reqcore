@@ -24,11 +24,13 @@ const showSaveForm = ref(false)
 const newName = ref('')
 const nameInput = ref<HTMLInputElement | null>(null)
 
+const { t } = useI18n()
+
 const activeView = computed(() => props.views.find(v => v.id === props.activeViewId) ?? null)
 
 const buttonLabel = computed(() => {
   if (activeView.value) return activeView.value.name
-  return 'Views'
+  return t('ui.views')
 })
 
 function toggle() {

@@ -16,6 +16,8 @@ definePageMeta({
   middleware: ['auth', 'require-org'],
 })
 
+const { t } = useI18n()
+const { applicationStatus, applicationStatusBadge, jobStatus, interviewStatus } = useLocalizedEnums()
 const route = useRoute()
 const localePath = useLocalePath()
 const jobId = route.params.id as string
@@ -93,33 +95,33 @@ function clearFilters() {
   propertyFilters.value = []
 }
 
-const sortOptions: { value: SortOption; label: string }[] = [
-  { value: 'date-desc', label: 'Newest first' },
-  { value: 'date-asc', label: 'Oldest first' },
-  { value: 'name-asc', label: 'Name A \u2192 Z' },
-  { value: 'name-desc', label: 'Name Z \u2192 A' },
-  { value: 'score-desc', label: 'Highest score' },
-  { value: 'score-asc', label: 'Lowest score' },
-  { value: 'updated-desc', label: 'Recently updated' },
-]
+const sortOptions = computed(() => [
+  { value: 'date-desc' as SortOption, label: t('jobsPage.sortNewest') },
+  { value: 'date-asc' as SortOption, label: t('jobsPage.applied') },
+  { value: 'name-asc' as SortOption, label: t('ui.name') },
+  { value: 'name-desc' as SortOption, label: t('ui.name') },
+  { value: 'score-desc' as SortOption, label: t('jobsPage.sortScore') },
+  { value: 'score-asc' as SortOption, label: t('jobsPage.score') },
+  { value: 'updated-desc' as SortOption, label: t('applicationsPage.updated') },
+])
 
 const currentSortLabel = computed(() =>
-  sortOptions.find(o => o.value === sortBy.value)?.label ?? 'Sort',
+  sortOptions.value.find(o => o.value === sortBy.value)?.label ?? t('candidatesPage.sortBy'),
 )
 
-const scoreFilterOptions: { value: ScoreFilter; label: string }[] = [
-  { value: 'all', label: 'All' },
-  { value: 'high', label: '75+' },
-  { value: 'medium', label: '40\u201374' },
-  { value: 'low', label: '< 40' },
-  { value: 'none', label: 'No score' },
-]
+const scoreFilterOptions = computed(() => [
+  { value: 'all' as ScoreFilter, label: t('jobsPage.scoreFilterAll') },
+  { value: 'high' as ScoreFilter, label: t('jobsPage.scoreFilterHigh') },
+  { value: 'medium' as ScoreFilter, label: t('jobsPage.scoreFilterMedium') },
+  { value: 'low' as ScoreFilter, label: t('jobsPage.scoreFilterLow') },
+  { value: 'none' as ScoreFilter, label: t('jobsPage.scoreFilterNone') },
+])
 
-const interviewFilterOptions: { value: InterviewFilter; label: string }[] = [
-  { value: 'all', label: 'All' },
-  { value: 'has-interview', label: 'Scheduled' },
-  { value: 'no-interview', label: 'None' },
-]
+const interviewFilterOptions = computed(() => [
+  { value: 'all' as InterviewFilter, label: t('jobsPage.interviewFilterAll') },
+  { value: 'has-interview' as InterviewFilter, label: t('jobsPage.interviewFilterHas') },
+  { value: 'no-interview' as InterviewFilter, label: t('jobsPage.interviewFilterNone') },
+])
 
 function selectSort(option: SortOption) {
   sortBy.value = option
@@ -401,7 +403,7 @@ function describeTimelineItem(item: TimelineEntry): string {
 
   if (item.action === 'scored' && item.metadata) {
     const score = item.metadata.score
-    if (score != null) return `${actor} scored ${resource} — ${score} pts`
+    if (score != null) return t('jobsPage.activityScored', { actor, resource, score })
   }
 
   return `${actor} ${action.toLowerCase()} ${resource}`
@@ -548,14 +550,14 @@ const statusBadgeClasses: Record<string, string> = {
   rejected: 'bg-surface-100 text-surface-500 dark:bg-surface-800 dark:text-surface-400',
 }
 
-const transitionLabels: Record<string, string> = {
-  new: 'Re-open',
-  screening: 'Screening',
-  interview: 'Interview',
-  offer: 'Offer',
-  hired: 'Hired',
-  rejected: 'Reject',
-}
+const transitionLabels = computed(() => ({
+  new: t('pipelineDetail.transitionReopen'),
+  screening: applicationStatus('screening'),
+  interview: applicationStatus('interview'),
+  offer: applicationStatus('offer'),
+  hired: applicationStatus('hired'),
+  rejected: t('pipelineDetail.transitionReject'),
+}))
 
 const transitionClasses: Record<string, string> = {
   new: 'border border-surface-300 dark:border-surface-600 text-surface-600 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-800',
@@ -567,19 +569,19 @@ const transitionClasses: Record<string, string> = {
 }
 
 function formatStatusLabel(status: string) {
-  return status.charAt(0).toUpperCase() + status.slice(1)
+  return applicationStatus(status)
 }
 
 function formatResponseValue(value: unknown): string {
   if (Array.isArray(value)) return value.join(', ')
-  if (typeof value === 'boolean') return value ? 'Yes' : 'No'
+  if (typeof value === 'boolean') return value ? t('pipelineDetail.yes') : t('pipelineDetail.no')
   return String(value ?? '—')
 }
 
 function formatDocumentType(value: SwipeDocument['type']) {
-  if (value === 'cover_letter') return 'Cover Letter'
-  if (value === 'resume') return 'Resume'
-  return 'Other'
+  if (value === 'cover_letter') return t('pipelineDetail.coverLetter')
+  if (value === 'resume') return t('pipelineDetail.resume')
+  return t('pipelineDetail.documentOther')
 }
 
 function getCandidateInitials(firstName?: string, lastName?: string) {
@@ -591,11 +593,11 @@ function getCandidateInitials(firstName?: string, lastName?: string) {
 function timeAgo(date: string | Date) {
   const diff = Date.now() - new Date(date).getTime()
   const mins = Math.floor(diff / 60_000)
-  if (mins < 60) return `${mins}m ago`
+  if (mins < 60) return t('pipelineDetail.timeAgoMinutes', { n: mins })
   const hrs = Math.floor(mins / 60)
-  if (hrs < 24) return `${hrs}h ago`
+  if (hrs < 24) return t('pipelineDetail.timeAgoHours', { n: hrs })
   const days = Math.floor(hrs / 24)
-  if (days < 30) return `${days}d ago`
+  if (days < 30) return t('pipelineDetail.timeAgoDays', { n: days })
   return new Date(date).toLocaleDateString()
 }
 
@@ -707,14 +709,14 @@ const interviewTypeIcons: Record<string, any> = {
   take_home: FileText,
 }
 
-const interviewTypeLabels: Record<string, string> = {
-  video: 'Video',
-  phone: 'Phone',
-  in_person: 'In Person',
-  technical: 'Technical',
-  panel: 'Panel',
-  take_home: 'Take Home',
-}
+const interviewTypeLabels = computed(() => ({
+  video: t('interviewsPage.types.video'),
+  phone: t('interviewsPage.types.phone'),
+  in_person: t('interviewsPage.types.in_person'),
+  technical: t('interviewsPage.types.technical'),
+  panel: t('interviewsPage.types.panel'),
+  take_home: t('interviewsPage.types.take_home'),
+} as Record<string, string>))
 
 const interviewStatusClasses: Record<string, string> = {
   scheduled: 'bg-brand-50 text-brand-700 ring-brand-200 dark:bg-brand-950/50 dark:text-brand-300 dark:ring-brand-800',
@@ -725,9 +727,9 @@ const interviewStatusClasses: Record<string, string> = {
 
 function formatInterviewDateTime(dateStr: string) {
   const d = new Date(dateStr)
-  return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
-    + ' at '
-    + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
+  return d.toLocaleDateString('ru-RU', { weekday: 'short', month: 'short', day: 'numeric' })
+    + ` ${t('pipelineDetail.atTime')} `
+    + d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
 }
 
 function formatInterviewDateTimeFull(dateStr: string) {
@@ -763,12 +765,12 @@ const interviewTransitionClasses: Record<InterviewStatus, string> = {
   no_show: 'bg-danger-600 text-white hover:bg-danger-700',
 }
 
-const interviewTransitionLabels: Record<InterviewStatus, string> = {
-  scheduled: 'Re-schedule',
-  completed: 'Completed',
-  cancelled: 'Cancel',
-  no_show: 'No Show',
-}
+const interviewTransitionLabels = computed(() => ({
+  scheduled: t('pipelineDetail.reschedule'),
+  completed: t('pipelineDetail.markCompleted'),
+  cancelled: t('pipelineDetail.cancel'),
+  no_show: t('pipelineDetail.noShow'),
+} as Record<InterviewStatus, string>))
 
 const interviewStatusIcons: Record<InterviewStatus, any> = {
   scheduled: Calendar,
@@ -838,7 +840,7 @@ function removeEditInterviewer(idx: number) {
 async function saveInterviewEdit() {
   interviewEditErrors.value = {}
   if (!interviewEditForm.title.trim()) {
-    interviewEditErrors.value.title = 'Title is required'
+    interviewEditErrors.value.title = t('pipelineDetail.titleRequired')
     return
   }
 
@@ -1086,7 +1088,7 @@ async function scoreIndividualCandidate(applicationId: string) {
       await executeDetailFetch()
     }
     track('individual_scoring_completed', { application_id: applicationId })
-    toast.success('Candidate scored', 'AI analysis complete.')
+    toast.success('Candidate scored', t('ai.scoredSuccess'))
   } catch (err: any) {
     const statusMessage = err?.data?.statusMessage ?? ''
     if (statusMessage.includes('AI provider not configured')) {
@@ -1162,7 +1164,7 @@ function closeDocPreview() {
     <!-- Loading -->
     <div v-if="isLoading" class="flex flex-1 flex-col items-center justify-center gap-3">
       <div class="size-8 rounded-full border-2 border-brand-200 border-t-brand-600 dark:border-brand-800 dark:border-t-brand-400 animate-spin" />
-      <p class="text-sm font-medium text-surface-400 dark:text-surface-500">Loading pipeline…</p>
+      <p class="text-sm font-medium text-surface-400 dark:text-surface-500">{{ t('jobsPage.loadingPipeline') }}</p>
     </div>
 
     <!-- Error -->
@@ -1170,8 +1172,8 @@ function closeDocPreview() {
       v-else-if="jobError || appError"
       class="m-6 rounded-xl border border-danger-200/80 bg-danger-50 p-5 text-sm text-danger-700 dark:border-danger-800/60 dark:bg-danger-950/40 dark:text-danger-300"
     >
-      {{ jobError ? 'Job not found or failed to load.' : 'Failed to load applications.' }}
-      <NuxtLink :to="$localePath('/dashboard')" class="ml-1 font-medium underline hover:no-underline">Back to Jobs</NuxtLink>
+      {{ jobError ? t('jobsPage.loadFailed') : t('applicationsPage.loadFailed') }}
+      <NuxtLink :to="$localePath('/dashboard/jobs')" class="ml-1 font-medium underline hover:no-underline">{{ t('jobsPage.backToJobs') }}</NuxtLink>
     </div>
 
     <template v-else-if="jobData">
@@ -1183,15 +1185,15 @@ function closeDocPreview() {
         <div class="hidden sm:flex items-center gap-2 text-[10px] font-medium text-surface-400 dark:text-surface-500">
           <div class="flex items-center gap-1 rounded-md bg-surface-100/80 px-2 py-0.5 dark:bg-surface-800/60">
             <span class="font-mono text-[10px]">↑↓</span>
-            <span>candidates</span>
+            <span>{{ t('jobsPage.keyboardCandidates') }}</span>
           </div>
           <div class="flex items-center gap-1 rounded-md bg-surface-100/80 px-2 py-0.5 dark:bg-surface-800/60">
             <span class="font-mono text-[10px]">←→</span>
-            <span>stages</span>
+            <span>{{ t('jobsPage.keyboardStages') }}</span>
           </div>
           <div class="flex items-center gap-1 rounded-md bg-surface-100/80 px-2 py-0.5 dark:bg-surface-800/60">
             <span class="font-mono text-[10px]">1-9</span>
-            <span>actions</span>
+            <span>{{ t('jobsPage.keyboardActions') }}</span>
           </div>
         </div>
       </Teleport>
@@ -1232,7 +1234,7 @@ function closeDocPreview() {
           <!-- Fullscreen toggle -->
           <button
             class="ml-auto flex shrink-0 cursor-pointer items-center justify-center rounded-lg p-2 text-surface-400 hover:bg-surface-100 hover:text-surface-600 dark:text-surface-500 dark:hover:bg-surface-800 dark:hover:text-surface-300 transition-all duration-200 focus:outline-none"
-            :title="isFullscreen ? 'Exit focus mode (Esc)' : 'Focus mode'"
+            :title="isFullscreen ? t('jobsPage.exitFocusMode') : t('jobsPage.focusMode')"
             @click="toggleFullscreen"
           >
             <Minimize2 v-if="isFullscreen" class="size-4" />
@@ -1258,7 +1260,7 @@ function closeDocPreview() {
               <input
                 v-model="searchTerm"
                 type="text"
-                placeholder="Search candidates…"
+                :placeholder="t('jobsPage.searchCandidates')"
                 class="w-full rounded-lg border border-surface-200/80 bg-surface-50/80 py-2 pl-8 pr-3 text-sm text-surface-900 placeholder:text-surface-400 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-surface-700/80 dark:bg-surface-800/60 dark:text-surface-100 dark:placeholder:text-surface-500 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 transition-all duration-150"
                 @focus="closePanels"
               />
@@ -1343,7 +1345,7 @@ function closeDocPreview() {
               >
                 <!-- Score filter -->
                 <div>
-                  <p class="text-[10px] font-semibold uppercase tracking-wider text-surface-400 dark:text-surface-500 mb-1">Score</p>
+                  <p class="text-[10px] font-semibold uppercase tracking-wider text-surface-400 dark:text-surface-500 mb-1">{{ t('pipelineDetail.filterScore') }}</p>
                   <div class="flex flex-wrap gap-1">
                     <button
                       v-for="opt in scoreFilterOptions"
@@ -1361,7 +1363,7 @@ function closeDocPreview() {
 
                 <!-- Interview filter -->
                 <div>
-                  <p class="text-[10px] font-semibold uppercase tracking-wider text-surface-400 dark:text-surface-500 mb-1">Interview</p>
+                  <p class="text-[10px] font-semibold uppercase tracking-wider text-surface-400 dark:text-surface-500 mb-1">{{ t('pipelineDetail.filterInterview') }}</p>
                   <div class="flex flex-wrap gap-1">
                     <button
                       v-for="opt in interviewFilterOptions"
@@ -1379,7 +1381,7 @@ function closeDocPreview() {
 
                 <!-- Property filters -->
                 <div>
-                  <p class="text-[10px] font-semibold uppercase tracking-wider text-surface-400 dark:text-surface-500 mb-1.5">Properties</p>
+                  <p class="text-[10px] font-semibold uppercase tracking-wider text-surface-400 dark:text-surface-500 mb-1.5">{{ t('pipelineDetail.tabProperties') }}</p>
                   <PropertyFilterBar
                     v-model="propertyFilters"
                     entity-type="application"
@@ -1394,7 +1396,7 @@ function closeDocPreview() {
                   @click="clearFilters"
                 >
                   <X class="size-3" />
-                  Clear filters
+                  {{ t('pipelineDetail.clearFilters') }}
                 </button>
               </div>
             </Transition>
@@ -1403,9 +1405,9 @@ function closeDocPreview() {
           <!-- Count bar -->
           <div class="shrink-0 px-3.5 pb-2 flex items-center justify-between">
             <span class="text-xs font-medium text-surface-500 dark:text-surface-400">
-              {{ filteredApplications.length }} candidate{{ filteredApplications.length === 1 ? '' : 's' }}
+              {{ t('jobsPage.candidatesCount', { count: filteredApplications.length }) }}
               <span v-if="searchTerm.trim() || hasActiveFilters" class="text-surface-400 dark:text-surface-500">
-                {{ hasActiveFilters ? ' filtered' : ' matching' }}
+                {{ hasActiveFilters ? ` ${t('pipelineDetail.filtered')}` : ` ${t('pipelineDetail.matching')}` }}
               </span>
             </span>
             <span v-if="hasActiveFilters && filteredApplications.length !== focusedApplications.length" class="text-[10px] text-surface-400 dark:text-surface-500">
@@ -1430,7 +1432,7 @@ function closeDocPreview() {
                 class="mt-2 cursor-pointer text-xs font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300"
                 @click="clearFilters"
               >
-                Clear filters
+                {{ t('pipelineDetail.clearFilters') }}
               </button>
             </div>
 
@@ -1466,10 +1468,10 @@ function closeDocPreview() {
                       'bg-danger-50 text-danger-700 ring-danger-200 dark:bg-danger-950/60 dark:text-danger-400 dark:ring-danger-800': app.score < 40,
                     }"
                   >
-                    {{ app.score }} pts
+                    {{ app.score }} {{ t('units.points') }}
                   </span>
                   <span class="text-[11px] text-surface-400 dark:text-surface-500">{{ timeAgo(app.createdAt) }}</span>
-                  <span v-if="applicationsWithInterviews.has(app.id)" class="inline-flex items-center text-warning-500 dark:text-warning-400" title="Interview scheduled">
+                  <span v-if="applicationsWithInterviews.has(app.id)" class="inline-flex items-center text-warning-500 dark:text-warning-400" :title="t('pipelineDetail.interviewScheduledBadge')">
                     <Calendar class="size-3" />
                   </span>
                 </div>
@@ -1544,7 +1546,7 @@ function closeDocPreview() {
                           'bg-surface-100 text-surface-500 ring-surface-200 dark:bg-surface-800/50 dark:text-surface-400 dark:ring-surface-700': currentSummary.status === 'rejected',
                         }"
                       >
-                        {{ currentSummary.status }}
+                        {{ applicationStatusBadge(currentSummary.status) }}
                       </span>
                     </div>
                     <div class="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-surface-500 dark:text-surface-400">
@@ -1571,7 +1573,7 @@ function closeDocPreview() {
                           'bg-danger-50 text-danger-700 ring-danger-200 dark:bg-danger-950/60 dark:text-danger-400 dark:ring-danger-800': currentSummary.score < 40,
                         }"
                       >
-                        {{ currentSummary.score }} pts
+                        {{ currentSummary.score }} {{ t('units.points') }}
                       </span>
                       <button
                         :disabled="isScoringIndividual"
@@ -1583,14 +1585,14 @@ function closeDocPreview() {
                       >
                         <Loader2 v-if="isScoringIndividual" class="size-3 animate-spin" />
                         <Brain v-else class="size-3" />
-                        {{ isScoringIndividual ? 'Scoring…' : (currentSummary.score != null ? 'Re-score' : 'Score Candidate') }}
+                        {{ isScoringIndividual ? t('pipelineDetail.scoring') : (currentSummary.score != null ? t('pipelineDetail.reScore') : t('pipelineDetail.scoreCandidate')) }}
                       </button>
                       <TimelineDateLink :date="currentSummary.createdAt" class="inline-flex items-center gap-1 text-[11px] text-surface-400 dark:text-surface-500">
                         <Clock class="size-3" />
-                        Applied {{ new Date(currentSummary.createdAt).toLocaleDateString() }}
+                        {{ t('pipelineDetail.applied') }} {{ new Date(currentSummary.createdAt).toLocaleDateString('ru-RU') }}
                       </TimelineDateLink>
                       <span v-if="currentSummary.updatedAt !== currentSummary.createdAt" class="inline-flex items-center gap-1 text-[11px] text-surface-400 dark:text-surface-500">
-                        · <TimelineDateLink :date="currentSummary.updatedAt">Updated {{ new Date(currentSummary.updatedAt).toLocaleDateString() }}</TimelineDateLink>
+                        · <TimelineDateLink :date="currentSummary.updatedAt">{{ t('pipelineDetail.updated') }} {{ new Date(currentSummary.updatedAt).toLocaleDateString('ru-RU') }}</TimelineDateLink>
                       </span>
                     </div>
                   </div>
@@ -1618,7 +1620,7 @@ function closeDocPreview() {
                   <NuxtLink
                     :to="$localePath(`/dashboard/applications/${currentSummary.id}`)"
                     class="flex items-center justify-center rounded-lg border border-surface-200 p-1.5 text-surface-500 transition-all duration-150 hover:bg-white hover:border-surface-300 hover:text-surface-700 dark:border-surface-700 dark:text-surface-400 dark:hover:bg-surface-800 dark:hover:border-surface-600 dark:hover:text-surface-300"
-                    title="Full application page"
+                    :title="t('pipelineDetail.fullApplicationPage')"
                   >
                     <ExternalLink class="size-4" />
                   </NuxtLink>
@@ -1641,7 +1643,7 @@ function closeDocPreview() {
                         : 'text-surface-500 hover:text-surface-700 dark:text-surface-400 dark:hover:text-surface-300'"
                       @click="detailTab = 'overview'"
                     >
-                      Overview
+                      {{ t('pipelineDetail.tabOverview') }}
                     </button>
                     <button
                       v-if="detailTab === 'overview'"
@@ -1665,26 +1667,26 @@ function closeDocPreview() {
                       v-if="showOverviewDropdown"
                       class="absolute left-0 top-full z-50 mt-1 w-44 rounded-xl border border-surface-200 dark:border-surface-700/80 bg-white dark:bg-surface-900 shadow-xl shadow-surface-900/5 dark:shadow-black/20 py-1.5 origin-top-left"
                     >
-                      <span class="block px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-surface-400 dark:text-surface-500">Sections</span>
+                      <span class="block px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-surface-400 dark:text-surface-500">{{ t('pipelineDetail.sectionsLabel') }}</span>
                       <label class="flex items-center gap-2.5 px-3.5 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-800/80 cursor-pointer select-none transition-colors">
                         <input v-model="overviewSections.aiAnalysis" type="checkbox" class="size-3.5 rounded border-surface-300 text-brand-600 focus:ring-brand-500 dark:border-surface-600 dark:bg-surface-800" />
-                        AI Analysis
+                        {{ t('nav.aiAnalysis') }}
                       </label>
                       <label class="flex items-center gap-2.5 px-3.5 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-800/80 cursor-pointer select-none transition-colors">
                         <input v-model="overviewSections.interviews" type="checkbox" class="size-3.5 rounded border-surface-300 text-brand-600 focus:ring-brand-500 dark:border-surface-600 dark:bg-surface-800" />
-                        Interviews
+                        {{ t('pipelineDetail.tabInterviews') }}
                       </label>
                       <label class="flex items-center gap-2.5 px-3.5 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-800/80 cursor-pointer select-none transition-colors">
                         <input v-model="overviewSections.documents" type="checkbox" class="size-3.5 rounded border-surface-300 text-brand-600 focus:ring-brand-500 dark:border-surface-600 dark:bg-surface-800" />
-                        Documents
+                        {{ t('pipelineDetail.tabDocuments') }}
                       </label>
                       <label class="flex items-center gap-2.5 px-3.5 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-800/80 cursor-pointer select-none transition-colors">
                         <input v-model="overviewSections.responses" type="checkbox" class="size-3.5 rounded border-surface-300 text-brand-600 focus:ring-brand-500 dark:border-surface-600 dark:bg-surface-800" />
-                        Responses
+                        {{ t('pipelineDetail.tabResponses') }}
                       </label>
                       <label class="flex items-center gap-2.5 px-3.5 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-800/80 cursor-pointer select-none transition-colors">
                         <input v-model="overviewSections.properties" type="checkbox" class="size-3.5 rounded border-surface-300 text-brand-600 focus:ring-brand-500 dark:border-surface-600 dark:bg-surface-800" />
-                        Properties
+                        {{ t('pipelineDetail.tabProperties') }}
                       </label>
                     </div>
                   </Transition>
@@ -1696,7 +1698,7 @@ function closeDocPreview() {
                     : 'border-transparent text-surface-500 hover:text-surface-700 hover:border-surface-300 dark:text-surface-400 dark:hover:text-surface-300 dark:hover:border-surface-600'"
                   @click="detailTab = 'ai-analysis'"
                 >
-                  AI Analysis
+                  {{ t('nav.aiAnalysis') }}
                 </button>
                 <button
                   class="cursor-pointer px-3.5 py-2.5 text-sm font-medium transition-all duration-150 border-b-2 -mb-px"
@@ -1705,7 +1707,7 @@ function closeDocPreview() {
                     : 'border-transparent text-surface-500 hover:text-surface-700 hover:border-surface-300 dark:text-surface-400 dark:hover:text-surface-300 dark:hover:border-surface-600'"
                   @click="detailTab = 'interviews'"
                 >
-                  Interviews
+                  {{ t('pipelineDetail.tabInterviews') }}
                   <span
                     v-if="currentApplicationInterviews.length > 0"
                     class="ml-1 text-xs text-surface-400"
@@ -1720,7 +1722,7 @@ function closeDocPreview() {
                     : 'border-transparent text-surface-500 hover:text-surface-700 hover:border-surface-300 dark:text-surface-400 dark:hover:text-surface-300 dark:hover:border-surface-600'"
                   @click="detailTab = 'documents'"
                 >
-                  Documents
+                  {{ t('pipelineDetail.tabDocuments') }}
                   <span
                     v-if="resolvedCurrentApplication?.candidate.documents?.length"
                     class="ml-1 text-xs text-surface-400"
@@ -1735,7 +1737,7 @@ function closeDocPreview() {
                     : 'border-transparent text-surface-500 hover:text-surface-700 hover:border-surface-300 dark:text-surface-400 dark:hover:text-surface-300 dark:hover:border-surface-600'"
                   @click="detailTab = 'responses'"
                 >
-                  Responses
+                  {{ t('pipelineDetail.tabResponses') }}
                   <span
                     v-if="resolvedCurrentApplication?.responses?.length"
                     class="ml-1 text-xs text-surface-400"
@@ -1751,7 +1753,7 @@ function closeDocPreview() {
                   @click="detailTab = 'timeline'"
                 >
                   <History class="size-3.5" />
-                  Timeline
+                  {{ t('pipelineDetail.tabTimeline') }}
                 </button>
                 <button
                   class="cursor-pointer px-3.5 py-2.5 text-sm font-medium transition-all duration-150 border-b-2 -mb-px flex items-center gap-1.5"
@@ -1785,10 +1787,10 @@ function closeDocPreview() {
                     <div class="flex size-7 items-center justify-center rounded-lg bg-warning-50 dark:bg-warning-950/40">
                       <MessageSquare class="size-3.5 text-warning-600 dark:text-warning-400" />
                     </div>
-                    <h3 class="text-sm font-semibold text-surface-800 dark:text-surface-200">Notes</h3>
+                    <h3 class="text-sm font-semibold text-surface-800 dark:text-surface-200">{{ t('jobsPage.notes') }}</h3>
                   </div>
                   <p class="text-sm leading-relaxed text-surface-600 dark:text-surface-300 whitespace-pre-wrap">
-                    {{ currentSummary.notes || 'No notes yet.' }}
+                    {{ currentSummary.notes || t('pipelineDetail.noNotesYet') }}
                   </p>
                 </div>
 
@@ -1799,7 +1801,7 @@ function closeDocPreview() {
                     class="inline-flex items-center gap-1.5 text-sm text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 font-medium transition-colors group"
                   >
                     <ExternalLink class="size-3.5 transition-transform group-hover:translate-x-0.5" />
-                    Full application page
+                    {{ t('pipelineDetail.fullApplicationPage') }}
                   </NuxtLink>
                 </div>
               </div>
@@ -1818,14 +1820,14 @@ function closeDocPreview() {
                 <div class="flex items-center justify-between mb-3">
                   <h2 class="text-sm font-semibold text-surface-800 dark:text-surface-200 flex items-center gap-2">
                     <Calendar class="size-4 text-surface-400 dark:text-surface-500" />
-                    Interviews
+                    {{ t('pipelineDetail.tabInterviews') }}
                   </h2>
                   <button
                     class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-surface-200 dark:border-surface-700/80 px-2.5 py-1.5 text-xs font-medium text-surface-600 dark:text-surface-300 hover:bg-white hover:border-surface-300 dark:hover:bg-surface-800 dark:hover:border-surface-600 transition-all duration-150"
                     @click="openInterviewScheduler"
                   >
                     <Plus class="size-3.5" />
-                    Schedule Interview
+                    {{ t('jobsPage.scheduleInterview') }}
                   </button>
                 </div>
 
@@ -1852,7 +1854,7 @@ function closeDocPreview() {
                             {{ iv.title }}
                           </p>
                           <p class="text-xs text-surface-500 dark:text-surface-400 mt-0.5">
-                            <TimelineDateLink :date="iv.scheduledAt">{{ formatInterviewDateTime(iv.scheduledAt) }}</TimelineDateLink> · {{ iv.duration }} min · {{ interviewTypeLabels[iv.type] ?? iv.type }}
+                            <TimelineDateLink :date="iv.scheduledAt">{{ formatInterviewDateTime(iv.scheduledAt) }}</TimelineDateLink> · {{ t('units.durationMinutes', { n: iv.duration }) }} · {{ interviewTypeLabels[iv.type] ?? iv.type }}
                           </p>
                           <div v-if="iv.googleCalendarEventId" class="mt-1">
                             <a
@@ -1864,12 +1866,12 @@ function closeDocPreview() {
                               @click.stop
                             >
                               <Calendar class="size-2.5" />
-                              Google Calendar
+                              {{ t('interviewsPage.googleCalendar') }}
                               <ExternalLink class="size-2" />
                             </a>
                             <span v-else class="inline-flex items-center gap-1 rounded-full bg-emerald-50 dark:bg-emerald-950/30 px-2 py-0.5 text-[10px] font-medium text-emerald-700 dark:text-emerald-400">
                               <Calendar class="size-2.5" />
-                              Google Calendar
+                              {{ t('interviewsPage.googleCalendar') }}
                             </span>
                           </div>
                         </div>
@@ -1880,7 +1882,7 @@ function closeDocPreview() {
                           :class="interviewStatusClasses[iv.status] ?? 'bg-surface-100 text-surface-500 ring-surface-200'"
                         >
                           <component :is="interviewStatusIcons[iv.status as InterviewStatus] ?? Calendar" class="size-3" />
-                          {{ iv.status === 'no_show' ? 'No Show' : iv.status }}
+                          {{ interviewStatus(iv.status) }}
                         </span>
                         <ChevronDown
                           class="size-4 text-surface-400 transition-transform duration-200"
@@ -1912,7 +1914,7 @@ function closeDocPreview() {
                       <div v-if="rescheduleInterviewId === iv.id" class="px-5 py-4 border-t border-surface-100 dark:border-surface-800/60">
                         <h4 class="text-xs font-semibold text-surface-700 dark:text-surface-300 mb-3 flex items-center gap-1.5">
                           <Calendar class="size-3.5" />
-                          Reschedule Interview
+                          {{ t('jobsPage.rescheduleInterview') }}
                         </h4>
                         <div class="grid grid-cols-3 gap-3">
                           <div>
@@ -1982,34 +1984,34 @@ function closeDocPreview() {
                               </dd>
                             </div>
                             <div>
-                              <dt class="text-[11px] font-medium text-surface-400 dark:text-surface-500 mb-0.5">Type</dt>
+                              <dt class="text-[11px] font-medium text-surface-400 dark:text-surface-500 mb-0.5">{{ t('pipelineDetail.interviewEditType') }}</dt>
                               <dd class="text-surface-800 dark:text-surface-200 font-medium text-[13px] flex items-center gap-1.5">
                                 <component :is="interviewTypeIcons[iv.type] ?? Calendar" class="size-3.5 text-surface-400" />
                                 {{ interviewTypeLabels[iv.type] ?? iv.type }}
                               </dd>
                             </div>
                             <div v-if="iv.location">
-                              <dt class="text-[11px] font-medium text-surface-400 dark:text-surface-500 mb-0.5">Location</dt>
+                              <dt class="text-[11px] font-medium text-surface-400 dark:text-surface-500 mb-0.5">{{ t('pipelineDetail.interviewEditLocation') }}</dt>
                               <dd class="text-surface-800 dark:text-surface-200 font-medium text-[13px] flex items-center gap-1.5">
                                 <MapPin class="size-3.5 text-surface-400" />
                                 {{ iv.location }}
                               </dd>
                             </div>
                             <div v-if="iv.interviewers?.length" class="col-span-2">
-                              <dt class="text-[11px] font-medium text-surface-400 dark:text-surface-500 mb-0.5">Interviewers</dt>
+                              <dt class="text-[11px] font-medium text-surface-400 dark:text-surface-500 mb-0.5">{{ t('pipelineDetail.interviewEditInterviewers') }}</dt>
                               <dd class="text-surface-800 dark:text-surface-200 font-medium text-[13px] flex items-center gap-1.5">
                                 <Users class="size-3.5 text-surface-400" />
                                 {{ iv.interviewers.join(', ') }}
                               </dd>
                             </div>
                             <div v-if="iv.notes" class="col-span-2">
-                              <dt class="text-[11px] font-medium text-surface-400 dark:text-surface-500 mb-0.5">Notes</dt>
+                              <dt class="text-[11px] font-medium text-surface-400 dark:text-surface-500 mb-0.5">{{ t('jobsPage.notes') }}</dt>
                               <dd class="text-surface-700 dark:text-surface-300 text-[13px] leading-relaxed whitespace-pre-wrap">
                                 {{ iv.notes }}
                               </dd>
                             </div>
                             <div v-if="iv.googleCalendarEventId" class="col-span-2">
-                              <dt class="text-[11px] font-medium text-surface-400 dark:text-surface-500 mb-0.5">Calendar Sync</dt>
+                              <dt class="text-[11px] font-medium text-surface-400 dark:text-surface-500 mb-0.5">{{ t('pipelineDetail.calendarSync') }}</dt>
                               <dd class="text-[13px]">
                                 <a
                                   v-if="iv.googleCalendarEventLink"
@@ -2019,12 +2021,12 @@ function closeDocPreview() {
                                   class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 px-2.5 py-1 text-emerald-700 dark:text-emerald-400 font-medium hover:bg-emerald-100 dark:hover:bg-emerald-950/50 transition-colors"
                                 >
                                   <Calendar class="size-3.5" />
-                                  Open in Google Calendar
+                                  {{ t('pipelineDetail.openInGoogleCalendar') }}
                                   <ExternalLink class="size-3" />
                                 </a>
                                 <span v-else class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 px-2.5 py-1 text-emerald-700 dark:text-emerald-400 font-medium">
                                   <Calendar class="size-3.5" />
-                                  Synced to Google Calendar
+                                  {{ t('pipelineDetail.syncedGoogleCalendar') }}
                                 </span>
                               </dd>
                             </div>
@@ -2035,7 +2037,7 @@ function closeDocPreview() {
                               @click.stop="startInterviewEdit(iv)"
                             >
                               <Pencil class="size-3" />
-                              Edit Details
+                              {{ t('pipelineDetail.editDetails') }}
                             </button>
                             <NuxtLink
                               :to="$localePath(`/dashboard/interviews/${iv.id}`)"
@@ -2043,7 +2045,7 @@ function closeDocPreview() {
                               @click.stop
                             >
                               <ExternalLink class="size-3" />
-                              Full Page
+                              {{ t('pipelineDetail.fullPage') }}
                             </NuxtLink>
                           </div>
                         </template>
@@ -2052,7 +2054,7 @@ function closeDocPreview() {
                         <template v-else>
                           <div class="space-y-3">
                             <div>
-                              <label class="block text-[11px] font-medium text-surface-500 dark:text-surface-400 mb-1">Title</label>
+                              <label class="block text-[11px] font-medium text-surface-500 dark:text-surface-400 mb-1">{{ t('pipelineDetail.interviewEditTitle') }}</label>
                               <input
                                 v-model="interviewEditForm.title"
                                 type="text"
@@ -2064,51 +2066,51 @@ function closeDocPreview() {
                             </div>
 
                             <div>
-                              <label class="block text-[11px] font-medium text-surface-500 dark:text-surface-400 mb-1">Type</label>
+                              <label class="block text-[11px] font-medium text-surface-500 dark:text-surface-400 mb-1">{{ t('pipelineDetail.interviewEditType') }}</label>
                               <select
                                 v-model="interviewEditForm.type"
                                 class="w-full rounded-lg border border-surface-200 dark:border-surface-700 px-3 py-2 text-sm text-surface-900 dark:text-surface-100 bg-white dark:bg-surface-800 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400 transition-colors"
                                 @click.stop
                               >
-                                <option value="video">Video Call</option>
-                                <option value="phone">Phone</option>
-                                <option value="in_person">In Person</option>
-                                <option value="technical">Technical</option>
-                                <option value="panel">Panel</option>
-                                <option value="take_home">Take Home</option>
+                                <option value="video">{{ t('interviewsPage.types.video') }}</option>
+                                <option value="phone">{{ t('interviewsPage.types.phone') }}</option>
+                                <option value="in_person">{{ t('interviewsPage.types.in_person') }}</option>
+                                <option value="technical">{{ t('interviewsPage.types.technical') }}</option>
+                                <option value="panel">{{ t('interviewsPage.types.panel') }}</option>
+                                <option value="take_home">{{ t('interviewsPage.types.take_home') }}</option>
                               </select>
                             </div>
 
                             <div>
-                              <label class="block text-[11px] font-medium text-surface-500 dark:text-surface-400 mb-1">Location / Link</label>
+                              <label class="block text-[11px] font-medium text-surface-500 dark:text-surface-400 mb-1">{{ t('pipelineDetail.interviewEditLocation') }}</label>
                               <input
                                 v-model="interviewEditForm.location"
                                 type="text"
-                                placeholder="Zoom link, office address…"
+                                :placeholder="t('pipelineDetail.interviewEditLocationPlaceholder')"
                                 class="w-full rounded-lg border border-surface-200 dark:border-surface-700 px-3 py-2 text-sm text-surface-900 dark:text-surface-100 bg-white dark:bg-surface-800 placeholder:text-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400 transition-colors"
                                 @click.stop
                               />
                             </div>
 
                             <div>
-                              <label class="block text-[11px] font-medium text-surface-500 dark:text-surface-400 mb-1">Notes</label>
+                              <label class="block text-[11px] font-medium text-surface-500 dark:text-surface-400 mb-1">{{ t('jobsPage.notes') }}</label>
                               <textarea
                                 v-model="interviewEditForm.notes"
                                 rows="3"
-                                placeholder="Interview notes…"
+                                :placeholder="t('pipelineDetail.interviewEditNotesPlaceholder')"
                                 class="w-full rounded-lg border border-surface-200 dark:border-surface-700 px-3 py-2 text-sm text-surface-900 dark:text-surface-100 bg-white dark:bg-surface-800 placeholder:text-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400 transition-colors"
                                 @click.stop
                               />
                             </div>
 
                             <div>
-                              <label class="block text-[11px] font-medium text-surface-500 dark:text-surface-400 mb-1.5">Interviewers</label>
+                              <label class="block text-[11px] font-medium text-surface-500 dark:text-surface-400 mb-1.5">{{ t('pipelineDetail.interviewEditInterviewers') }}</label>
                               <div class="space-y-2">
                                 <div v-for="(_, idx) in interviewEditForm.interviewers" :key="idx" class="flex items-center gap-2">
                                   <input
                                     v-model="interviewEditForm.interviewers[idx]"
                                     type="text"
-                                    placeholder="Name or email"
+                                    :placeholder="t('pipelineDetail.interviewEditInterviewerPlaceholder')"
                                     class="flex-1 rounded-lg border border-surface-200 dark:border-surface-700 px-3 py-1.5 text-sm text-surface-900 dark:text-surface-100 bg-white dark:bg-surface-800 placeholder:text-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400 transition-colors"
                                     @click.stop
                                   />
@@ -2126,7 +2128,7 @@ function closeDocPreview() {
                                 @click.stop="addEditInterviewer"
                               >
                                 <Plus class="size-3" />
-                                Add interviewer
+                                {{ t('pipelineDetail.addInterviewer') }}
                               </button>
                             </div>
 
@@ -2137,14 +2139,14 @@ function closeDocPreview() {
                                 class="cursor-pointer rounded-lg border border-surface-300 dark:border-surface-700 px-3 py-1.5 text-xs font-medium text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-800 transition-colors"
                                 @click.stop="cancelInterviewEdit"
                               >
-                                Cancel
+                                {{ t('common.cancel') }}
                               </button>
                               <button
                                 :disabled="isInterviewSaving"
                                 class="cursor-pointer rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 @click.stop="saveInterviewEdit"
                               >
-                                {{ isInterviewSaving ? 'Saving…' : 'Save Changes' }}
+                                {{ isInterviewSaving ? t('pipelineDetail.saving') : t('pipelineDetail.saveChanges') }}
                               </button>
                             </div>
                           </div>
@@ -2159,14 +2161,14 @@ function closeDocPreview() {
                   <div class="flex size-14 items-center justify-center rounded-2xl bg-surface-100 dark:bg-surface-800/60 mx-auto mb-3">
                     <Calendar class="size-6 text-surface-400 dark:text-surface-500" />
                   </div>
-                  <p class="text-sm font-medium text-surface-600 dark:text-surface-300">No interviews scheduled</p>
-                  <p class="mt-1 text-xs text-surface-400 dark:text-surface-500">Schedule an interview to start the process.</p>
+                  <p class="text-sm font-medium text-surface-600 dark:text-surface-300">{{ t('pipelineDetail.noInterviewsScheduled') }}</p>
+                  <p class="mt-1 text-xs text-surface-400 dark:text-surface-500">{{ t('pipelineDetail.scheduleInterviewHint') }}</p>
                   <button
                     class="mt-4 inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-brand-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-brand-700 transition-colors shadow-sm"
                     @click="openInterviewScheduler"
                   >
                     <Plus class="size-3.5" />
-                    Schedule Interview
+                    {{ t('jobsPage.scheduleInterview') }}
                   </button>
                 </div>
               </div>
@@ -2175,7 +2177,7 @@ function closeDocPreview() {
               <div v-if="showSection.documents" ref="documentsRef" class="space-y-3 max-w-4xl mx-auto" :class="detailTab === 'overview' ? 'mt-10' : ''">
                 <h2 class="text-sm font-semibold text-surface-800 dark:text-surface-200 flex items-center gap-2 mb-3">
                   <Paperclip class="size-4 text-surface-400 dark:text-surface-500" />
-                  Documents
+                  {{ t('pipelineDetail.documentsTitle') }}
                 </h2>
                 <div v-if="resolvedCurrentApplication?.candidate.documents?.length" class="space-y-3">
                   <div
@@ -2202,14 +2204,14 @@ function closeDocPreview() {
                         @click="handleDocPreview(doc)"
                       >
                         <Eye class="size-3.5" />
-                        Preview
+                        {{ t('pipelineDetail.preview') }}
                       </button>
                       <a
                         :href="`/api/documents/${doc.id}/download`"
                         class="inline-flex items-center gap-1.5 rounded-lg border border-surface-200 px-3 py-1.5 text-xs font-medium text-surface-600 hover:bg-surface-50 hover:border-surface-300 dark:border-surface-700 dark:text-surface-300 dark:hover:bg-surface-800 dark:hover:border-surface-600 transition-all duration-150"
                       >
                         <Download class="size-3.5" />
-                        Download
+                        {{ t('pipelineDetail.download') }}
                       </a>
                     </div>
                   </div>
@@ -2218,8 +2220,8 @@ function closeDocPreview() {
                   <div class="flex size-14 items-center justify-center rounded-2xl bg-surface-100 dark:bg-surface-800/60 mx-auto mb-3">
                     <FileText class="size-6 text-surface-400 dark:text-surface-500" />
                   </div>
-                  <p class="text-sm font-medium text-surface-600 dark:text-surface-300">No documents uploaded</p>
-                  <p class="mt-1 text-xs text-surface-400 dark:text-surface-500">Documents will appear here once uploaded.</p>
+                  <p class="text-sm font-medium text-surface-600 dark:text-surface-300">{{ t('pipelineDetail.noDocuments') }}</p>
+                  <p class="mt-1 text-xs text-surface-400 dark:text-surface-500">{{ t('pipelineDetail.noDocumentsHint') }}</p>
                 </div>
               </div>
 
@@ -2227,7 +2229,7 @@ function closeDocPreview() {
               <div v-if="showSection.responses" ref="responsesRef" class="space-y-3 max-w-4xl mx-auto" :class="detailTab === 'overview' ? 'mt-10' : ''">
                 <h2 class="text-sm font-semibold text-surface-800 dark:text-surface-200 flex items-center gap-2 mb-3">
                   <MessageSquare class="size-4 text-surface-400 dark:text-surface-500" />
-                  Responses
+                  {{ t('pipelineDetail.responsesTitle') }}
                 </h2>                <template v-if="resolvedCurrentApplication?.responses?.length">
                   <div class="space-y-3">
                     <div
@@ -2236,7 +2238,7 @@ function closeDocPreview() {
                       class="rounded-xl border border-surface-200/80 bg-white p-5 shadow-sm shadow-surface-900/[0.03] dark:border-surface-800/60 dark:bg-surface-900 dark:shadow-none"
                     >
                       <p class="text-xs font-semibold text-surface-400 dark:text-surface-500 uppercase tracking-wider mb-2">
-                        {{ response.question?.label ?? 'Unknown question' }}
+                        {{ response.question?.label ?? t('pipelineDetail.unknownQuestion') }}
                       </p>
                       <p class="text-sm text-surface-700 dark:text-surface-200 leading-relaxed">
                         {{ formatResponseValue(response.value) }}
@@ -2260,7 +2262,7 @@ function closeDocPreview() {
                     <div class="flex size-7 items-center justify-center rounded-lg bg-brand-50 dark:bg-brand-950/40">
                       <SlidersHorizontal class="size-3.5 text-brand-600 dark:text-brand-400" />
                     </div>
-                    <h3 class="text-sm font-semibold text-surface-800 dark:text-surface-200">Properties</h3>
+                    <h3 class="text-sm font-semibold text-surface-800 dark:text-surface-200">{{ t('pipelineDetail.tabProperties') }}</h3>
                   </div>
                   <PropertyBlock
                     entity-type="application"
@@ -2276,13 +2278,13 @@ function closeDocPreview() {
               <div v-if="showSection.timeline" class="space-y-3 max-w-4xl mx-auto">
                 <h2 class="text-sm font-semibold text-surface-800 dark:text-surface-200 flex items-center gap-2 mb-3">
                   <History class="size-4 text-surface-400 dark:text-surface-500" />
-                  Timeline
+                  {{ t('pipelineDetail.timelineTitle') }}
                 </h2>
 
                 <!-- Loading -->
                 <div v-if="timelineLoading" class="text-center py-12 text-surface-400">
                   <div class="size-6 rounded-full border-2 border-brand-200 border-t-brand-600 dark:border-brand-800 dark:border-t-brand-400 animate-spin mx-auto mb-3" />
-                  Loading timeline…
+                  {{ t('pipelineDetail.loadingTimeline') }}
                 </div>
 
                 <!-- Error -->
@@ -2341,7 +2343,7 @@ function closeDocPreview() {
                             <span v-if="item.metadata.to_status || item.metadata.toStatus" class="inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-medium leading-none" :class="getTimelineStatusBadge(String(item.metadata.to_status ?? item.metadata.toStatus))">{{ item.metadata.to_status ?? item.metadata.toStatus }}</span>
                           </template>
                           <template v-else-if="item.action === 'scored' && item.metadata?.score">
-                            <span class="inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-medium leading-none bg-accent-100 text-accent-700 dark:bg-accent-900/60 dark:text-accent-300">{{ item.metadata.score }} pts</span>
+                            <span class="inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-medium leading-none bg-accent-100 text-accent-700 dark:bg-accent-900/60 dark:text-accent-300">{{ item.metadata.score }} {{ t('units.points') }}</span>
                           </template>
                         </div>
                         <div class="flex items-center gap-2 mt-0.5">

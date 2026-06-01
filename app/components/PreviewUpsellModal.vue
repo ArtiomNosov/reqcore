@@ -5,6 +5,7 @@ const emit = defineEmits<{
   (e: 'close'): void
 }>()
 
+const { t } = useI18n()
 const { message } = usePreviewReadOnly()
 
 function closeModal() {
@@ -21,7 +22,7 @@ function closeModal() {
         <div class="flex items-center justify-between border-b border-surface-200 px-5 py-4 dark:border-surface-800">
           <div class="flex items-center gap-2">
             <Eye class="size-5 text-brand-600 dark:text-brand-400" />
-            <h3 class="text-lg font-semibold text-surface-900 dark:text-surface-50">You're in the live demo</h3>
+            <h3 class="text-lg font-semibold text-surface-900 dark:text-surface-50">{{ t('previewModal.title') }}</h3>
           </div>
 
           <button
@@ -38,11 +39,10 @@ function closeModal() {
           </p>
 
           <p class="text-sm text-surface-500 dark:text-surface-400">
-            Get full read &amp; write access — choose the option that works best for you:
+            {{ t('previewModal.chooseOption') }}
           </p>
 
           <div class="space-y-2">
-            <!-- Cloud hosted option -->
             <NuxtLink
               :to="$localePath('/auth/fresh-signup')"
               class="flex items-start gap-3 rounded-xl border border-brand-200 dark:border-brand-800 bg-gradient-to-r from-brand-50 to-violet-50 dark:from-brand-950/30 dark:to-violet-950/30 px-4 py-3 transition-all hover:shadow-md hover:border-brand-300 dark:hover:border-brand-700 no-underline group"
@@ -52,12 +52,11 @@ function closeModal() {
                 <Cloud class="size-4" />
               </div>
               <div>
-                <div class="text-sm font-semibold text-surface-900 dark:text-surface-100 group-hover:text-brand-700 dark:group-hover:text-brand-300 transition-colors">Use Cloud Hosted</div>
-                <div class="text-xs text-surface-500 dark:text-surface-400 mt-0.5">Start free in seconds — we handle hosting, updates &amp; backups</div>
+                <div class="text-sm font-semibold text-surface-900 dark:text-surface-100 group-hover:text-brand-700 dark:group-hover:text-brand-300 transition-colors">{{ t('previewModal.cloudTitle') }}</div>
+                <div class="text-xs text-surface-500 dark:text-surface-400 mt-0.5">{{ t('previewModal.cloudDesc') }}</div>
               </div>
             </NuxtLink>
 
-            <!-- Self-host option -->
             <a
               href="https://github.com/reqcore-inc/reqcore#quick-start"
               target="_blank"
@@ -68,8 +67,8 @@ function closeModal() {
                 <Rocket class="size-4" />
               </div>
               <div>
-                <div class="text-sm font-semibold text-surface-900 dark:text-surface-100 group-hover:text-surface-700 dark:group-hover:text-surface-200 transition-colors">Self-Host (Free &amp; Open Source)</div>
-                <div class="text-xs text-surface-500 dark:text-surface-400 mt-0.5">Deploy on your own infrastructure — full control over your data</div>
+                <div class="text-sm font-semibold text-surface-900 dark:text-surface-100 group-hover:text-surface-700 dark:group-hover:text-surface-200 transition-colors">{{ t('previewModal.selfHostTitle') }}</div>
+                <div class="text-xs text-surface-500 dark:text-surface-400 mt-0.5">{{ t('previewModal.selfHostDesc') }}</div>
               </div>
             </a>
           </div>
@@ -81,7 +80,7 @@ function closeModal() {
             class="inline-flex items-center gap-1.5 text-xs text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300 transition-colors no-underline"
           >
             <Github class="size-3.5" />
-            View on GitHub
+            {{ t('previewModal.viewGithub') }}
           </a>
         </div>
       </div>

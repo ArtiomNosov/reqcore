@@ -43,6 +43,20 @@ const localeFlags: Record<string, string> = {
   nb: '🇳🇴',
 }
 
+const localeShortLabels: Record<string, string> = {
+  ru: 'РУ',
+  en: 'АН',
+  es: 'ИС',
+  fr: 'ФР',
+  de: 'НЕ',
+  vi: 'ВЬ',
+  nb: 'НО',
+}
+
+function localeDisplayCode(code: string): string {
+  return localeShortLabels[code] ?? code.toUpperCase()
+}
+
 type LocaleEntry = string | { code?: string | null }
 
 function getLocaleCode(entry: LocaleEntry): string | null {
@@ -177,17 +191,17 @@ async function handleLocaleChange(nextLocale: string) {
       {{ i18nProbeText }}
     </span>
 
-    <div ref="dropdownRef" class="relative">
+    <div v-if="localeOptions.length > 1" ref="dropdownRef" class="relative">
       <!-- Trigger button -->
       <button
         type="button"
         :aria-label="t('common.selectLanguage')"
         :aria-expanded="isOpen"
         aria-haspopup="listbox"
-        class="flex h-8 items-center gap-1 rounded-md border border-surface-300/45 dark:border-surface-700/55 bg-transparent px-2 text-xs font-medium lowercase text-surface-500 dark:text-surface-400 outline-none transition-colors hover:border-surface-400/60 hover:text-surface-700 dark:hover:border-surface-600 dark:hover:text-surface-200 focus:border-brand-500/70 focus:text-surface-800 dark:focus:text-surface-100"
+        class="flex h-8 items-center gap-1 rounded-md border border-surface-300/45 dark:border-surface-700/55 bg-transparent px-2 text-xs font-medium text-surface-500 dark:text-surface-400 outline-none transition-colors hover:border-surface-400/60 hover:text-surface-700 dark:hover:border-surface-600 dark:hover:text-surface-200 focus:border-brand-500/70 focus:text-surface-800 dark:focus:text-surface-100"
         @click="isOpen = !isOpen"
       >
-        <span>{{ localeOptions.find(o => o.code === selectedLocaleCode)?.flag ?? '🌐' }} {{ selectedLocaleCode }}</span>
+        <span>{{ localeOptions.find(o => o.code === selectedLocaleCode)?.flag ?? '🌐' }} {{ localeDisplayCode(selectedLocaleCode) }}</span>
         <ChevronDown class="size-3 opacity-60 transition-transform duration-150" :class="{ 'rotate-180': isOpen }" />
       </button>
 
@@ -212,14 +226,14 @@ async function handleLocaleChange(nextLocale: string) {
         >
           <span class="flex items-center gap-1.5">
             <span>{{ option.flag }}</span>
-            <span class="font-medium">{{ option.code }}</span>
+            <span class="font-medium">{{ localeDisplayCode(option.code) }}</span>
           </span>
           <span
             v-if="option.partial"
             class="rounded bg-amber-100 dark:bg-amber-900/40 px-1 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:text-amber-400"
-            title="Translation incomplete"
+            :title="t('common.partialLocale')"
           >
-            partial
+            {{ t('common.partial') }}
           </span>
         </li>
       </ul>

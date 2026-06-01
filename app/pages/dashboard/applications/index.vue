@@ -6,9 +6,14 @@ definePageMeta({
   middleware: ['auth', 'require-org'],
 })
 
+const { t } = useI18n()
+const { applicationStatusBadge } = useLocalizedEnums()
+const { formatRelativeAgo } = useRelativeTime()
+const applicationsSeoTitle = computed(() => t('applicationsPage.title'))
+const applicationsSeoDescription = computed(() => t('applicationsPage.description'))
 useSeoMeta({
-  title: 'Applications — Reqcore',
-  description: 'Manage applications across all jobs',
+  title: applicationsSeoTitle,
+  description: applicationsSeoDescription,
 })
 
 // ── Column visibility ─────────────────────────────────────────────────────────
@@ -28,12 +33,12 @@ const visibleColumns = ref<Record<string, boolean>>({ ...defaultColumnVisibility
 const { definitions: propertyDefs } = useProperties({ entityType: () => 'application' })
 
 const applicationColumns = computed(() => [
-  { key: 'candidate', label: 'Candidate', required: true },
-  { key: 'email', label: 'Email' },
-  { key: 'job', label: 'Job' },
-  { key: 'status', label: 'Status' },
-  { key: 'score', label: 'Score' },
-  { key: 'applied', label: 'Applied' },
+  { key: 'candidate', label: t('applicationsPage.candidate'), required: true },
+  { key: 'email', label: t('ui.email') },
+  { key: 'job', label: t('applicationsPage.job') },
+  { key: 'status', label: t('ui.status') },
+  { key: 'score', label: t('applicationsPage.score') },
+  { key: 'applied', label: t('applicationsPage.applied') },
   ...propertyDefs.value.map((d) => ({ key: `prop_${d.id}`, label: d.name })),
 ])
 
@@ -190,14 +195,7 @@ function clearAllFilters() {
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function timeAgo(date: string | Date) {
-  const diff = Date.now() - new Date(date).getTime()
-  const mins = Math.floor(diff / 60_000)
-  if (mins < 60) return `${mins}m ago`
-  const hrs = Math.floor(mins / 60)
-  if (hrs < 24) return `${hrs}h ago`
-  const days = Math.floor(hrs / 24)
-  if (days < 30) return `${days}d ago`
-  return new Date(date).toLocaleDateString()
+  return formatRelativeAgo(date)
 }
 
 function scoreClass(score: number) {
@@ -224,14 +222,9 @@ const statusDotClasses: Record<string, string> = {
   rejected: 'bg-surface-400 dark:bg-surface-500',
 }
 
-const statusLabels: Record<Status, string> = {
-  new: 'New',
-  screening: 'Screening',
-  interview: 'Interview',
-  offer: 'Offer',
-  hired: 'Hired',
-  rejected: 'Rejected',
-}
+const statusLabels = computed(() =>
+  Object.fromEntries(STATUS_OPTIONS.map(s => [s, applicationStatusBadge(s)])) as Record<Status, string>,
+)
 
 // ── Drawer + Saved Views ──────────────────────────────────────────────────────
 
@@ -353,9 +346,9 @@ const selectedApplicationId = ref<string | null>(null)
     <!-- Header -->
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-50">Applications</h1>
+        <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-50">{{ t('applicationsPage.heading') }}</h1>
         <p class="text-sm text-surface-500 dark:text-surface-400 mt-1">
-          Track candidates through your hiring pipeline.
+          {{ t('applicationsPage.description') }}
         </p>
       </div>
     </div>
@@ -367,7 +360,7 @@ const selectedApplicationId = ref<string | null>(null)
         <input
           v-model="searchInput"
           type="text"
-          placeholder="Search by candidate name, email, or job title…"
+          :placeholder="t('applicationsPage.searchPlaceholder')"
           class="w-full rounded-lg border border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 pl-10 pr-3 py-2 text-sm text-surface-900 dark:text-surface-100 placeholder:text-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
         />
       </div>
@@ -394,7 +387,7 @@ const selectedApplicationId = ref<string | null>(null)
         @click="drawerOpen = true"
       >
         <SlidersHorizontal class="size-4" />
-        Filters
+        {{ t('ui.filters') }}
         <span
           v-if="drawerActiveCount > 0"
           class="inline-flex items-center justify-center min-w-[1rem] h-4 px-1 rounded-full bg-surface-700 dark:bg-surface-300 text-white dark:text-surface-900 text-[10px] font-semibold"
@@ -406,7 +399,7 @@ const selectedApplicationId = ref<string | null>(null)
         @click="clearAllFilters"
       >
         <X class="size-3" />
-        Clear
+        {{ t('ui.resetAll') }}
       </button>
       <button
         type="button"
@@ -422,7 +415,7 @@ const selectedApplicationId = ref<string | null>(null)
     <!-- Filter drawer -->
     <FilterDrawer
       v-model="drawerOpen"
-      title="Filter applications"
+      :title="t('applicationsPage.filterTitle')"
       description="Customize your view, then save it for quick access."
       :active-count="drawerActiveCount"
       saveable
@@ -433,7 +426,7 @@ const selectedApplicationId = ref<string | null>(null)
       <div class="space-y-6">
         <!-- Status -->
         <div>
-          <label class="block text-xs font-semibold uppercase tracking-wide text-surface-500 dark:text-surface-400 mb-2">Status</label>
+          <label class="block text-xs font-semibold uppercase tracking-wide text-surface-500 dark:text-surface-400 mb-2">{{ t('ui.status') }}</label>
           <div class="flex flex-wrap gap-1.5">
             <button
               type="button"
@@ -442,7 +435,7 @@ const selectedApplicationId = ref<string | null>(null)
                 ? 'bg-surface-900 text-white dark:bg-surface-100 dark:text-surface-900'
                 : 'bg-surface-100 dark:bg-surface-800 text-surface-500 dark:text-surface-400 hover:bg-surface-200 dark:hover:bg-surface-700'"
               @click="activeStatus = undefined"
-            >Any</button>
+            >{{ t('ui.all') }}</button>
             <button
               v-for="s in STATUS_OPTIONS"
               :key="s"
@@ -524,7 +517,7 @@ const selectedApplicationId = ref<string | null>(null)
 
     <!-- Loading -->
     <div v-if="fetchStatus === 'pending'" class="text-center py-16 text-surface-400">
-      Loading applications…
+      {{ t('ui.loading') }}
     </div>
 
     <!-- Error -->
@@ -532,8 +525,8 @@ const selectedApplicationId = ref<string | null>(null)
       v-else-if="error"
       class="rounded-lg border border-danger-200 bg-danger-50 p-4 text-sm text-danger-700"
     >
-      Failed to load applications. Please try again.
-      <button class="underline ml-1" @click="refresh()">Retry</button>
+      {{ t('applicationsPage.loadFailed') }}
+      <button class="underline ml-1" @click="refresh()">{{ t('ui.retry') }}</button>
     </div>
 
     <!-- Empty state -->
@@ -542,9 +535,9 @@ const selectedApplicationId = ref<string | null>(null)
       class="rounded-xl border border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 p-16 text-center"
     >
       <FileText class="size-10 text-surface-300 dark:text-surface-600 mx-auto mb-3" />
-      <h3 class="text-base font-semibold text-surface-700 dark:text-surface-200 mb-1">No applications yet</h3>
+      <h3 class="text-base font-semibold text-surface-700 dark:text-surface-200 mb-1">{{ t('applicationsPage.noApplications') }}</h3>
       <p class="text-sm text-surface-500 dark:text-surface-400">
-        Applications will appear here when candidates apply to your jobs or when you manually link candidates.
+        {{ t('applicationsPage.emptyHint') }}
       </p>
     </div>
 
@@ -554,15 +547,15 @@ const selectedApplicationId = ref<string | null>(null)
       class="rounded-xl border border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 p-12 text-center"
     >
       <Search class="size-8 text-surface-300 dark:text-surface-600 mx-auto mb-3" />
-      <h3 class="text-base font-semibold text-surface-700 dark:text-surface-200 mb-1">No matching applications</h3>
+      <h3 class="text-base font-semibold text-surface-700 dark:text-surface-200 mb-1">{{ t('common.noResults') }}</h3>
       <p class="text-sm text-surface-500 dark:text-surface-400 mb-3">
-        Try adjusting your search or filters.
+        {{ t('applicationsPage.filterAdjust') }}
       </p>
       <button
         class="text-sm text-brand-600 hover:text-brand-700 font-medium transition-colors"
         @click="clearAllFilters"
       >
-        Clear all filters
+        {{ t('ui.resetAll') }}
       </button>
     </div>
 
@@ -573,7 +566,7 @@ const selectedApplicationId = ref<string | null>(null)
           <!-- Fullscreen header -->
           <div v-if="isFullscreen" class="flex items-center justify-between px-4 py-3 border-b border-surface-200 dark:border-surface-800 shrink-0 bg-white dark:bg-surface-950">
             <span class="text-sm font-semibold text-surface-900 dark:text-surface-100">
-              Applications — {{ filteredApplications.length }} result{{ filteredApplications.length === 1 ? '' : 's' }}
+              {{ filteredApplications.length === 1 ? t('applicationsPage.resultsCount', { count: filteredApplications.length }) : t('applicationsPage.resultsCountPlural', { count: filteredApplications.length }) }}
             </span>
             <button
               type="button"
@@ -581,7 +574,7 @@ const selectedApplicationId = ref<string | null>(null)
               @click="isFullscreen = false"
             >
               <Minimize2 class="size-4" />
-              Exit fullscreen
+              {{ t('applicationsPage.fullscreenExit') }}
             </button>
           </div>
           <div :class="isFullscreen ? 'flex-1 overflow-auto p-4' : ''">
@@ -591,7 +584,7 @@ const selectedApplicationId = ref<string | null>(null)
             <tr class="bg-surface-50 dark:bg-surface-800/50 border-b border-surface-200 dark:border-surface-800">
               <th class="text-left px-4 py-3 font-medium text-surface-500 dark:text-surface-400">
                 <button class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors" @click="toggleSort('name')">
-                  Candidate
+                  {{ t('applicationsPage.candidate') }}
                   <ArrowUp v-if="sortKey === 'name' && sortDir === 'asc'" class="size-3.5" />
                   <ArrowDown v-else-if="sortKey === 'name' && sortDir === 'desc'" class="size-3.5" />
                   <ArrowUpDown v-else class="size-3.5 opacity-40" />
@@ -599,7 +592,7 @@ const selectedApplicationId = ref<string | null>(null)
               </th>
               <th v-if="visibleColumns.email" class="text-left px-4 py-3 font-medium text-surface-500 dark:text-surface-400 hidden lg:table-cell">
                 <button class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors" @click="toggleSort('email')">
-                  Email
+                  {{ t('ui.email') }}
                   <ArrowUp v-if="sortKey === 'email' && sortDir === 'asc'" class="size-3.5" />
                   <ArrowDown v-else-if="sortKey === 'email' && sortDir === 'desc'" class="size-3.5" />
                   <ArrowUpDown v-else class="size-3.5 opacity-40" />
@@ -607,7 +600,7 @@ const selectedApplicationId = ref<string | null>(null)
               </th>
               <th v-if="visibleColumns.job" class="text-left px-4 py-3 font-medium text-surface-500 dark:text-surface-400 hidden md:table-cell">
                 <button class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors" @click="toggleSort('job')">
-                  Job
+                  {{ t('applicationsPage.job') }}
                   <ArrowUp v-if="sortKey === 'job' && sortDir === 'asc'" class="size-3.5" />
                   <ArrowDown v-else-if="sortKey === 'job' && sortDir === 'desc'" class="size-3.5" />
                   <ArrowUpDown v-else class="size-3.5 opacity-40" />
@@ -615,7 +608,7 @@ const selectedApplicationId = ref<string | null>(null)
               </th>
               <th v-if="visibleColumns.status" class="text-left px-4 py-3 font-medium text-surface-500 dark:text-surface-400">
                 <button class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors" @click="toggleSort('status')">
-                  Status
+                  {{ t('ui.status') }}
                   <ArrowUp v-if="sortKey === 'status' && sortDir === 'asc'" class="size-3.5" />
                   <ArrowDown v-else-if="sortKey === 'status' && sortDir === 'desc'" class="size-3.5" />
                   <ArrowUpDown v-else class="size-3.5 opacity-40" />
@@ -623,7 +616,7 @@ const selectedApplicationId = ref<string | null>(null)
               </th>
               <th v-if="visibleColumns.score" class="text-center px-4 py-3 font-medium text-surface-500 dark:text-surface-400 hidden sm:table-cell">
                 <button class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors" @click="toggleSort('score')">
-                  Score
+                  {{ t('applicationsPage.score') }}
                   <ArrowUp v-if="sortKey === 'score' && sortDir === 'asc'" class="size-3.5" />
                   <ArrowDown v-else-if="sortKey === 'score' && sortDir === 'desc'" class="size-3.5" />
                   <ArrowUpDown v-else class="size-3.5 opacity-40" />
@@ -631,7 +624,7 @@ const selectedApplicationId = ref<string | null>(null)
               </th>
               <th v-if="visibleColumns.applied" class="text-left px-4 py-3 font-medium text-surface-500 dark:text-surface-400">
                 <button class="inline-flex items-center gap-1 hover:text-surface-900 dark:hover:text-surface-100 transition-colors" @click="toggleSort('created')">
-                  Applied
+                  {{ t('applicationsPage.applied') }}
                   <ArrowUp v-if="sortKey === 'created' && sortDir === 'asc'" class="size-3.5" />
                   <ArrowDown v-else-if="sortKey === 'created' && sortDir === 'desc'" class="size-3.5" />
                   <ArrowUpDown v-else class="size-3.5 opacity-40" />
@@ -715,7 +708,9 @@ const selectedApplicationId = ref<string | null>(null)
 
       <!-- Footer count -->
       <p class="text-xs text-surface-400 pt-3">
-        Showing {{ filteredApplications.length }} of {{ total }} application{{ total === 1 ? '' : 's' }}
+        {{ total === 1
+          ? t('applicationsPage.resultsFooterOne', { shown: filteredApplications.length, total })
+          : t('applicationsPage.resultsFooter', { shown: filteredApplications.length, total }) }}
       </p>
           </div>
         </div>

@@ -12,9 +12,13 @@ definePageMeta({
   middleware: ['auth', 'require-org'],
 })
 
+const { t } = useI18n()
+const { interviewStatus } = useLocalizedEnums()
+const interviewsSeoTitle = computed(() => t('interviewsPage.title'))
+const interviewsSeoDescription = computed(() => t('interviewsPage.description'))
 useSeoMeta({
-  title: 'Interviews — Reqcore',
-  description: 'Manage all scheduled interviews',
+  title: interviewsSeoTitle,
+  description: interviewsSeoDescription,
   robots: 'noindex, nofollow',
 })
 
@@ -66,7 +70,7 @@ const filteredInterviews = computed(() => {
 const groupedByDate = computed(() => {
   const groups = new Map<string, typeof filteredInterviews.value>()
   for (const interview of filteredInterviews.value) {
-    const dateKey = new Date(interview.scheduledAt).toLocaleDateString('en-US', {
+    const dateKey = new Date(interview.scheduledAt).toLocaleDateString('ru-RU', {
       weekday: 'long',
       month: 'long',
       day: 'numeric',
@@ -79,32 +83,32 @@ const groupedByDate = computed(() => {
 })
 
 // ─── Status styling ──────────────────────────────────────────────
-const statusConfig: Record<InterviewStatus, { label: string; icon: any; class: string; dot: string }> = {
+const statusConfig = computed(() => ({
   scheduled: {
-    label: 'Scheduled',
+    label: interviewStatus('scheduled'),
     icon: Calendar,
     class: 'bg-brand-50 text-brand-700 ring-brand-200 dark:bg-brand-950/50 dark:text-brand-300 dark:ring-brand-800',
     dot: 'bg-brand-500',
   },
   completed: {
-    label: 'Completed',
+    label: interviewStatus('completed'),
     icon: CheckCircle2,
     class: 'bg-success-50 text-success-700 ring-success-200 dark:bg-success-950/50 dark:text-success-300 dark:ring-success-800',
     dot: 'bg-success-500',
   },
   cancelled: {
-    label: 'Cancelled',
+    label: interviewStatus('cancelled'),
     icon: XCircle,
     class: 'bg-surface-100 text-surface-500 ring-surface-200 dark:bg-surface-800/50 dark:text-surface-400 dark:ring-surface-700',
     dot: 'bg-surface-400',
   },
   no_show: {
-    label: 'No Show',
+    label: interviewStatus('no_show'),
     icon: AlertTriangle,
     class: 'bg-danger-50 text-danger-700 ring-danger-200 dark:bg-danger-950/50 dark:text-danger-300 dark:ring-danger-800',
     dot: 'bg-danger-500',
   },
-}
+} as Record<InterviewStatus, { label: string; icon: any; class: string; dot: string }>))
 
 const typeIcons: Record<string, any> = {
   video: Video,
@@ -115,25 +119,22 @@ const typeIcons: Record<string, any> = {
   take_home: FileText,
 }
 
-const typeLabels: Record<string, string> = {
-  video: 'Video',
-  phone: 'Phone',
-  in_person: 'In Person',
-  technical: 'Technical',
-  panel: 'Panel',
-  take_home: 'Take Home',
+function typeLabel(type: string) {
+  return t(`interviewsPage.types.${type}`, type)
 }
 
+const dateLocale = 'ru-RU'
+
 function formatTime(dateStr: string) {
-  return new Date(dateStr).toLocaleTimeString('en-US', {
-    hour: 'numeric',
+  return new Date(dateStr).toLocaleTimeString(dateLocale, {
+    hour: '2-digit',
     minute: '2-digit',
-    hour12: true,
+    hour12: false,
   })
 }
 
 function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('en-US', {
+  return new Date(dateStr).toLocaleDateString(dateLocale, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -146,9 +147,9 @@ function formatDateShort(dateStr: string) {
   const tomorrow = new Date(today)
   tomorrow.setDate(tomorrow.getDate() + 1)
 
-  if (d.toDateString() === today.toDateString()) return 'Today'
-  if (d.toDateString() === tomorrow.toDateString()) return 'Tomorrow'
-  return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+  if (d.toDateString() === today.toDateString()) return t('time.today')
+  if (d.toDateString() === tomorrow.toDateString()) return t('time.tomorrow')
+  return d.toLocaleDateString(dateLocale, { weekday: 'short', month: 'short', day: 'numeric' })
 }
 
 function isUpcoming(dateStr: string) {
@@ -306,9 +307,9 @@ const statusCounts = computed(() => {
     <!-- Header -->
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-50">Interviews</h1>
+        <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-50">{{ t('interviewsPage.heading') }}</h1>
         <p class="mt-1 text-sm text-surface-500 dark:text-surface-400">
-          Manage all scheduled interviews across your jobs
+          {{ t('interviewsPage.description') }}
         </p>
       </div>
       <NuxtLink
@@ -316,7 +317,7 @@ const statusCounts = computed(() => {
         class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 transition-colors no-underline"
       >
         <Mail class="size-4" />
-        Email Templates
+        {{ t('interviewsPage.emailTemplates') }}
       </NuxtLink>
     </div>
 
@@ -328,7 +329,7 @@ const statusCounts = computed(() => {
         <input
           v-model="searchInput"
           type="text"
-          placeholder="Search interviews, candidates, jobs…"
+          :placeholder="t('interviewsPage.searchPlaceholder')"
           class="w-full rounded-lg border border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 py-2 pl-10 pr-9 text-sm text-surface-900 dark:text-surface-100 placeholder:text-surface-400 dark:placeholder:text-surface-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors"
         />
         <button
@@ -366,7 +367,7 @@ const statusCounts = computed(() => {
             : 'bg-white dark:bg-surface-800 text-surface-600 dark:text-surface-400 hover:bg-surface-50 dark:hover:bg-surface-700'"
           @click="activeView = 'list'"
         >
-          List
+          {{ t('interviewsPage.list') }}
         </button>
         <button
           class="px-3 py-1.5 text-xs font-medium transition-all cursor-pointer"
@@ -376,7 +377,7 @@ const statusCounts = computed(() => {
           @click="activeView = 'calendar'"
         >
           <CalendarDays class="inline size-3.5 mr-1 -mt-0.5" />
-          Timeline
+          {{ t('interviewsPage.timeline') }}
         </button>
       </div>
     </div>
@@ -406,8 +407,8 @@ const statusCounts = computed(() => {
       v-else-if="error"
       class="rounded-lg border border-danger-200 dark:border-danger-900 bg-danger-50 dark:bg-danger-950 p-4 text-sm text-danger-700 dark:text-danger-400"
     >
-      Failed to load interviews.
-      <button class="underline ml-1 cursor-pointer" @click="refresh()">Retry</button>
+      {{ t('interviewsPage.loadFailed') }}
+      <button class="underline ml-1 cursor-pointer" @click="refresh()">{{ t('ui.retry') }}</button>
     </div>
 
     <!-- Empty state -->
@@ -417,19 +418,19 @@ const statusCounts = computed(() => {
     >
       <Calendar class="size-10 text-surface-300 dark:text-surface-600 mx-auto mb-3" />
       <h3 class="text-base font-semibold text-surface-700 dark:text-surface-200 mb-1">
-        {{ searchInput || activeStatus ? 'No matching interviews' : 'No interviews yet' }}
+        {{ searchInput || activeStatus ? t('interviewsPage.emptyNoMatch') : t('interviewsPage.emptyNone') }}
       </h3>
       <p class="text-sm text-surface-500 dark:text-surface-400 mb-4 max-w-xs mx-auto">
         {{ searchInput || activeStatus
-          ? 'Try adjusting your filters.'
-          : 'Interviews will appear here when you schedule them from the pipeline.' }}
+          ? t('interviewsPage.emptyNoMatchHint')
+          : t('interviewsPage.emptyNoneHint') }}
       </p>
       <button
         v-if="activeStatus || searchInput"
         class="cursor-pointer rounded-lg border border-surface-200 dark:border-surface-700 px-4 py-2 text-sm font-medium text-surface-600 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-800 transition-colors"
         @click="activeStatus = undefined; searchInput = ''"
       >
-        Clear filters
+        {{ t('interviewsPage.clearFilters') }}
       </button>
     </div>
 
@@ -492,11 +493,11 @@ const statusCounts = computed(() => {
                   </TimelineDateLink>
                   <span class="inline-flex items-center gap-1">
                     <Clock class="size-3.5" />
-                    {{ formatTime(interviewItem.scheduledAt) }} · {{ interviewItem.duration }}min
+                    {{ formatTime(interviewItem.scheduledAt) }} · {{ t('units.durationMinutes', { n: interviewItem.duration }) }}
                   </span>
                   <span class="inline-flex items-center gap-1">
                     <component :is="typeIcons[interviewItem.type] || Video" class="size-3.5" />
-                    {{ typeLabels[interviewItem.type] }}
+                    {{ typeLabel(interviewItem.type) }}
                   </span>
                   <span v-if="interviewItem.location" class="inline-flex items-center gap-1 truncate max-w-[200px]">
                     <MapPin class="size-3.5 shrink-0" />
@@ -515,12 +516,12 @@ const statusCounts = computed(() => {
                     @click.stop
                   >
                     <Calendar class="size-3" />
-                    Google Calendar
+                    {{ t('interviewsPage.googleCalendar') }}
                     <ExternalLink class="size-2.5" />
                   </a>
                   <span v-else-if="interviewItem.googleCalendarEventId" class="inline-flex items-center gap-1 rounded-full bg-emerald-50 dark:bg-emerald-950/30 px-2 py-0.5 text-[10px] font-medium text-emerald-700 dark:text-emerald-400">
                     <Calendar class="size-3" />
-                    Google Calendar
+                    {{ t('interviewsPage.googleCalendar') }}
                   </span>
                 </div>
               </div>
@@ -534,7 +535,7 @@ const statusCounts = computed(() => {
                 class="cursor-pointer rounded-lg bg-success-600 px-2.5 py-1.5 text-[11px] font-semibold text-white hover:bg-success-700 transition-all shadow-sm"
                 @click="quickStatusChange(interviewItem, 'completed')"
               >
-                Complete
+                {{ t('interviewsPage.complete') }}
               </button>
 
               <!-- More menu -->
@@ -563,7 +564,7 @@ const statusCounts = computed(() => {
                       @click="openEdit(interviewItem); openMenuId = null"
                     >
                       <Pencil class="size-3.5 text-surface-400" />
-                      Edit
+                      {{ t('interviewsPage.edit') }}
                     </button>
                     <template v-for="nextStatus in getAllowedTransitions(interviewItem.status)" :key="nextStatus">
                       <button
@@ -571,7 +572,7 @@ const statusCounts = computed(() => {
                         @click="quickStatusChange(interviewItem, nextStatus); openMenuId = null"
                       >
                         <component :is="statusConfig[nextStatus]?.icon || Calendar" class="size-3.5 text-surface-400" />
-                        Mark as {{ statusConfig[nextStatus]?.label }}
+                        {{ t('interviewsPage.markAs', { status: statusConfig[nextStatus]?.label }) }}
                       </button>
                     </template>
                     <div class="border-t border-surface-100 dark:border-surface-800 my-1.5 mx-2" />
@@ -580,7 +581,7 @@ const statusCounts = computed(() => {
                       @click="confirmDelete(interviewItem); openMenuId = null"
                     >
                       <Trash2 class="size-3.5" />
-                      Delete
+                      {{ t('interviewsPage.delete') }}
                     </button>
                   </div>
                 </Transition>
@@ -592,7 +593,7 @@ const statusCounts = computed(() => {
 
       <!-- Total count -->
       <p class="text-xs text-surface-400 pt-3 px-1">
-        {{ total }} interview{{ total === 1 ? '' : 's' }} total
+        {{ total === 1 ? t('interviewsPage.totalCountOne', { count: total }) : t('interviewsPage.totalCount', { count: total }) }}
       </p>
     </template>
 
@@ -605,7 +606,7 @@ const statusCounts = computed(() => {
               <CalendarDays class="size-3.5 text-brand-600 dark:text-brand-400" />
             </div>
             <h3 class="text-sm font-semibold text-surface-800 dark:text-surface-200">{{ dateLabel }}</h3>
-            <span class="text-xs text-surface-400 dark:text-surface-500">{{ dateInterviews.length }} interview{{ dateInterviews.length === 1 ? '' : 's' }}</span>
+            <span class="text-xs text-surface-400 dark:text-surface-500">{{ dateInterviews.length === 1 ? t('interviewsPage.totalCountOne', { count: dateInterviews.length }) : t('interviewsPage.totalCount', { count: dateInterviews.length }) }}</span>
           </div>
 
           <div class="ml-3.5 border-l-2 border-surface-200 dark:border-surface-700/60 pl-6 space-y-3">
@@ -649,7 +650,7 @@ const statusCounts = computed(() => {
                     </span>
                     <span class="inline-flex items-center gap-1">
                       <component :is="typeIcons[interviewItem.type]" class="size-3" />
-                      {{ typeLabels[interviewItem.type] }}
+                      {{ typeLabel(interviewItem.type) }}
                     </span>
                     <span v-if="interviewItem.location" class="inline-flex items-center gap-1 truncate max-w-[160px]">
                       <MapPin class="size-3 shrink-0" />
@@ -685,7 +686,7 @@ const statusCounts = computed(() => {
                     class="cursor-pointer rounded-lg bg-success-600 px-2 py-1.5 text-[10px] font-semibold text-white hover:bg-success-700 transition-all shadow-sm"
                     @click="quickStatusChange(interviewItem, 'completed')"
                   >
-                    Complete
+                    {{ t('interviewsPage.complete') }}
                   </button>
                 </div>
               </div>
@@ -696,7 +697,7 @@ const statusCounts = computed(() => {
 
       <!-- Total count -->
       <p class="text-xs text-surface-400 pt-3 px-1">
-        {{ total }} interview{{ total === 1 ? '' : 's' }} total
+        {{ total === 1 ? t('interviewsPage.totalCountOne', { count: total }) : t('interviewsPage.totalCount', { count: total }) }}
       </p>
     </template>
 

@@ -2,6 +2,21 @@ import { eq, and, desc, gte, lte, inArray } from 'drizzle-orm'
 import { z } from 'zod'
 import { activityLog, user, job, candidate, application, interview } from '../../database/schema'
 
+const interviewTypeRu: Record<string, string> = {
+  phone: 'телефонное',
+  video: 'видео',
+  in_person: 'очное',
+  panel: 'панельное',
+  technical: 'техническое',
+  take_home: 'домашнее',
+}
+
+function formatInterviewResourceName(firstName: string, lastName: string, type: string): string {
+  const name = `${firstName} ${lastName}`.trim()
+  const typeLabel = interviewTypeRu[type] ?? type
+  return `${name} — ${typeLabel} собеседование`
+}
+
 const timelineQuerySchema = z.object({
   before: z.string().datetime().optional(),
   after: z.string().datetime().optional(),
@@ -153,6 +168,8 @@ export default defineEventHandler(async (event) => {
     jobId: i.jobId,
     candidateId: i.candidateId,
     jobTitle: i.jobTitle,
+    candidateFirstName: i.candidateFirstName,
+    candidateLastName: i.candidateLastName,
     candidateName: `${i.candidateFirstName} ${i.candidateLastName}`,
   }]))
 
@@ -191,7 +208,11 @@ export default defineEventHandler(async (event) => {
       case 'interview': {
         const intInfo = interviewMap.get(item.resourceId)
         if (intInfo) {
-          resourceName = `${intInfo.candidateName} — ${intInfo.type} interview`
+          resourceName = formatInterviewResourceName(
+            intInfo.candidateFirstName,
+            intInfo.candidateLastName,
+            intInfo.type,
+          )
           resourceUrl = `/dashboard/interviews/${item.resourceId}`
           jobId = intInfo.jobId
           jobName = intInfo.jobTitle
@@ -254,7 +275,7 @@ export default defineEventHandler(async (event) => {
       actorName: null,
       actorEmail: null,
       actorImage: null,
-      resourceName: `${i.candidateFirstName} ${i.candidateLastName} — ${i.type} interview`,
+      resourceName: formatInterviewResourceName(i.candidateFirstName, i.candidateLastName, i.type),
       resourceUrl: `/dashboard/interviews/${i.id}`,
       applicationId: i.applicationId,
       jobId: i.jobId,
